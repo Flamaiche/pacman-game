@@ -222,6 +222,12 @@ public interface IAnimated {
      */
     void onCollisionWith(IAnimated other);
 
+    void onCollisionWith(PacMan pacMan);
+
+    void onCollisionWith(Fantome fantome);
+
+    void onCollisoinWith(PacGomme pacGomme);
+
     /**
      * Réinitialise ou libère certaines ressources lorsque cet objet animé est retiré de
      * l'affichage, sans toutefois être retiré du jeu.
