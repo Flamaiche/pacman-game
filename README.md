@@ -1,5 +1,7 @@
 # *Pac-Man* en JavaFX
 
+### Chef de projet : Babahamou Malik
+
 ## Description
 
 Ce projet fournit une implémentation de base du jeu *Pac-Man* en *JavaFX*.
