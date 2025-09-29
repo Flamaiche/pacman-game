@@ -16,6 +16,9 @@ public class Carte {
     private static final Random rand = new Random();
 
     public static GameMap createMap(int largeur, int hauteur) {
+        /*
+        largeur & hauteur en nombre de cellules
+         */
         GameMap map = new GameMap(hauteur, largeur);
 
         SpriteStore spriteStore = new SpriteStore();

@@ -16,10 +16,12 @@
 
 package fr.univartois.butinfo.r304.pacman.model;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import fr.univartois.butinfo.r304.pacman.model.map.Carte;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
@@ -169,8 +171,9 @@ public final class PacmanGame {
      * @return La carte du jeu ayant été créée.
      */
     private GameMap createMap() {
-        // TODO Utilisez le générateur de cartes que vous avez écrit pour créer une carte.
-        return null;
+        int nbCellLargeur = width / ISpriteStore.DEFAULT_SPRITE_SIZE;
+        int nbCellHauteur = width / ISpriteStore.DEFAULT_SPRITE_SIZE;
+        return Carte.createMap(nbCellLargeur, nbCellHauteur);
     }
 
     /**
