@@ -27,4 +27,18 @@ public class Fantome extends AbstractAnimated {
     }
 
 
+    @Override
+    public void onCollisionWith(PacMan pacMan) {
+
+    }
+
+    @Override
+    public void onCollisionWith(Fantome fantome) {
+
+    }
+
+    @Override
+    public void onCollisoinWith(PacGomme pacGomme) {
+
+    }
 }

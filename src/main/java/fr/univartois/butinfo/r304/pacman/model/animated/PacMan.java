@@ -46,4 +46,19 @@ public class PacMan extends AbstractAnimated{
     public void onCollisionWith(IAnimated other) {
 
     }
+
+    @Override
+    public void onCollisionWith(PacMan pacMan) {
+
+    }
+
+    @Override
+    public void onCollisionWith(Fantome fantome) {
+
+    }
+
+    @Override
+    public void onCollisoinWith(PacGomme pacGomme) {
+
+    }
 }

@@ -1,6 +1,7 @@
-package fr.univartois.butinfo.r304.pacman.model;
+package fr.univartois.butinfo.r304.pacman.model.animated;
 
-import fr.univartois.butinfo.r304.pacman.model.animated.AbstractAnimated;
+import fr.univartois.butinfo.r304.pacman.model.IAnimated;
+import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 
 public class PacGomme extends AbstractAnimated {
