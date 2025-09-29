@@ -3,30 +3,14 @@ package fr.univartois.butinfo.r304.pacman.model.map;
 import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import javafx.beans.binding.IntegerExpression;
 
-import java.util.ArrayList;
+import java.util.Random;
 
 /*
-le labyrinth sera genera à partir Carte (le labyrinth est une Carte)
+le labyrinth sera genera à partir Carte
+Carte est un générateur de Cell pour GameMap
  */
 public class Carte {
-    private int largeur;
-    private int hauteur;
-    private Cell[][] grid;
+    private static final Random rand = new Random();
 
-    public Carte(int largeur, int hauteur) {
-        this.largeur = largeur;
-        this.hauteur = hauteur;
-        grid = new Cell[largeur][hauteur];
-        initCell();
-    }
-
-    public void initCell() {
-        for (int x = 0; x < largeur; x++) {
-            for (int y = 0; y < hauteur; y++) {
-                Cell newCell = new Cell(x, y);
-                grid[x][y] = newCell;
-            }
-        }
-    }
 
 }
