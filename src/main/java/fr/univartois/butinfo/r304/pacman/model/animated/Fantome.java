@@ -6,8 +6,19 @@ import fr.univartois.butinfo.r304.pacman.view.Sprite;
 
 public class Fantome extends AbstractAnimated {
 
-    protected Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite) {
+    private CouleurFantome couleurFantome;
+
+    protected Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite, CouleurFantome couleurFantome) {
         super(game, xPosition, yPosition, sprite);
+        this.couleurFantome = couleurFantome;
+    }
+
+    private CouleurFantome getCouleurFantome() {
+        return couleurFantome;
+    }
+
+    private void setCouleurFantome(CouleurFantome couleurFantome) {
+        this.couleurFantome = couleurFantome;
     }
 
     @Override
