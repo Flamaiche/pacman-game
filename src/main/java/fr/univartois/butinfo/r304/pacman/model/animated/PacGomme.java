@@ -35,7 +35,7 @@ public class PacGomme extends AbstractAnimated {
     }
 
     @Override
-    public void onCollisoinWith(PacGomme pacGomme) {
+    public void onCollisionWith(PacGomme pacGomme) {
 
     }
 }

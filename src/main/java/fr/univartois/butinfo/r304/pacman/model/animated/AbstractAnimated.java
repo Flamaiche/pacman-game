@@ -475,5 +475,5 @@ public abstract class AbstractAnimated implements IAnimated {
 
     public abstract void onCollisionWith(Fantome fantome);
 
-    public abstract void onCollisoinWith(PacGomme pacGomme);
+    public abstract void onCollisionWith(PacGomme pacGomme);
 }

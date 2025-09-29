@@ -229,7 +229,7 @@ public interface IAnimated {
 
     void onCollisionWith(Fantome fantome);
 
-    void onCollisoinWith(PacGomme pacGomme);
+    void onCollisionWith(PacGomme pacGomme);
 
     /**
      * Réinitialise ou libère certaines ressources lorsque cet objet animé est retiré de
