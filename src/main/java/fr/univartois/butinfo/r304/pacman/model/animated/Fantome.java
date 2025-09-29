@@ -2,6 +2,7 @@ package fr.univartois.butinfo.r304.pacman.model.animated;
 
 import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
+import fr.univartois.butinfo.r304.pacman.model.map.Wall;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 
 public class Fantome extends AbstractAnimated {
@@ -23,22 +24,24 @@ public class Fantome extends AbstractAnimated {
 
     @Override
     public void onCollisionWith(IAnimated other) {
+       //il ne se passe rien pour les autres objets animés
 
     }
 
 
     @Override
     public void onCollisionWith(PacMan pacMan) {
-
+        //collision entre pacman et fantome gerer par le membre 2
     }
 
     @Override
     public void onCollisionWith(Fantome fantome) {
-
+        //ne se passe rien pas d'interaction
     }
 
     @Override
     public void onCollisionWith(PacGomme pacGomme) {
+        //Les fantomes traversent les pacGommes donc pas d'effet
 
     }
 }
