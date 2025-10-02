@@ -19,23 +19,20 @@ public class PacGomme extends AbstractAnimated {
         super(game, xPosition, yPosition, sprite);
     }
 
-    @Override
-    public void onCollisionWith(IAnimated other) {
-
-    }
 
     @Override
     public void onCollisionWith(PacMan pacMan) {
-
+        game.pacGumEaten(this);
+        this.onDestruction();
     }
 
     @Override
     public void onCollisionWith(Fantome fantome) {
-
+        // ne se passe rien
     }
 
     @Override
     public void onCollisionWith(PacGomme pacGomme) {
-
+        // ne se passe rien non plus
     }
 }
