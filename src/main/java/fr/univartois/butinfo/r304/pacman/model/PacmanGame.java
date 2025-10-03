@@ -30,6 +30,8 @@ import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 import javafx.animation.AnimationTimer;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 /**
  * La classe {@link PacmanGame} gère une partie du jeu Pac-Man.
@@ -197,7 +199,7 @@ public final class PacmanGame {
         clearAnimated();
 
         // TODO On crée le joueur sur la carte.
-        player = null;
+        player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("pacman"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
         animatedObjects.add(player);
         spawnAnimated(player);
 
