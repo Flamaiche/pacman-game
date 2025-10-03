@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import fr.univartois.butinfo.r304.pacman.model.animated.PacMan;
 import fr.univartois.butinfo.r304.pacman.model.map.Carte;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
@@ -71,7 +72,7 @@ public final class PacmanGame {
      * Le personnage du joueur.
      */
     // TODO Adaptez le type de cet attribut pour correspondre à votre implémentation.
-    private IAnimated player;
+    private PacMan player;
 
     /**
      * Le nombre de fantômes initialement dans le jeu.
