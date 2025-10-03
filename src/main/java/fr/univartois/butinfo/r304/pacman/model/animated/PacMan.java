@@ -4,16 +4,22 @@ import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import javafx.beans.property.IntegerProperty;
+import javafx.scene.paint.LinearGradient;
 
-public class PacMan extends AbstractAnimated{
+public class PacMan extends AbstractAnimated {
 
     private final IntegerProperty pointsDeVie;
     private final IntegerProperty score;
+
 
     public PacMan(PacmanGame game, int xPosition, int yPosition, Sprite sprite, IntegerProperty pointsDeVie, IntegerProperty score) {
         super(game, xPosition, yPosition, sprite);
         this.pointsDeVie = pointsDeVie;
         this.score = score;
+    }
+
+    public PacmanGame getGame() {
+        return game;
     }
 
     public IntegerProperty pointsDeVieProperty() {
@@ -41,9 +47,18 @@ public class PacMan extends AbstractAnimated{
     }
 
 
-
+    //Methodes pout toutes les collisisons
     @Override
     public void onCollisionWith(IAnimated other) {
+        if (other instanceof PacGomme) {
+            onCollisionWith((PacGomme) other);
+
+        } else if (other instanceof Fantome) {
+            onCollisionWith((Fantome) other);
+        } else if (other instanceof PacMan) {
+            onCollisionWith((PacMan) other);
+
+        }
 
     }
 
@@ -59,6 +74,7 @@ public class PacMan extends AbstractAnimated{
 
     @Override
     public void onCollisionWith(PacGomme pacGomme) {
+
 
     }
 }
