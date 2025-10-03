@@ -21,11 +21,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import fr.univartois.butinfo.r304.pacman.model.animated.PacGomme;
 import fr.univartois.butinfo.r304.pacman.model.map.Carte;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
+import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 import javafx.animation.AnimationTimer;
 
 /**
@@ -206,6 +208,19 @@ public final class PacmanGame {
             animatedObjects.add(ghost);
             spawnAnimated(ghost);
         }
+
+        SpriteStore spriteStore = new SpriteStore();
+        Sprite gomme = spriteStore.getSprite("pacgum");
+
+        int y, x;
+        for (Cell emptyCell : gameMap.getEmptyCells()) {
+            y = emptyCell.getColumn();
+            x = emptyCell.getRow();
+            PacGomme pg = new PacGomme(this, x, y, gomme);
+            animatedObjects.add(pg);
+            spawnAnimated(pg);
+        }
+        nbGums = gameMap.getEmptyCells().size();
     }
 
     /**
