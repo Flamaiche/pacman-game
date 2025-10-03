@@ -47,34 +47,33 @@ public class PacMan extends AbstractAnimated {
     }
 
 
-    //Methodes pout toutes les collisisons
     @Override
     public void onCollisionWith(IAnimated other) {
-        if (other instanceof PacGomme) {
-            onCollisionWith((PacGomme) other);
-
-        } else if (other instanceof Fantome) {
-            onCollisionWith((Fantome) other);
-        } else if (other instanceof PacMan) {
-            onCollisionWith((PacMan) other);
-
-        }
 
     }
 
     @Override
     public void onCollisionWith(PacMan pacMan) {
-
+        // Collision avec lui meme impossible
     }
 
     @Override
     public void onCollisionWith(Fantome fantome) {
+        setPointsDeVie(getPointsDeVie() - 1 );
+        if (pointsDeVie.get() <= 0) {
+            game.playerIsDead();
+        } else {
+            setX(game.getHeight() / 2);
+            setY(game.getHeight() / 2);
+            setHorizontalSpeed(0);
+            setVerticalSpeed(0);
+        }
 
     }
 
     @Override
     public void onCollisionWith(PacGomme pacGomme) {
-
-
+        pacGomme.onCollisionWith(this);
+        setScore(getScore() + 1);
     }
 }
