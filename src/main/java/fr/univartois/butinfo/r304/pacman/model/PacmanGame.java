@@ -199,7 +199,7 @@ public final class PacmanGame {
         clearAnimated();
 
         // TODO On crée le joueur sur la carte.
-        player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("pacman"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
+        player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("half-open"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
         animatedObjects.add(player);
         spawnAnimated(player);
 
