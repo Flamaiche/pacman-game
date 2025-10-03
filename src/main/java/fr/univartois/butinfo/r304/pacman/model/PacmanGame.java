@@ -174,7 +174,7 @@ public final class PacmanGame {
      */
     private GameMap createMap() {
         int nbCellLargeur = width / ISpriteStore.DEFAULT_SPRITE_SIZE;
-        int nbCellHauteur = width / ISpriteStore.DEFAULT_SPRITE_SIZE;
+        int nbCellHauteur = height / ISpriteStore.DEFAULT_SPRITE_SIZE;
         return Carte.createMap(nbCellLargeur, nbCellHauteur);
     }
 
