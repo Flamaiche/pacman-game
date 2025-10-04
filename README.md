@@ -332,4 +332,26 @@ PacmanController o-- "1" PacmanGame
 
 ### Jalon n°2 - TP n°4
 
+| Fonctionnalité                             | Patron de Conception ? | Terminée ? | Auteur(s)                                     |
+| ------------------------------------------ | ---------------------- | ---------- | --------------------------------------------- |
+| Variantes de génération de labyrinthe      |                        |            |                                               |
+| Complétion d'un labyrinthe existant        |                        |            |                                               |
+| Variantes de déplacement pour les fantômes |                        |            |                                               |
+
+### Jalon n°3 - TP n°5
+
+| Fonctionnalité                             | Patron de Conception ? | Terminée ? | Auteur(s)                                     |
+| ------------------------------------------ | ---------------------- | ---------- | --------------------------------------------- |
+| Pac-Man vulnérable                         |                        |            |                                               |
+| Pac-Man invulnérable                       |                        |            |                                               |
+| Fantômes vulnérables                       |                        |            |                                               |
+| Fantômes fuyants                           |                        |            |                                               |
+| Fantômes presque invulnérables             |                        |            |                                               |
+| Fantômes invulnérables                     |                        |            |                                               |
+| Fantômes invulnérables                     |                        |            |                                               |
+| Réutilisation des fantômes existants       |                        |            |                                               |
+| Ajout des méga-gommes                      |                        |            |                                               |
+
+### Jalon n°4 - TP n°6
+
 *À venir...*
