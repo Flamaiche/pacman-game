@@ -5,11 +5,16 @@ import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.model.map.Wall;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 
+import java.util.Random;
+
 public class Fantome extends AbstractAnimated {
 
     private CouleurFantome couleurFantome;
+    public static final int DELAI = 50;
+    public int compteurDeplacement=0;
+    private Random random = new Random();
 
-    protected Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite, CouleurFantome couleurFantome) {
+    public Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite, CouleurFantome couleurFantome) {
         super(game, xPosition, yPosition, sprite);
         this.couleurFantome = couleurFantome;
     }
@@ -44,4 +49,28 @@ public class Fantome extends AbstractAnimated {
         //Les fantomes traversent les pacGommes donc pas d'effet
 
     }
+
+    public boolean onStep(long delta){
+        compteurDeplacement++;
+        if(compteurDeplacement>= DELAI){
+            choixRandomDirection();
+            compteurDeplacement=0;
+        }
+        return super.onStep(delta);
+    }
+
+    private void choixRandomDirection(){
+
+        double vitesse = 50+random.nextDouble() *100;
+
+        if(random.nextBoolean()){
+            setHorizontalSpeed(vitesse*(random.nextBoolean()?1:-1));
+            setVerticalSpeed(0);
+        }else {
+            setVerticalSpeed(vitesse*(random.nextBoolean()?1:-1));
+            setHorizontalSpeed(0);
+        }
+
+    }
+
 }
