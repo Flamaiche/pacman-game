@@ -200,8 +200,7 @@ public final class PacmanGame {
         // On commence par enlever tous les éléments mobiles encore présents.
         clearAnimated();
 
-        // TODO On crée le joueur sur la carte.
-        player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("half-open"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
+        player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("pacman/half-open"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
         animatedObjects.add(player);
         spawnAnimated(player);
 
@@ -209,7 +208,7 @@ public final class PacmanGame {
         // On crée ensuite les fantômes sur la carte.
         for (int i = 0; i < nbGhosts; i++) {
             CouleurFantome couleur =CouleurFantome.values()[ (i % CouleurFantome.values().length) ];
-            IAnimated ghost = new Fantome(this,0,0,spriteStore.getSprite("ghost"), couleur);
+            IAnimated ghost = new Fantome(this,0,0,spriteStore.getSprite("ghosts/blue/1"), couleur);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
             animatedObjects.add(ghost);
             spawnAnimated(ghost);
