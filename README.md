@@ -319,16 +319,16 @@ PacmanController o-- "1" PacmanGame
 
 ### Jalon n°1 - TP n°3
 
-| Fonctionnalité                             | Terminée ? | Auteur(s)                                     |
-| ------------------------------------------ | ---------- | --------------------------------------------- |
-| Gestion des collisions spécifiques         |            |                                               |
-| Représentation des pac-gommes              |            |                                               |
-| Représentation de Pac-Man                  |            |                                               |
-| Intégration de Pac-Man dans la partie      |            |                                               |
-| Représentation des fantômes                |            |                                               |
-| Intégration des fantômes dans la partie    |            |                                               |
-| Création de la carte du jeu                |            |                                               |
-| Ajout des pac-gommes sur la carte          |            |                                               |
+| Fonctionnalité                             | Terminée ? | Auteur(s) |
+| ------------------------------------------ |------------|-----------|
+| Gestion des collisions spécifiques         | Oui        | 4 membres |
+| Représentation des pac-gommes              | Oui        | membre 1  |
+| Représentation de Pac-Man                  | Oui        | membre 2  |
+| Intégration de Pac-Man dans la partie      | Oui        | membre 2  |
+| Représentation des fantômes                | Oui        | membre 3  |
+| Intégration des fantômes dans la partie    | Oui        | membre 3  |
+| Création de la carte du jeu                | Partiel    | membre 4  |
+| Ajout des pac-gommes sur la carte          | Oui        | membre 4  |
 
 ### Jalon n°2 - TP n°4
 
