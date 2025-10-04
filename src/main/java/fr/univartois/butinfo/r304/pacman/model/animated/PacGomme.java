@@ -15,7 +15,7 @@ public class PacGomme extends AbstractAnimated {
      * @param yPosition La position en y initiale de l'objet animé.
      * @param sprite    L'instance de {@link Sprite} représentant l'objet animé.
      */
-    protected PacGomme(PacmanGame game, double xPosition, double yPosition, Sprite sprite) {
+    public PacGomme(PacmanGame game, double xPosition, double yPosition, Sprite sprite) {
         super(game, xPosition, yPosition, sprite);
     }
 
