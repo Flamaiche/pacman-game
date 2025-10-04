@@ -471,4 +471,7 @@ public abstract class AbstractAnimated implements IAnimated {
         return false;
     }
 
+    public void onCollisionWith(IAnimated other) {
+        // ne fait rien
+    }
 }

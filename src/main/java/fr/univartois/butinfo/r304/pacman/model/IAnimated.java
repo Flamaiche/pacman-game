@@ -16,6 +16,9 @@
 
 package fr.univartois.butinfo.r304.pacman.model;
 
+import fr.univartois.butinfo.r304.pacman.model.animated.Fantome;
+import fr.univartois.butinfo.r304.pacman.model.animated.PacGomme;
+import fr.univartois.butinfo.r304.pacman.model.animated.PacMan;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -221,6 +224,12 @@ public interface IAnimated {
      * @param other L'objet avec lequel cet objet est entré en collision.
      */
     void onCollisionWith(IAnimated other);
+
+    void onCollisionWith(PacMan pacMan);
+
+    void onCollisionWith(Fantome fantome);
+
+    void onCollisionWith(PacGomme pacGomme);
 
     /**
      * Réinitialise ou libère certaines ressources lorsque cet objet animé est retiré de
