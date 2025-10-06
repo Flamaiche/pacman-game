@@ -50,6 +50,7 @@ public class PacMan extends AbstractAnimated {
     @Override
     public void onCollisionWith(IAnimated other) {
 
+
     }
 
     @Override
