@@ -7,9 +7,11 @@ import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 le labyrinth sera genera à partir Carte
 Carte est un générateur de Cell pour GameMap
  */
-public class Carte {
+public class Carte implements ICarte {
 
-    public static GameMap createMap(int largeur, int hauteur) {
+    public Carte() {}
+
+    public  GameMap createMap(int largeur, int hauteur) {
         /*
         largeur & hauteur en nombre de cellules
          */
