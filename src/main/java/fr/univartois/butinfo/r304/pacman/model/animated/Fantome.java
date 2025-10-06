@@ -29,23 +29,24 @@ public class Fantome extends AbstractAnimated {
 
     @Override
     public void onCollisionWith(IAnimated other) {
+        // par défaut on laisse l'autre gérer
         other.onCollisionWith(this);
     }
 
     @Override
     public void onCollisionWith(PacMan pacMan) {
-        //collision entre pacman et fantome gerer par le membre 2
+        // on renvoie l'appel à PacMan avec le type dynamique
+        pacMan.onCollisionWith(this);
     }
 
     @Override
     public void onCollisionWith(Fantome fantome) {
-        //ne se passe rien pas d'interaction
+        // ne fait rien
     }
 
     @Override
     public void onCollisionWith(PacGomme pacGomme) {
-        //Les fantomes traversent les pacGommes donc pas d'effet
-
+        // ne fait rien
     }
 
     public boolean onStep(long delta){
