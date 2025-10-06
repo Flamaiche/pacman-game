@@ -26,8 +26,9 @@ public class PacGomme extends AbstractAnimated {
 
     @Override
     public void onCollisionWith(PacMan pacMan) {
-        game.pacGumEaten(this);
+        if (isDestroyed()) return;
         this.onDestruction();
+        game.pacGumEaten(this);
     }
 
     @Override
