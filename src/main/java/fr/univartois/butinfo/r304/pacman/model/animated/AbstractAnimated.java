@@ -40,13 +40,24 @@ public abstract class AbstractAnimated implements IAnimated {
 
     /**
      * La marge de sécurité pour les obstacles (en pixels).
+     *
+     * WARNING : Les marges sont reliés entre elle.
      */
     private static final int MARGIN = 1;
 
     /**
      * La marge de sécurité pour les collisions (fantome, pac-gomme)
+     *
+     * WARNING : Les marges sont reliés entre elle.
      */
-    private static final int MARGIN_COLLISION = 1;
+    private static final int MARGIN_COLLISION = 2;
+
+    /**
+     * La marge de pixels pour considérer aligner un IAnimated sur la grille
+     *
+     * WARNING : Les marges sont reliés entre elle. 
+     */
+    private static final int ALIGN_TOLERANCE = 1;
 
     /**
      * Le jeu dans lequel cet objet animé évolue.
@@ -497,7 +508,13 @@ public abstract class AbstractAnimated implements IAnimated {
     public boolean isAlignedWithGrid() {
         int cellWidth = game.getCellAt(0, 0).getWidth();
         int cellHeight = game.getCellAt(0, 0).getHeight();
-        return ((int)getX() % cellWidth == 0) && ((int)getY() % cellHeight == 0);
+
+        int modX = getX() % cellWidth;
+        int modY = getY() % cellHeight;
+
+        return (modX <= ALIGN_TOLERANCE || modX >= cellWidth - ALIGN_TOLERANCE)
+                && (modY <= ALIGN_TOLERANCE || modY >= cellHeight - ALIGN_TOLERANCE);
     }
+
 
 }
