@@ -208,7 +208,8 @@ public final class PacmanGame {
         // On crée ensuite les fantômes sur la carte.
         for (int i = 0; i < nbGhosts; i++) {
             CouleurFantome couleur =CouleurFantome.values()[ (i % CouleurFantome.values().length) ];
-            IAnimated ghost = new Fantome(this,0,0,spriteStore.getSprite("ghosts/blue/1"), couleur);
+            String spritePath = "ghosts/" + couleur.getFolderName() + "/1";
+            IAnimated ghost = new Fantome(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
             animatedObjects.add(ghost);
             spawnAnimated(ghost);
