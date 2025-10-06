@@ -50,14 +50,14 @@ public abstract class AbstractAnimated implements IAnimated {
      *
      * WARNING : Les marges sont reliés entre elle.
      */
-    private static final int MARGIN_COLLISION = 2;
+    private static final int MARGIN_COLLISION = 8;
 
     /**
      * La marge de pixels pour considérer aligner un IAnimated sur la grille
      *
      * WARNING : Les marges sont reliés entre elle. 
      */
-    private static final int ALIGN_TOLERANCE = 1;
+    private static final int ALIGN_TOLERANCE = 3;
 
     /**
      * Le jeu dans lequel cet objet animé évolue.
