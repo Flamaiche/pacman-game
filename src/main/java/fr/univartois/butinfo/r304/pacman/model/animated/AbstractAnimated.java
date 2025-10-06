@@ -83,6 +83,9 @@ public abstract class AbstractAnimated implements IAnimated {
      */
     protected final ObjectProperty<Image> image;
 
+    protected double requestedHorizontalSpeed = 0;
+    protected double requestedVerticalSpeed = 0;
+
     /**
      * Crée une nouvelle instance de AbstractAnimated.
      *
@@ -189,7 +192,7 @@ public abstract class AbstractAnimated implements IAnimated {
      */
     @Override
     public void setHorizontalSpeed(double speed) {
-        this.horizontalSpeed = speed;
+        requestedHorizontalSpeed = speed;
     }
 
     /*
@@ -209,7 +212,7 @@ public abstract class AbstractAnimated implements IAnimated {
      */
     @Override
     public void setVerticalSpeed(double speed) {
-        this.verticalSpeed = speed;
+        requestedVerticalSpeed = speed;
     }
 
     /*
@@ -324,31 +327,40 @@ public abstract class AbstractAnimated implements IAnimated {
      */
     @Override
     public boolean onStep(long delta) {
-        // On met à jour la position de l'objet sur l'axe x.
+        // Si l'objet est aligné avec la grille, on applique la direction demandée.
+        if (isAlignedWithGrid()) {
+            if ((requestedHorizontalSpeed != horizontalSpeed) || (requestedVerticalSpeed != verticalSpeed)) {
+                horizontalSpeed = requestedHorizontalSpeed;
+                verticalSpeed = requestedVerticalSpeed;
+            }
+        }
+
+        // On calcule la nouvelle position sur l'axe X.
         int limitMaxX = game.getWidth() - getWidth();
         double newX = xPosition.get() + (horizontalSpeed * delta) / 1000;
         if ((newX < 0) || (newX > limitMaxX)) {
-            // L'objet a atteint la limite sur l'axe x.
+            // L'objet a atteint la limite sur l'axe X.
             return false;
         }
 
-        // On met à jour la position de l'objet sur l'axe y.
+        // On calcule la nouvelle position sur l'axe Y.
         int limitMaxY = game.getHeight() - getHeight();
         double newY = yPosition.get() + (verticalSpeed * delta) / 1000;
         if ((newY < 0) || (newY > limitMaxY)) {
-            // L'objet a atteint la limite sur l'axe y.
+            // L'objet a atteint la limite sur l'axe Y.
             return false;
         }
 
-        // On vérifie qu'il n'y a pas un obstacle.
+        // On vérifie s’il y a un mur à la nouvelle position.
         if (isOnWall((int) newX, (int) newY)) {
             // L'objet a atteint un mur.
             return false;
         }
 
-        // L'objet n'a atteint aucun obstacle
+        // Si tout est bon, on applique la nouvelle position.
         xPosition.set(newX);
         yPosition.set(newY);
+
         return true;
     }
 
@@ -475,4 +487,11 @@ public abstract class AbstractAnimated implements IAnimated {
         // ici on ne fait rien du tout car sinon appel recursive
         // l'appel est fait dans les sous classes, ainsi le type dynamique est pris en compte
     }
+
+    public boolean isAlignedWithGrid() {
+        int cellWidth = game.getCellAt(0, 0).getWidth();
+        int cellHeight = game.getCellAt(0, 0).getHeight();
+        return ((int)getX() % cellWidth == 0) && ((int)getY() % cellHeight == 0);
+    }
+
 }
