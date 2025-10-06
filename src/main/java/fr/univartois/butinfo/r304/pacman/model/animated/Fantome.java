@@ -13,6 +13,7 @@ public class Fantome extends AbstractAnimated {
     public static final int DELAI = 50;
     public int compteurDeplacement=0;
     private Random random = new Random();
+    private IStrategieDeplacement strategieDeplacement;
 
     public Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite, CouleurFantome couleurFantome) {
         super(game, xPosition, yPosition, sprite);
@@ -46,6 +47,10 @@ public class Fantome extends AbstractAnimated {
     public void onCollisionWith(PacGomme pacGomme) {
         //Les fantomes traversent les pacGommes donc pas d'effet
 
+    }
+
+    public void setStrategieDeplacement(IStrategieDeplacement strategieDeplacement) {
+        this.strategieDeplacement = strategieDeplacement;
     }
 
     public boolean onStep(long delta){
