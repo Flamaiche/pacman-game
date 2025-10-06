@@ -35,7 +35,7 @@ public interface ISpriteStore {
     /**
      * La taille par défaut des sprites (en pixels).
      */
-    int DEFAULT_SPRITE_SIZE = 30;
+    int DEFAULT_SPRITE_SIZE = 24;
 
     /**
      * La fréquence d'images par défaut pour les sprites animés (en images par seconde).
