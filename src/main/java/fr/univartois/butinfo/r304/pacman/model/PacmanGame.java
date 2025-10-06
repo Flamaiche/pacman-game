@@ -28,6 +28,7 @@ import fr.univartois.butinfo.r304.pacman.model.animated.PacGomme;
 import fr.univartois.butinfo.r304.pacman.model.map.Carte;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
+import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
 import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
@@ -110,6 +111,9 @@ public final class PacmanGame {
      */
     private IPacmanController controller;
 
+
+    private ICarte carte;
+
     /**
      * Crée une nouvelle instance de PacmanGame.
      *
@@ -119,11 +123,12 @@ public final class PacmanGame {
      *        {@link Sprite} du jeu.
      * @param nbGhosts Le nombre de fantômes dans le jeu.
      */
-    public PacmanGame(int gameWidth, int gameHeight, ISpriteStore spriteStore, int nbGhosts) {
+    public PacmanGame(int gameWidth, int gameHeight, ISpriteStore spriteStore, int nbGhosts, ICarte carte) {
         this.width = gameWidth;
         this.height = gameHeight;
         this.spriteStore = spriteStore;
         this.nbGhosts = nbGhosts;
+        this.carte = carte;
     }
 
     /**
@@ -180,7 +185,15 @@ public final class PacmanGame {
     private GameMap createMap() {
         int nbCellLargeur = width / ISpriteStore.DEFAULT_SPRITE_SIZE;
         int nbCellHauteur = height / ISpriteStore.DEFAULT_SPRITE_SIZE;
-        return Carte.createMap(nbCellLargeur, nbCellHauteur);
+        return carte.createMap(nbCellLargeur, nbCellHauteur);
+
+
+
+    }
+
+    public void setIcarte(ICarte carte){
+        this.carte=carte;
+
     }
 
     /**
