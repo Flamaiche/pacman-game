@@ -46,11 +46,9 @@ public class PacMan extends AbstractAnimated {
         this.score.set(score);
     }
 
-
     @Override
     public void onCollisionWith(IAnimated other) {
-
-
+        other.onCollisionWith(this);
     }
 
     @Override
@@ -64,7 +62,7 @@ public class PacMan extends AbstractAnimated {
         if (pointsDeVie.get() <= 0) {
             game.playerIsDead();
         } else {
-            setX(game.getHeight() / 2);
+            setX(game.getHeight() / 2); // todo : utiliser spawn() de la classe Game
             setY(game.getHeight() / 2);
             setHorizontalSpeed(0);
             setVerticalSpeed(0);

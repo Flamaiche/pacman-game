@@ -472,6 +472,7 @@ public abstract class AbstractAnimated implements IAnimated {
     }
 
     public void onCollisionWith(IAnimated other) {
-        // ne fait rien
+        // ici on ne fait rien du tout car sinon appel recursive
+        // l'appel est fait dans les sous classes, ainsi le type dynamique est pris en compte
     }
 }

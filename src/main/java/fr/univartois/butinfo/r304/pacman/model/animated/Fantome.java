@@ -29,10 +29,8 @@ public class Fantome extends AbstractAnimated {
 
     @Override
     public void onCollisionWith(IAnimated other) {
-       //il ne se passe rien pour les autres objets animés
-
+        other.onCollisionWith(this);
     }
-
 
     @Override
     public void onCollisionWith(PacMan pacMan) {
