@@ -94,8 +94,7 @@ public class PacMan extends AbstractAnimated {
         } else {
             setX(game.getHeight() / 2); // todo : utiliser spawn() de la classe Game
             setY(game.getHeight() / 2);
-            setHorizontalSpeed(0);
-            setVerticalSpeed(0);
+            game.stopMoving();
         }
     }
 
