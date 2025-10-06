@@ -41,7 +41,12 @@ public abstract class AbstractAnimated implements IAnimated {
     /**
      * La marge de sécurité pour les obstacles (en pixels).
      */
-    private static final int MARGIN = 5;
+    private static final int MARGIN = 1;
+
+    /**
+     * La marge de sécurité pour les collisions (fantome, pac-gomme)
+     */
+    private static final int MARGIN_COLLISION = 1;
 
     /**
      * Le jeu dans lequel cet objet animé évolue.
@@ -405,17 +410,18 @@ public abstract class AbstractAnimated implements IAnimated {
      */
     @Override
     public boolean isCollidingWith(IAnimated other) {
-        if (isDestroyed() || other.isDestroyed()) {
-            // L'un des deux objets au moins est déjà consommé.
-            // Il ne peut donc pas y avoir de collision.
-            return false;
-        }
+        if (isDestroyed() || other.isDestroyed()) return false;
 
-        Rectangle rectangle = new Rectangle(getX(), getY(), getWidth(), getHeight());
-        return rectangle.intersects(other.getX(), other.getY(), other.getWidth(),
-                other.getHeight());
+        Rectangle pacmanRect = new Rectangle(
+                getX() + MARGIN_COLLISION,
+                getY() + MARGIN_COLLISION,
+                getWidth() - 2 * MARGIN_COLLISION,
+                getHeight() - 2 * MARGIN_COLLISION
+        );
+
+        Rectangle otherRect = new Rectangle(other.getX(), other.getY(), other.getWidth(), other.getHeight());
+        return pacmanRect.intersects(otherRect.getBoundsInLocal());
     }
-
     /*
      * (non-Javadoc)
      *
