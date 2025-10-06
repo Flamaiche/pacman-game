@@ -213,7 +213,7 @@ public final class PacmanGame {
         // On commence par enlever tous les éléments mobiles encore présents.
         clearAnimated();
 
-        player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("pacman/half-open"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
+        player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("pacman/right/closed"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
         animatedObjects.add(player);
         spawnAnimated(player);
 

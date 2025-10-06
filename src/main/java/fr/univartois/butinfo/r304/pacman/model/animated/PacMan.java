@@ -11,6 +11,15 @@ public class PacMan extends AbstractAnimated {
     private final IntegerProperty pointsDeVie;
     private final IntegerProperty score;
 
+    private long animationTimer = 0;
+    private int animationFrame = 0;
+    private static final String[] SPRITES = {
+            "closed",
+            "half-open",
+            "open",
+            "open",
+            "half-open"
+    };
 
     public PacMan(PacmanGame game, int xPosition, int yPosition, Sprite sprite, IntegerProperty pointsDeVie, IntegerProperty score) {
         super(game, xPosition, yPosition, sprite);
@@ -44,6 +53,26 @@ public class PacMan extends AbstractAnimated {
 
     public void setScore(int score) {
         this.score.set(score);
+    }
+
+    public void animate(long delta) {
+        animationTimer += delta;
+        if (animationTimer >= 120) {
+            animationTimer=0;
+            animationFrame = (animationFrame + 1) % SPRITES.length;
+            setSprite(getGame().getSpriteStore().getSprite("pacman/"+getDirection()+"/"+SPRITES[animationFrame]));
+        }
+    }
+
+    private String getDirection() {
+        if (getVerticalSpeed() != 0) {
+            if (getVerticalSpeed() < 0) return "up";
+            else return "down";
+        } else if (getHorizontalSpeed() != 0) {
+            if (getHorizontalSpeed() < 0) return "left";
+            else return "right";
+        }
+        return "right"; // droite par défaut
     }
 
     @Override

@@ -98,6 +98,10 @@ final class GameAnimation extends AnimationTimer {
     private void updateObjects(long delta) {
         for (IAnimated movable : animatedObjects) {
             movable.onStep(delta);
+
+            if (movable instanceof PacMan pacMan) {
+                pacMan.animate(delta);
+            }
         }
     }
 
