@@ -48,6 +48,7 @@ public class PacMan extends AbstractAnimated {
 
     @Override
     public void onCollisionWith(IAnimated other) {
+        // toutes les collisions arrivent ici ( voir GameAnimation.checkCollision() )
         other.onCollisionWith(this);
     }
 
@@ -67,12 +68,10 @@ public class PacMan extends AbstractAnimated {
             setHorizontalSpeed(0);
             setVerticalSpeed(0);
         }
-
     }
 
     @Override
     public void onCollisionWith(PacGomme pacGomme) {
-        pacGomme.onCollisionWith(this);
         setScore(getScore() + 1);
     }
 }
