@@ -216,7 +216,6 @@ public final class PacmanGame {
         clearAnimated();
 
         player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("pacman/right/closed"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
-        animatedObjects.add(player);
         spawnAnimated(player);
 
 
