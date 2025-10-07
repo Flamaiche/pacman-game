@@ -104,7 +104,7 @@ public final class PacmanGame {
     /**
      * L'animation du jeu, qui s'assure que les différents objets évoluent.
      */
-    private final AnimationTimer animation = new GameAnimation(movingObjects, animatedObjects);
+    private AnimationTimer animation = new GameAnimation(movingObjects, animatedObjects);
 
     /**
      * Le contrôleur du jeu.
@@ -203,6 +203,8 @@ public final class PacmanGame {
         prepare();
         createAnimated();
         initStatistics();
+        if (animation != null) animation.stop(); // sécure
+        animation = new GameAnimation(movingObjects, animatedObjects);
         animation.start();
     }
 
@@ -212,10 +214,11 @@ public final class PacmanGame {
     private void createAnimated() {
         // On commence par enlever tous les éléments mobiles encore présents.
         clearAnimated();
+        movingObjects.clear();
 
         player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("pacman/right/closed"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
-        animatedObjects.add(player);
         spawnAnimated(player);
+        addMoving(player);
 
 
         // On crée ensuite les fantômes sur la carte.
@@ -224,8 +227,8 @@ public final class PacmanGame {
             String spritePath = "ghosts/" + couleur.getFolderName() + "/1";
             IAnimated ghost = new Fantome(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
-            animatedObjects.add(ghost);
             spawnAnimated(ghost);
+            addMoving(ghost);
         }
 
         SpriteStore spriteStore = new SpriteStore();
@@ -236,8 +239,8 @@ public final class PacmanGame {
             y = emptyCell.getColumn();
             x = emptyCell.getRow();
             PacGomme pg = new PacGomme(this, x, y, gomme);
-            animatedObjects.add(pg);
             spawnAnimated(pg);
+            addAnimated(pg);
         }
         nbGums = gameMap.getEmptyCells().size();
     }
@@ -262,7 +265,6 @@ public final class PacmanGame {
             Cell cell = spawnableCells.get(RANDOM.nextInt(spawnableCells.size()));
             animated.setX(cell.getColumn() * spriteStore.getSpriteSize());
             animated.setY(cell.getRow() * spriteStore.getSpriteSize());
-            addMoving(animated);
         }
     }
 
