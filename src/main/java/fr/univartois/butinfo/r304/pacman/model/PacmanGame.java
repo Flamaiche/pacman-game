@@ -203,7 +203,7 @@ public final class PacmanGame {
         prepare();
         createAnimated();
         initStatistics();
-        if (animation != null) animation.stop();
+        if (animation != null) animation.stop(); // sécure
         animation = new GameAnimation(movingObjects, animatedObjects);
         animation.start();
     }
@@ -214,9 +214,11 @@ public final class PacmanGame {
     private void createAnimated() {
         // On commence par enlever tous les éléments mobiles encore présents.
         clearAnimated();
+        movingObjects.clear();
 
         player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("pacman/right/closed"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
         spawnAnimated(player);
+        addMoving(player);
 
 
         // On crée ensuite les fantômes sur la carte.
@@ -226,6 +228,7 @@ public final class PacmanGame {
             IAnimated ghost = new Fantome(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
             spawnAnimated(ghost);
+            addMoving(ghost);
         }
 
         SpriteStore spriteStore = new SpriteStore();
@@ -237,6 +240,7 @@ public final class PacmanGame {
             x = emptyCell.getRow();
             PacGomme pg = new PacGomme(this, x, y, gomme);
             spawnAnimated(pg);
+            addAnimated(pg);
         }
         nbGums = gameMap.getEmptyCells().size();
     }
@@ -261,7 +265,6 @@ public final class PacmanGame {
             Cell cell = spawnableCells.get(RANDOM.nextInt(spawnableCells.size()));
             animated.setX(cell.getColumn() * spriteStore.getSpriteSize());
             animated.setY(cell.getRow() * spriteStore.getSpriteSize());
-            addMoving(animated);
         }
     }
 
