@@ -10,8 +10,6 @@ import java.util.Random;
 public class Fantome extends AbstractAnimated {
 
     private CouleurFantome couleurFantome;
-    public static final int DELAI = 50;
-    public int compteurDeplacement=0;
     private Random random = new Random();
     private IStrategieDeplacement strategieDeplacement;
 
@@ -54,26 +52,10 @@ public class Fantome extends AbstractAnimated {
     }
 
     public boolean onStep(long delta){
-        compteurDeplacement++;
-        if(compteurDeplacement>= DELAI){
-            choixRandomDirection();
-            compteurDeplacement=0;
+        if(strategieDeplacement!=null){
+            strategieDeplacement.mouvement();
         }
         return super.onStep(delta);
-    }
-
-    private void choixRandomDirection(){
-
-        double vitesse = 50+random.nextDouble() *100;
-
-        if(random.nextBoolean()){
-            setHorizontalSpeed(vitesse*(random.nextBoolean()?1:-1));
-            setVerticalSpeed(0);
-        }else {
-            setVerticalSpeed(vitesse*(random.nextBoolean()?1:-1));
-            setHorizontalSpeed(0);
-        }
-
     }
 
 }

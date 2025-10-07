@@ -332,11 +332,11 @@ PacmanController o-- "1" PacmanGame
 
 ### Jalon n°2 - TP n°4
 
-| Fonctionnalité                             | Patron de Conception ? | Terminée ? | Auteur(s)                                     |
-| ------------------------------------------ | ---------------------- | ---------- | --------------------------------------------- |
-| Variantes de génération de labyrinthe      |                        |            |                                               |
-| Complétion d'un labyrinthe existant        |                        |            |                                               |
-| Variantes de déplacement pour les fantômes |                        |            |                                               |
+| Fonctionnalité                             | Patron de Conception ?     | Terminée ? | Auteur(s)                 |
+| ------------------------------------------ |----------------------------|------------|---------------------------|
+| Variantes de génération de labyrinthe      |                            |            |                           |
+| Complétion d'un labyrinthe existant        |                            |            |                           |
+| Variantes de déplacement pour les fantômes | Patron Stratégie(strategy) | Démarrage  | Popieul Mathéo (membre 3) |
 
 ### Jalon n°3 - TP n°5
 
