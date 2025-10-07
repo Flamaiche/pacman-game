@@ -104,7 +104,7 @@ public final class PacmanGame {
     /**
      * L'animation du jeu, qui s'assure que les différents objets évoluent.
      */
-    private final AnimationTimer animation = new GameAnimation(movingObjects, animatedObjects);
+    private AnimationTimer animation = new GameAnimation(movingObjects, animatedObjects);
 
     /**
      * Le contrôleur du jeu.
@@ -203,6 +203,8 @@ public final class PacmanGame {
         prepare();
         createAnimated();
         initStatistics();
+        if (animation != null) animation.stop();
+        animation = new GameAnimation(movingObjects, animatedObjects);
         animation.start();
     }
 
@@ -224,7 +226,6 @@ public final class PacmanGame {
             String spritePath = "ghosts/" + couleur.getFolderName() + "/1";
             IAnimated ghost = new Fantome(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
-            animatedObjects.add(ghost);
             spawnAnimated(ghost);
         }
 
@@ -236,7 +237,6 @@ public final class PacmanGame {
             y = emptyCell.getColumn();
             x = emptyCell.getRow();
             PacGomme pg = new PacGomme(this, x, y, gomme);
-            animatedObjects.add(pg);
             spawnAnimated(pg);
         }
         nbGums = gameMap.getEmptyCells().size();
