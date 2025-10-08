@@ -21,6 +21,7 @@ import java.io.IOException;
 import fr.univartois.butinfo.r304.pacman.controller.PacmanController;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.model.map.Carte;
+import fr.univartois.butinfo.r304.pacman.model.map.Carte_2;
 import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 import javafx.application.Application;
@@ -65,7 +66,9 @@ public final class PacmanApplication extends Application {
         Parent viewContent = fxmlLoader.load();
         PacmanController controller = fxmlLoader.getController();
         controller.setStage(stage);
-        ICarte carte = new Carte();
+        //ICarte carte = new Carte();
+        ICarte carte = new Carte_2();
+
 
         // On crée ensuite le jeu, que l'on lie au contrôleur.
         PacmanGame game = new PacmanGame(
@@ -80,6 +83,8 @@ public final class PacmanApplication extends Application {
         stage.setTitle("PacmanFX");
         stage.setResizable(false);
         stage.show();
+
+
     }
 
     /**
