@@ -191,4 +191,12 @@ public final class Cell {
         imageProperty.bind(cell.getSprite().imageProperty());
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Cell)) return false;
+        Cell autre = (Cell) obj;
+        return this.row == autre.row && this.column == autre.column;
+    }
+
 }
