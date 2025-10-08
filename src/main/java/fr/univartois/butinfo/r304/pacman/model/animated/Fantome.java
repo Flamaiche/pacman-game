@@ -10,9 +10,9 @@ import java.util.Random;
 public class Fantome extends AbstractAnimated {
 
     private CouleurFantome couleurFantome;
-    public static final int DELAI = 50;
-    public int compteurDeplacement=0;
     private Random random = new Random();
+    private IStrategieDeplacement strategieDeplacement;
+
 
     public Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite, CouleurFantome couleurFantome) {
         super(game, xPosition, yPosition, sprite);
@@ -49,27 +49,15 @@ public class Fantome extends AbstractAnimated {
         // ne fait rien
     }
 
-    public boolean onStep(long delta){
-        compteurDeplacement++;
-        if(compteurDeplacement>= DELAI){
-            choixRandomDirection();
-            compteurDeplacement=0;
-        }
-        return super.onStep(delta);
+    public void setStrategieDeplacement(IStrategieDeplacement strategieDeplacement) {
+        this.strategieDeplacement = strategieDeplacement;
     }
 
-    private void choixRandomDirection(){
-
-        double vitesse = 50+random.nextDouble() *100;
-
-        if(random.nextBoolean()){
-            setHorizontalSpeed(vitesse*(random.nextBoolean()?1:-1));
-            setVerticalSpeed(0);
-        }else {
-            setVerticalSpeed(vitesse*(random.nextBoolean()?1:-1));
-            setHorizontalSpeed(0);
+    public boolean onStep(long delta){
+        if(strategieDeplacement!=null){
+            strategieDeplacement.mouvement();
         }
-
+        return super.onStep(delta);
     }
 
 }
