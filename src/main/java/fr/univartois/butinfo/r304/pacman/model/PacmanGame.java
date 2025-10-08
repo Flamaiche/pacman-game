@@ -314,7 +314,7 @@ public final class PacmanGame {
      *
      * @return La cellule occupée par l'objet mobile.
      */
-    private Cell getCellOf(IAnimated animated) {
+    public Cell getCellOf(IAnimated animated) {
         // On commence par récupérer la position du centre de l'objet.
         int midX = animated.getX() + (animated.getWidth() / 2);
         int midY = animated.getY() + (animated.getHeight() / 2);
@@ -410,6 +410,14 @@ public final class PacmanGame {
     private void gameOver(String message) {
         animation.stop();
         controller.gameOver(message);
+    }
+
+    public GameMap getGameMap() {
+        return gameMap;
+    }
+
+    public PacMan getPlayer() {
+        return player;
     }
 
 }
