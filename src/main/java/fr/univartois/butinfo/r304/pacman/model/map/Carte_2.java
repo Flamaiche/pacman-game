@@ -5,44 +5,55 @@ import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 
 public class Carte_2 extends Carte {
 
-    public Carte_2() {
-        super();
-    }
+    public Carte_2() {}
 
     @Override
     public GameMap createMap(int largeur, int hauteur) {
-        largeur = 36;
-        hauteur = 24;
+        GameMap map = new Carte().createMap(largeur, hauteur);
+        ajoutMursInterieurs(map, largeur, hauteur);
+        return map;
+    }
 
-        GameMap map = new GameMap(hauteur, largeur);
-
+    private void ajoutMursInterieurs(GameMap map, int largeur, int hauteur) {
         SpriteStore spriteStore = new SpriteStore();
         Wall wall = new Wall(spriteStore.getSprite("wall"));
         Sprite path = spriteStore.getSprite("path");
 
-        for (int i = 0; i < hauteur; i++) {
-            for (int j = 0; j < largeur; j++) {
+        int offset = 2;
+        int couche = 0;
 
-                // Bords fermés
-                if (i == 0 || i == hauteur - 1 || j == 0 || j == largeur - 1) {
-                    map.setAt(i, j, new Cell(wall));
-                }
-                // Murs horizontaux pour créer couloirs
-                else if ((i == 4 || i == 8 || i == 12 || i == 16 || i == 20) && (j % 3 != 0)) {
-                    map.setAt(i, j, new Cell(wall));
-                }
-                // Murs verticaux pour créer couloirs
-                else if ((j == 5 || j == 11 || j == 17 || j == 23 || j == 29) && (i % 4 != 0)) {
-                    map.setAt(i, j, new Cell(wall));
-                }
-                // Chemins libres partout ailleurs
-                else {
-                    map.setAt(i, j, new Cell(path));
-                }
+        while (offset < Math.min(largeur, hauteur) / 2 - 2) {
+
+            for (int x = offset; x < largeur - offset; x++) {
+                if (x != offset + 1 || couche % 2 == 0)
+                    map.setAt(offset, x, new Cell(wall));
             }
+
+            for (int y = offset; y < hauteur - offset; y++) {
+                if (y != offset + 1 || couche % 2 == 1) // ouverture alternée
+                    map.setAt(y, largeur - offset - 1, new Cell(wall));
+            }
+
+            for (int x = largeur - offset - 1; x >= offset; x--) {
+                if (x != largeur - offset - 2 || couche % 2 == 0)
+                    map.setAt(hauteur - offset - 1, x, new Cell(wall));
+            }
+
+            for (int y = hauteur - offset - 1; y >= offset; y--) {
+                if (y != hauteur - offset - 2 || couche % 2 == 1)
+                    map.setAt(y, offset, new Cell(wall));
+            }
+
+            offset += 3;
+            couche++;
         }
 
-
-        return map;
+        int centreX = largeur / 2;
+        int centreY = hauteur / 2;
+        for (int y = centreY - 2; y <= centreY + 2; y++) {
+            for (int x = centreX - 2; x <= centreX + 2; x++) {
+                map.setAt(y, x, new Cell(path));
+            }
+        }
     }
 }
