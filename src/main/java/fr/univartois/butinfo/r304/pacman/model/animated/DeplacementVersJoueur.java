@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-
-
 public class DeplacementVersJoueur implements IStrategieDeplacement {
     private final Fantome fantome;
     private Random random = new Random();
