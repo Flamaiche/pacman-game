@@ -41,23 +41,23 @@ public abstract class AbstractAnimated implements IAnimated {
     /**
      * La marge de sécurité pour les obstacles (en pixels).
      *
-     * WARNING : Les marges sont reliés entre elle.
+     * WARNING (hard) : Les marges sont reliés entre elle.
      */
     private static final int MARGIN = 1;
 
     /**
      * La marge de sécurité pour les collisions (fantome, pac-gomme)
      *
-     * WARNING : Les marges sont reliés entre elle.
+     * WARNING (light) : Les marges sont reliés entre elle.
      */
-    private static final int MARGIN_COLLISION = 8;
+    private static final int MARGIN_COLLISION = 5;
 
     /**
      * La marge de pixels pour considérer aligner un IAnimated sur la grille
      *
-     * WARNING : Les marges sont reliés entre elle. 
+     * WARNING (hard) : Les marges sont reliés entre elle.
      */
-    private static final int ALIGN_TOLERANCE = 3;
+    private static final int ALIGN_TOLERANCE = 4;
 
     /**
      * Le jeu dans lequel cet objet animé évolue.
@@ -343,11 +343,13 @@ public abstract class AbstractAnimated implements IAnimated {
      */
     @Override
     public boolean onStep(long delta) {
+
         // Si l'objet est aligné avec la grille, on applique la direction demandée.
-        if (isAlignedWithGrid()) {
+        if (isAlignedWithGrid(ALIGN_TOLERANCE)) {
             if ((requestedHorizontalSpeed != horizontalSpeed) || (requestedVerticalSpeed != verticalSpeed)) {
                 horizontalSpeed = requestedHorizontalSpeed;
                 verticalSpeed = requestedVerticalSpeed;
+                alignToGrid();
             }
         }
 
@@ -379,6 +381,18 @@ public abstract class AbstractAnimated implements IAnimated {
 
         return true;
     }
+
+    public void alignToGrid() {
+        int cellWidth = game.getCellAt(0, 0).getWidth();
+        int cellHeight = game.getCellAt(0, 0).getHeight();
+
+        int alignedX = (int) Math.round((double) getX() / cellWidth) * cellWidth;
+        int alignedY = (int) Math.round((double) getY() / cellHeight) * cellHeight;
+
+        setX(alignedX);
+        setY(alignedY);
+    }
+
 
     /**
      * Vérifie si la nouvelle position de l'objet est sur un mur.
@@ -505,15 +519,15 @@ public abstract class AbstractAnimated implements IAnimated {
         // l'appel est fait dans les sous classes, ainsi le type dynamique est pris en compte
     }
 
-    public boolean isAlignedWithGrid() {
+    public boolean isAlignedWithGrid(int alignTolerance) {
         int cellWidth = game.getCellAt(0, 0).getWidth();
         int cellHeight = game.getCellAt(0, 0).getHeight();
 
         int modX = getX() % cellWidth;
         int modY = getY() % cellHeight;
 
-        return (modX <= ALIGN_TOLERANCE || modX >= cellWidth - ALIGN_TOLERANCE)
-                && (modY <= ALIGN_TOLERANCE || modY >= cellHeight - ALIGN_TOLERANCE);
+        return (modX <= alignTolerance || modX >= cellWidth - alignTolerance)
+                && (modY <= alignTolerance || modY >= cellHeight - alignTolerance);
     }
 
 

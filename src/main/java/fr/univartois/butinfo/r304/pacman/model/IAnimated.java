@@ -231,7 +231,9 @@ public interface IAnimated {
 
     void onCollisionWith(PacGomme pacGomme);
 
-    boolean isAlignedWithGrid();
+    boolean isAlignedWithGrid(int alignTolerance);
+
+    void alignToGrid();
 
     /**
      * Réinitialise ou libère certaines ressources lorsque cet objet animé est retiré de
