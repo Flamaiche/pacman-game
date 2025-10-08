@@ -21,10 +21,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.univartois.butinfo.r304.pacman.model.animated.CouleurFantome;
-import fr.univartois.butinfo.r304.pacman.model.animated.Fantome;
-import fr.univartois.butinfo.r304.pacman.model.animated.PacMan;
-import fr.univartois.butinfo.r304.pacman.model.animated.PacGomme;
+import fr.univartois.butinfo.r304.pacman.model.animated.*;
 import fr.univartois.butinfo.r304.pacman.model.map.Carte;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
@@ -222,7 +219,8 @@ public final class PacmanGame {
         for (int i = 0; i < nbGhosts; i++) {
             CouleurFantome couleur =CouleurFantome.values()[ (i % CouleurFantome.values().length) ];
             String spritePath = "ghosts/" + couleur.getFolderName() + "/1";
-            IAnimated ghost = new Fantome(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
+            Fantome ghost = new Fantome(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
+            ghost.setStrategieDeplacement(new DeplacementAleatoire(ghost));
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
             animatedObjects.add(ghost);
             spawnAnimated(ghost);

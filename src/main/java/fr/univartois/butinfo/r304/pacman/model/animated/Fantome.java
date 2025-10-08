@@ -13,6 +13,7 @@ public class Fantome extends AbstractAnimated {
     private Random random = new Random();
     private IStrategieDeplacement strategieDeplacement;
 
+
     public Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite, CouleurFantome couleurFantome) {
         super(game, xPosition, yPosition, sprite);
         this.couleurFantome = couleurFantome;
