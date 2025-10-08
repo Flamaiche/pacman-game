@@ -5,18 +5,21 @@ import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
 
 
 public class DeplacementVersJoueur implements IStrategieDeplacement {
-
     private final Fantome fantome;
+    private Random random = new Random();
     private final PacmanGame game;
     private final IAnimated pacman;
 
     private int compteurDeplacement = 0;
     private static final int DELAI = 50;
-    private static final double VITESSE = 80;
 
     public DeplacementVersJoueur(Fantome fantome) {
         this.fantome = fantome;
@@ -50,11 +53,12 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
         int deltaX = prochaineCellule.getColumn() - celluleFantome.getColumn();
         int deltaY = prochaineCellule.getRow() - celluleFantome.getRow();
 
+        double vitesse = 50 + random.nextDouble() * 100;
         if (deltaX != 0) {
-            fantome.setHorizontalSpeed(deltaX > 0 ? VITESSE : -VITESSE);
+            fantome.setHorizontalSpeed(deltaX > 0 ? vitesse : -vitesse);
             fantome.setVerticalSpeed(0);
         } else if (deltaY != 0) {
-            fantome.setVerticalSpeed(deltaY > 0 ? VITESSE : -VITESSE);
+            fantome.setVerticalSpeed(deltaY > 0 ? vitesse : -vitesse);
             fantome.setHorizontalSpeed(0);
         }
     }
@@ -134,8 +138,8 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
         return precedente;
     }
 
-    private List<Cell> obtenirVoisins(GameMap carte, Cell cellule) {
-        List<Cell> voisins = new ArrayList<>();
+    private ArrayList<Cell> obtenirVoisins(GameMap carte, Cell cellule) {
+        ArrayList<Cell> voisins = new ArrayList<>();
         int ligne = cellule.getRow();
         int colonne = cellule.getColumn();
 
