@@ -42,6 +42,7 @@ public class Carte_2 extends Carte {
             }
         }
 
+
         return map;
     }
 }
