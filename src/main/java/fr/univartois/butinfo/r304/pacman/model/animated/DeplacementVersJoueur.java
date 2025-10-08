@@ -32,17 +32,20 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
             compteurDeplacement = 0;
         }
     }
-    
-    
+
     private void choisirDirection(int anticipation) {
         GameMap carte = game.getGameMap();
         Cell celluleFantome = game.getCellOf(fantome);
         Cell celluleCible = determinerCelluleCible(anticipation);
 
-        if (celluleFantome == null || celluleCible == null) return;
+        if (celluleFantome == null) return;
 
         Cell prochaineCellule = trouverProchaineCelluleSurChemin(carte, celluleFantome, celluleCible);
-        if (prochaineCellule == null) return;
+        if (prochaineCellule == null) {
+            celluleCible = determinerCelluleCible(0);
+            prochaineCellule = trouverProchaineCelluleSurChemin(carte, celluleFantome, celluleCible);
+            if (prochaineCellule == null) return;
+        }
 
         int deltaX = prochaineCellule.getColumn() - celluleFantome.getColumn();
         int deltaY = prochaineCellule.getRow() - celluleFantome.getRow();
@@ -55,6 +58,7 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
             fantome.setHorizontalSpeed(0);
         }
     }
+
 
     private Cell determinerCelluleCible(int anticipation) {
         Cell cellulePacman = game.getCellOf(pacman);
