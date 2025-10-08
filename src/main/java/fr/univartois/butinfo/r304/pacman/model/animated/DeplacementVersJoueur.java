@@ -13,7 +13,6 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
     private final Fantome fantome;
     private final PacmanGame game;
     private final IAnimated pacman;
-    private final Random generateurAleatoire = new Random();
 
     private int compteurDeplacement = 0;
     private static final int DELAI = 50;
