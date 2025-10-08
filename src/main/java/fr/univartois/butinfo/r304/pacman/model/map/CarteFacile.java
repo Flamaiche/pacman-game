@@ -3,7 +3,6 @@ package fr.univartois.butinfo.r304.pacman.model.map;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 
-import java.awt.desktop.SystemSleepEvent;
 
 public class CarteFacile extends Carte {
 
@@ -11,6 +10,7 @@ public class CarteFacile extends Carte {
 
     @Override
     public GameMap createMap(int largeur, int hauteur) {
+
 
         GameMap map = new Carte().createMap(largeur, hauteur);
         ajoutMursInterieurs(map, largeur, hauteur);
@@ -39,16 +39,23 @@ public class CarteFacile extends Carte {
                         map.setAt(y, x+1, new Cell(wall));
                     }
                 } else if (y == (int)centreY && (x > 3 && x < largeur-4)) {
+                    System.out.println(y +"\t" + centreY + "\t" + hauteur);
                     map.setAt(y, x, new Cell(wall));
                     if (y < centreY) {
                         map.setAt(y+1, x, new Cell(wall));
                     }
                 } else if (x == (int)centreX && (y > 3 && y < hauteur-4)) {
-                    System.out.println(x +"\n" + centreX + "\n" + largeur);
+                    System.out.println(x +"\t" + centreX + "\t" + largeur);
                     map.setAt(y, x, new Cell(wall));
                     if (x < centreX) {
                         map.setAt(y, x + 1, new Cell(wall));
                     }
+                }
+                // autres
+                else if ((y == 6 || y == hauteur-7) && (x > 5 && x < largeur-6) && x%3!=0) {
+                    map.setAt(y, x, new Cell(wall));
+                } else if ((x == 6 || x == largeur-7) && (y > 5 && y < hauteur-6) && y%3!=0) {
+                    map.setAt(y, x, new Cell(wall));
                 }
             }
         }
