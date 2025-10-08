@@ -87,9 +87,13 @@ public final class SpriteStore implements ISpriteStore {
      * @throws NoSuchElementException S'il n'existe pas d'image ayant le nom donné.
      */
     private Image loadImage(String name) {
+        int margin = 0;
+        if (name.contains("pacman")) {
+            margin = 0;
+        }
         try {
             URL urlImage = getClass().getResource("sprites/" + name + ".png");
-            return new Image(urlImage.toExternalForm(), getSpriteSize(), getSpriteSize(), true, true);
+            return new Image(urlImage.toExternalForm(), getSpriteSize() - margin, getSpriteSize() - margin, true, true);
 
         } catch (NullPointerException | IllegalArgumentException e) {
             throw new NoSuchElementException("Could not load image " + name, e);
