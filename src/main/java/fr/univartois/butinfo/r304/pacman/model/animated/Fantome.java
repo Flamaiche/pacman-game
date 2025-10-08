@@ -2,6 +2,7 @@ package fr.univartois.butinfo.r304.pacman.model.animated;
 
 import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
+import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 import fr.univartois.butinfo.r304.pacman.model.map.Wall;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 
@@ -58,6 +59,10 @@ public class Fantome extends AbstractAnimated {
             strategieDeplacement.mouvement();
         }
         return super.onStep(delta);
+    }
+
+    public PacmanGame getGame(){
+        return game;
     }
 
 }
