@@ -14,8 +14,8 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
     private final PacmanGame game;
     private final IAnimated pacman;
     private final Random random = new Random();
+    private final double vitesse = PacmanGame.DEFAULT_SPEED;;
     private int anticipation = 0;
-    private double vitesse = 100;
 
 
     private int compteurDeplacement = 0;
@@ -28,7 +28,6 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
         this.fantome = fantome;
         this.game = fantome.getGame();
         this.pacman = game.getPlayer();
-        vitesse = PacmanGame.DEFAULT_SPEED;
     }
 
     @Override
