@@ -237,7 +237,7 @@ public final class PacmanGame {
             y = emptyCell.getColumn();
             x = emptyCell.getRow();
             PacGomme pg = new PacGomme(this, x, y, gomme);
-            spawnAnimated(pg);
+            spawnAnimated(pg, x, y);
             addAnimated(pg);
         }
         nbGums = gameMap.getEmptyCells().size();
@@ -261,6 +261,14 @@ public final class PacmanGame {
         List<Cell> spawnableCells = gameMap.getEmptyCells();
         if (!spawnableCells.isEmpty()) {
             Cell cell = spawnableCells.get(RANDOM.nextInt(spawnableCells.size()));
+            animated.setX(cell.getColumn() * spriteStore.getSpriteSize());
+            animated.setY(cell.getRow() * spriteStore.getSpriteSize());
+        }
+    }
+
+    private void spawnAnimated(IAnimated animated, int x, int y) {
+        Cell cell = gameMap.getAt(x, y);
+        if (!cell.isEmpty()) {
             animated.setX(cell.getColumn() * spriteStore.getSpriteSize());
             animated.setY(cell.getRow() * spriteStore.getSpriteSize());
         }
