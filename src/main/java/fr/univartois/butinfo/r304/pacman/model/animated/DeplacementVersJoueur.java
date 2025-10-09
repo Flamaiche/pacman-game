@@ -25,9 +25,13 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
 
     @Override
     public void mouvement() {
+        mouvement(0);
+    }
+
+    public void mouvement(int anticipation) {
         compteurDeplacement++;
         if (compteurDeplacement >= DELAI) {
-            choisirDirection(0);
+            choisirDirection(anticipation);
             compteurDeplacement = 0;
         }
     }
