@@ -1,4 +1,6 @@
-package fr.univartois.butinfo.r304.pacman.model.animated;
+package fr.univartois.butinfo.r304.pacman.model.animated.deplacements;
+
+import fr.univartois.butinfo.r304.pacman.model.animated.Fantome;
 
 public class DeplacementVersJoueurA3 implements IStrategieDeplacement {
     private final Fantome fantome;

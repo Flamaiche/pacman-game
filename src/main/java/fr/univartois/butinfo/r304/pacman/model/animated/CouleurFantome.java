@@ -1,5 +1,10 @@
 package fr.univartois.butinfo.r304.pacman.model.animated;
 
+import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.DeplacementAleatoire;
+import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.DeplacementVersJoueur;
+import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.DeplacementVersJoueurA3;
+import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.IStrategieDeplacement;
+
 public enum CouleurFantome {
     RED("red"),
     PINK("pink"),
