@@ -25,10 +25,12 @@ public enum CouleurFantome {
         switch (this) {
             case PINK :
                 mouvement = new DeplacementVersJoueur(fantome);
+                break;
             case BLUE :
                 DeplacementVersJoueur dvj = new DeplacementVersJoueur(fantome);
                 dvj.setAnticipation(3);
                 mouvement =  dvj;
+                break;
             default :
                 mouvement = new DeplacementAleatoire(fantome);
         };
