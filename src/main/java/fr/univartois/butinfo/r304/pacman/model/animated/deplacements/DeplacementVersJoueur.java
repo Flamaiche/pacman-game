@@ -14,13 +14,10 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
     private final PacmanGame game;
     private final IAnimated pacman;
     private final Random random = new Random();
-    private final double vitesse = PacmanGame.DEFAULT_SPEED;;
+    private final double vitesse = PacmanGame.DEFAULT_SPEED;
     private int anticipation = 0;
-
-
     private int compteurDeplacement = 0;
-    private static final int DELAI = 50;
-
+    private static final int DELAI = 20;
     private int directionX = 0;
     private int directionY = 0;
 
@@ -57,24 +54,44 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
         if (distances.isEmpty()) return;
 
         int minDist = Collections.min(distances.values());
+
+        final int SEUIL_DEMI_TOUR = 2;
+        Cell celluleArriere = null;
+        int arriereX = celluleFantome.getColumn() - directionX;
+        int arriereY = celluleFantome.getRow() - directionY;
+        if (carte.isOnMap(arriereY, arriereX)) {
+            celluleArriere = carte.getAt(arriereY, arriereX);
+        }
+        if (celluleArriere != null && distances.containsKey(celluleArriere)) {
+            int distArriere = distances.get(celluleArriere);
+            if (distArriere > minDist + SEUIL_DEMI_TOUR) {
+                distances.remove(celluleArriere);
+            }
+        }
+
+        if (distances.isEmpty()) return;
+        minDist = Collections.min(distances.values());
+
         List<Cell> meilleursVoisins = new ArrayList<>();
         for (Map.Entry<Cell, Integer> entry : distances.entrySet()) {
             if (entry.getValue() == minDist) meilleursVoisins.add(entry.getKey());
         }
 
         Cell prochaine = null;
+        double meilleureDistanceEuclidienne = Double.MAX_VALUE;
+
         for (Cell c : meilleursVoisins) {
-            int dx = c.getColumn() - celluleFantome.getColumn();
-            int dy = c.getRow() - celluleFantome.getRow();
-            if (dx == directionX && dy == directionY) {
+            double distEuclidienne = Math.hypot(
+                    c.getColumn() - cellulePacman.getColumn(),
+                    c.getRow() - cellulePacman.getRow()
+            );
+            if (distEuclidienne < meilleureDistanceEuclidienne) {
+                meilleureDistanceEuclidienne = distEuclidienne;
                 prochaine = c;
-                break;
             }
         }
 
-        if (prochaine == null) {
-            prochaine = meilleursVoisins.get(random.nextInt(meilleursVoisins.size()));
-        }
+        if (prochaine == null) return;
 
         int deltaX = prochaine.getColumn() - celluleFantome.getColumn();
         int deltaY = prochaine.getRow() - celluleFantome.getRow();
