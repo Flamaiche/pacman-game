@@ -1,5 +1,9 @@
 package fr.univartois.butinfo.r304.pacman.model.animated;
 
+import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.DeplacementAleatoire;
+import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.DeplacementVersJoueur;
+import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.IStrategieDeplacement;
+
 public enum CouleurFantome {
     RED("red"),
     PINK("pink"),
@@ -14,6 +18,23 @@ public enum CouleurFantome {
 
     public String getFolderName() {
         return folderName;
+    }
+
+    public IStrategieDeplacement getStrategie(Fantome fantome) {
+        IStrategieDeplacement mouvement;
+        switch (this) {
+            case PINK :
+                mouvement = new DeplacementVersJoueur(fantome);
+                break;
+            case BLUE :
+                DeplacementVersJoueur dvj = new DeplacementVersJoueur(fantome);
+                dvj.setAnticipation(3);
+                mouvement =  dvj;
+                break;
+            default :
+                mouvement = new DeplacementAleatoire(fantome);
+        };
+        return mouvement;
     }
 }
 

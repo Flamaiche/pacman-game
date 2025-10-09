@@ -1,10 +1,12 @@
-package fr.univartois.butinfo.r304.pacman.model.animated;
+package fr.univartois.butinfo.r304.pacman.model.animated.deplacements;
+
+import fr.univartois.butinfo.r304.pacman.model.animated.Fantome;
 
 import java.util.Random;
 
 public class DeplacementAleatoire implements IStrategieDeplacement {
-        private Fantome fantome;
-        private Random random = new Random();
+        private final Fantome fantome;
+        private final Random random = new Random();
         private int compteurDeplacement =0;
         private static final int DELAI = 50;
 

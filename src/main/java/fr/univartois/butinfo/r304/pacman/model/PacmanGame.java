@@ -16,13 +16,12 @@
 
 package fr.univartois.butinfo.r304.pacman.model;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.univartois.butinfo.r304.pacman.model.animated.*;
-import fr.univartois.butinfo.r304.pacman.model.map.Carte;
+
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
@@ -223,7 +222,6 @@ public final class PacmanGame {
             CouleurFantome couleur =CouleurFantome.values()[ (i % CouleurFantome.values().length) ];
             String spritePath = "ghosts/" + couleur.getFolderName() + "/1";
             Fantome ghost = new Fantome(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
-            ghost.setStrategieDeplacement(new DeplacementAleatoire(ghost));
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
             spawnAnimated(ghost);
             addMoving(ghost);
@@ -314,7 +312,7 @@ public final class PacmanGame {
      *
      * @return La cellule occupée par l'objet mobile.
      */
-    private Cell getCellOf(IAnimated animated) {
+    public Cell getCellOf(IAnimated animated) {
         // On commence par récupérer la position du centre de l'objet.
         int midX = animated.getX() + (animated.getWidth() / 2);
         int midY = animated.getY() + (animated.getHeight() / 2);
@@ -410,6 +408,14 @@ public final class PacmanGame {
     private void gameOver(String message) {
         animation.stop();
         controller.gameOver(message);
+    }
+
+    public GameMap getGameMap() {
+        return gameMap;
+    }
+
+    public PacMan getPlayer() {
+        return player;
     }
 
 }
