@@ -11,13 +11,13 @@ import java.util.Random;
 public class Fantome extends AbstractAnimated {
 
     private CouleurFantome couleurFantome;
-    private Random random = new Random();
     private IStrategieDeplacement strategieDeplacement;
 
 
     public Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite, CouleurFantome couleurFantome) {
         super(game, xPosition, yPosition, sprite);
         this.couleurFantome = couleurFantome;
+        this.strategieDeplacement = couleurFantome.getStrategie(this);
     }
 
     private CouleurFantome getCouleurFantome() {
