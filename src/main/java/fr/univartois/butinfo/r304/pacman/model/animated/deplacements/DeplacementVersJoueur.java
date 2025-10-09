@@ -14,6 +14,7 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
     private final PacmanGame game;
     private final IAnimated pacman;
     private final Random random = new Random();
+    private int anticipation = 0;
 
     private int compteurDeplacement = 0;
     private static final int DELAI = 50;
@@ -26,7 +27,7 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
 
     @Override
     public void mouvement() {
-        mouvement(0);
+        mouvement(anticipation);
     }
 
     public void mouvement(int anticipation) {
@@ -136,5 +137,9 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
         if (carte.isOnMap(ligne, colonne + 1)) voisins.add(carte.getAt(ligne, colonne + 1));
 
         return voisins;
+    }
+
+    public void setAnticipation(int anticipation) {
+        this.anticipation = anticipation;
     }
 }
