@@ -5,16 +5,14 @@ import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class DeplacementVersJoueur implements IStrategieDeplacement {
+
     private final Fantome fantome;
-    private Random random = new Random();
     private final PacmanGame game;
     private final IAnimated pacman;
+    private final Random random = new Random();
 
     private int compteurDeplacement = 0;
     private static final int DELAI = 50;
@@ -37,11 +35,11 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
     private void choisirDirection(int anticipation) {
         GameMap carte = game.getGameMap();
         Cell celluleFantome = game.getCellOf(fantome);
-        Cell celluleCible = determinerCelluleCible(anticipation);
-
         if (celluleFantome == null) return;
 
+        Cell celluleCible = determinerCelluleCible(anticipation);
         Cell prochaineCellule = trouverProchaineCelluleSurChemin(carte, celluleFantome, celluleCible);
+
         if (prochaineCellule == null) {
             celluleCible = determinerCelluleCible(0);
             prochaineCellule = trouverProchaineCelluleSurChemin(carte, celluleFantome, celluleCible);
@@ -50,8 +48,8 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
 
         int deltaX = prochaineCellule.getColumn() - celluleFantome.getColumn();
         int deltaY = prochaineCellule.getRow() - celluleFantome.getRow();
-
         double vitesse = 50 + random.nextDouble() * 100;
+
         if (deltaX != 0) {
             fantome.setHorizontalSpeed(deltaX > 0 ? vitesse : -vitesse);
             fantome.setVerticalSpeed(0);
@@ -61,22 +59,19 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
         }
     }
 
-
     private Cell determinerCelluleCible(int anticipation) {
         Cell cellulePacman = game.getCellOf(pacman);
         if (cellulePacman == null) return null;
 
         int ligne = cellulePacman.getRow();
         int colonne = cellulePacman.getColumn();
-
-        // tableau des directions possibles
         int dx = 0, dy = 0;
+
         if (pacman.getHorizontalSpeed() > 0) dx = 1;
         else if (pacman.getHorizontalSpeed() < 0) dx = -1;
         else if (pacman.getVerticalSpeed() > 0) dy = 1;
         else if (pacman.getVerticalSpeed() < 0) dy = -1;
 
-        // avancer d'anticipation cellules
         GameMap carte = game.getGameMap();
         for (int i = 0; i < anticipation; i++) {
             int nouvelleLigne = ligne + dy;
@@ -96,20 +91,15 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
         int largeur = carte.getWidth();
         boolean[][] visite = new boolean[hauteur][largeur];
         Map<Cell, Cell> parent = new HashMap<>();
-        ArrayList<Cell> file = new ArrayList<>();
+        List<Cell> file = new ArrayList<>();
 
         file.add(depart);
         visite[depart.getRow()][depart.getColumn()] = true;
 
-        int index = 0;
-
-        while (index < file.size()) {
-            Cell celluleActuelle = file.get(index);
-            index++;
-
-            if (celluleActuelle.equals(arrivee)) {
+        for (int i = 0; i < file.size(); i++) {
+            Cell celluleActuelle = file.get(i);
+            if (celluleActuelle.equals(arrivee))
                 return reconstruirePremiereEtape(depart, arrivee, parent);
-            }
 
             for (Cell voisin : obtenirVoisins(carte, celluleActuelle)) {
                 if (!visite[voisin.getRow()][voisin.getColumn()] && voisin.isEmpty()) {
@@ -119,32 +109,26 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
                 }
             }
         }
-
         return null;
     }
 
-
     private Cell reconstruirePremiereEtape(Cell depart, Cell arrivee, Map<Cell, Cell> parent) {
-        Cell actuelle = arrivee;
-        Cell precedente = null;
-
+        Cell actuelle = arrivee, precedente = null;
         while (actuelle != null && !actuelle.equals(depart)) {
             precedente = actuelle;
             actuelle = parent.get(actuelle);
         }
-
         return precedente;
     }
 
-    private ArrayList<Cell> obtenirVoisins(GameMap carte, Cell cellule) {
-        ArrayList<Cell> voisins = new ArrayList<>();
-        int ligne = cellule.getRow();
-        int colonne = cellule.getColumn();
+    private List<Cell> obtenirVoisins(GameMap carte, Cell cellule) {
+        List<Cell> voisins = new ArrayList<>();
+        int ligne = cellule.getRow(), colonne = cellule.getColumn();
 
-        if (carte.isOnMap(ligne - 1, colonne)) voisins.add(carte.getAt(ligne - 1, colonne)); // haut
-        if (carte.isOnMap(ligne + 1, colonne)) voisins.add(carte.getAt(ligne + 1, colonne)); // bas
-        if (carte.isOnMap(ligne, colonne - 1)) voisins.add(carte.getAt(ligne, colonne - 1)); // gauche
-        if (carte.isOnMap(ligne, colonne + 1)) voisins.add(carte.getAt(ligne, colonne + 1)); // droite
+        if (carte.isOnMap(ligne - 1, colonne)) voisins.add(carte.getAt(ligne - 1, colonne));
+        if (carte.isOnMap(ligne + 1, colonne)) voisins.add(carte.getAt(ligne + 1, colonne));
+        if (carte.isOnMap(ligne, colonne - 1)) voisins.add(carte.getAt(ligne, colonne - 1));
+        if (carte.isOnMap(ligne, colonne + 1)) voisins.add(carte.getAt(ligne, colonne + 1));
 
         return voisins;
     }
