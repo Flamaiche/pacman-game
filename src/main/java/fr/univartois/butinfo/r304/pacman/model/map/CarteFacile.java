@@ -39,13 +39,11 @@ public class CarteFacile extends Carte {
                         map.setAt(y, x+1, new Cell(wall));
                     }
                 } else if (y == (int)centreY && (x > 3 && x < largeur-4)) {
-                    System.out.println(y +"\t" + centreY + "\t" + hauteur);
                     map.setAt(y, x, new Cell(wall));
                     if (y < centreY) {
                         map.setAt(y+1, x, new Cell(wall));
                     }
                 } else if (x == (int)centreX && (y > 3 && y < hauteur-4)) {
-                    System.out.println(x +"\t" + centreX + "\t" + largeur);
                     map.setAt(y, x, new Cell(wall));
                     if (x < centreX) {
                         map.setAt(y, x + 1, new Cell(wall));
