@@ -418,4 +418,7 @@ public final class PacmanGame {
         return player;
     }
 
+    public List<IAnimated> getAnimatedObjects() {
+        return animatedObjects;
+    }
 }

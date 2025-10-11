@@ -62,4 +62,7 @@ public class Fantome extends AbstractAnimated {
         return game;
     }
 
+    public IStrategieDeplacement getStrategieDeplacement() {
+        return strategieDeplacement;
+    }
 }
