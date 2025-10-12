@@ -24,13 +24,17 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
         this.pacman = game.getPlayer();
     }
 
+    public void setAnticipation(int anticipation) {
+        this.anticipation = anticipation;
+    }
+
     @Override
     public void mouvement() {
         GameMap carte = game.getGameMap();
         Cell celluleFantome = game.getCellOf(fantome);
         if (celluleFantome == null) return;
 
-        // Recalculer le chemin uniquement si la prochaine cellule est atteinte ou chemin vide
+        // Recalcul du chemin si nécessaire
         if (cheminVersPacman.isEmpty() || indexProchaineCellule >= cheminVersPacman.size() ||
                 celluleFantome.equals(cheminVersPacman.get(indexProchaineCellule))) {
             Cell cible = determinerCelluleCible();
@@ -79,6 +83,16 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
         int dy = (int) Math.signum(pacman.getVerticalSpeed());
 
         GameMap carte = game.getGameMap();
+        Cell celluleFantome = game.getCellOf(fantome);
+
+        // Si Pac-Man est très proche, fonce directement vers lui
+        int distanceLignes = Math.abs(celluleFantome.getRow() - ligne);
+        int distanceColonnes = Math.abs(celluleFantome.getColumn() - colonne);
+        if (distanceLignes <= anticipationEffective && distanceColonnes <= anticipationEffective) {
+            return cellulePacman;
+        }
+
+        // Sinon, projection classique en fonction de l'anticipation
         for (int i = 0; i < anticipationEffective; i++) {
             int nouvelleLigne = ligne + dy;
             int nouvelleColonne = colonne + dx;
@@ -133,10 +147,6 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
         if (carte.isOnMap(ligne, colonne - 1)) voisins.add(carte.getAt(ligne, colonne - 1));
         if (carte.isOnMap(ligne, colonne + 1)) voisins.add(carte.getAt(ligne, colonne + 1));
         return voisins;
-    }
-
-    public void setAnticipation(int anticipation) {
-        this.anticipation = anticipation;
     }
 
     public List<Cell> getCheminVersPacman() {
