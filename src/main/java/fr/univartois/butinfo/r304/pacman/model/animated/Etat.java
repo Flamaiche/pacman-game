@@ -10,6 +10,8 @@ public enum Etat {
 
     private boolean estMort;
 
+    private final static int DUREE_ETAT = 200; // en nombre de frame
+
     Etat(boolean estVulnerable,  boolean estMort) {
         this.estVulnerable = estVulnerable;
         this.estMort = estMort;

@@ -83,4 +83,8 @@ public class Fantome extends AbstractAnimated implements Mortel {
     public Etat getEtat() {
         return etat;
     }
+
+    public void setEtat(Etat etat) {
+        this.etat = etat;
+    }
 }

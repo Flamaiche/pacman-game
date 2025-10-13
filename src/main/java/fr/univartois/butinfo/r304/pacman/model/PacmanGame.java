@@ -415,7 +415,7 @@ public final class PacmanGame {
     }
 
     public void megaPacGumEaten(IAnimated megaGum) {
-        System.out.println("Mega Pac-Gomme");
+        player.setEtat(Etat.INVULNERABLE);
     }
 
     /**

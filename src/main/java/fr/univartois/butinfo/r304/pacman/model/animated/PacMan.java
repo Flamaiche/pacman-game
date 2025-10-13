@@ -116,4 +116,11 @@ public class PacMan extends AbstractAnimated implements Mortel {
     public Etat getEtat() {
         return etat;
     }
+
+    public void setEtat(Etat etat) {
+        if (etat != Etat.VULNERABLE || etat != Etat.INVULNERABLE) {
+            throw new IllegalArgumentException("Etat interdit pour le pacman: " + etat);
+        }
+        this.etat = etat;
+    }
 }

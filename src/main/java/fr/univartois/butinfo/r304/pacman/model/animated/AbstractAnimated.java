@@ -347,6 +347,10 @@ public abstract class AbstractAnimated implements IAnimated {
         // Si l'objet est aligné avec la grille, on applique la direction demandée.
         if (isAlignedWithGrid(ALIGN_TOLERANCE)) {
             if ((requestedHorizontalSpeed != horizontalSpeed) || (requestedVerticalSpeed != verticalSpeed)) {
+                if (this instanceof PacMan && !((PacMan) this).getEtat().estVulnerable()) { // boost pac-man invulnerable
+                    requestedHorizontalSpeed*=1.5;
+                    requestedVerticalSpeed*=1.5;
+                }
                 horizontalSpeed = requestedHorizontalSpeed;
                 verticalSpeed = requestedVerticalSpeed;
                 alignToGrid();
