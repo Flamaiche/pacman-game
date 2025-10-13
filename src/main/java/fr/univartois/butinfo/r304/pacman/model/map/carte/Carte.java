@@ -1,5 +1,9 @@
-package fr.univartois.butinfo.r304.pacman.model.map;
+package fr.univartois.butinfo.r304.pacman.model.map.carte;
 
+import fr.univartois.butinfo.r304.pacman.model.map.Cell;
+import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
+import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
+import fr.univartois.butinfo.r304.pacman.model.map.Wall;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 
@@ -11,7 +15,7 @@ public class Carte implements ICarte {
 
     public Carte() {}
 
-    public  GameMap createMap(int largeur, int hauteur) {
+    public GameMap createMap(int largeur, int hauteur) {
         /*
         largeur & hauteur en nombre de cellules
          */

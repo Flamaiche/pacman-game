@@ -1,5 +1,8 @@
-package fr.univartois.butinfo.r304.pacman.model.map;
+package fr.univartois.butinfo.r304.pacman.model.map.carte;
 
+import fr.univartois.butinfo.r304.pacman.model.map.Cell;
+import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
+import fr.univartois.butinfo.r304.pacman.model.map.Wall;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 
