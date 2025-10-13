@@ -268,10 +268,8 @@ public final class PacmanGame {
 
     private void spawnAnimated(IAnimated animated, int x, int y) {
         Cell cell = gameMap.getAt(x, y);
-        if (!cell.isEmpty()) {
-            animated.setX(cell.getColumn() * spriteStore.getSpriteSize());
-            animated.setY(cell.getRow() * spriteStore.getSpriteSize());
-        }
+        animated.setX(cell.getColumn() * spriteStore.getSpriteSize());
+        animated.setY(cell.getRow() * spriteStore.getSpriteSize());
     }
 
     /**
