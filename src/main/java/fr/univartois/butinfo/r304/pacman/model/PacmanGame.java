@@ -259,7 +259,6 @@ public final class PacmanGame {
      * Initialise les statistiques de cette partie.
      */
     private void initStatistics() {
-        // TODO Lier les propriétés du joueur avec celles du contrôleur.
         controller.bindLife(player.pointsDeVieProperty());
         controller.bindScore(player.scoreProperty());
     }
