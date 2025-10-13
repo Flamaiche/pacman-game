@@ -1,5 +1,7 @@
 package fr.univartois.butinfo.r304.pacman.model.map;
 
+import fr.univartois.butinfo.r304.pacman.model.map.carte.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

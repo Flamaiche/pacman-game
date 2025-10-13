@@ -1,5 +1,6 @@
 package fr.univartois.butinfo.r304.pacman.model.map;
 
+import fr.univartois.butinfo.r304.pacman.model.map.carte.Carte;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 
