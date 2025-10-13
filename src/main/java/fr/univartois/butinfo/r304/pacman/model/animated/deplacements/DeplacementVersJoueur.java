@@ -13,7 +13,7 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
     private final Fantome fantome;
     private final PacmanGame game;
     private final IAnimated pacman;
-    private final double vitesse = PacmanGame.DEFAULT_SPEED;
+    private final double vitesse = PacmanGame.DEFAULT_SPEED*0.85;
     private int anticipation = 0;
     private List<Cell> cheminVersPacman = new ArrayList<>();
     private int indexProchaineCellule = 0;
