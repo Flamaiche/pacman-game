@@ -5,17 +5,19 @@ import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.IStrategieDeplacement;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 
-public class Fantome extends AbstractAnimated {
+public class Fantome extends AbstractAnimated implements Mortel {
 
     private CouleurFantome couleurFantome;
     private IStrategieDeplacement strategieDeplacement;
     private int spawnX = 0;
     private int spawnY = 0;
+    private Etat etat;
 
     public Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite, CouleurFantome couleurFantome) {
         super(game, xPosition, yPosition, sprite);
         this.couleurFantome = couleurFantome;
         this.strategieDeplacement = couleurFantome.getStrategie(this);
+        this.etat = Etat.INVULNERABLE;
     }
 
     private CouleurFantome getCouleurFantome() {
@@ -76,5 +78,9 @@ public class Fantome extends AbstractAnimated {
 
     public IStrategieDeplacement getStrategieDeplacement() {
         return strategieDeplacement;
+    }
+
+    public Etat getEtat() {
+        return etat;
     }
 }

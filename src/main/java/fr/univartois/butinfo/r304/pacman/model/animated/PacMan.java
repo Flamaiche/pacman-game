@@ -6,12 +6,13 @@ import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import javafx.beans.property.IntegerProperty;
 import javafx.scene.paint.LinearGradient;
 
-public class PacMan extends AbstractAnimated {
+public class PacMan extends AbstractAnimated implements Mortel {
 
     private final IntegerProperty pointsDeVie;
     private final IntegerProperty score;
     private int spawnX = 0;
     private int spawnY = 0;
+    private Etat etat;
 
     private long animationTimer = 0;
     private int animationFrame = 0;
@@ -27,6 +28,7 @@ public class PacMan extends AbstractAnimated {
         super(game, xPosition, yPosition, sprite);
         this.pointsDeVie = pointsDeVie;
         this.score = score;
+        this.etat = Etat.VULNERABLE;
     }
 
     public PacmanGame getGame() {
@@ -109,5 +111,9 @@ public class PacMan extends AbstractAnimated {
     @Override
     public void onCollisionWith(PacGomme pacGomme) {
         setScore(getScore() + 1);
+    }
+
+    public Etat getEtat() {
+        return etat;
     }
 }
