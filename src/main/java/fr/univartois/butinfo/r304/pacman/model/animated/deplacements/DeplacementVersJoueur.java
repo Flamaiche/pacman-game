@@ -85,7 +85,7 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
         GameMap carte = game.getGameMap();
         Cell celluleFantome = game.getCellOf(fantome);
 
-        // Si Pac-Man est très proche, fonce directement vers lui
+        // Si PacMan est très proche, fonce directement vers lui
         int distanceLignes = Math.abs(celluleFantome.getRow() - ligne);
         int distanceColonnes = Math.abs(celluleFantome.getColumn() - colonne);
         if (distanceLignes <= anticipationEffective && distanceColonnes <= anticipationEffective) {

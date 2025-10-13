@@ -14,9 +14,13 @@ public class DeplacementBarrage implements IStrategieDeplacement {
     private final PacmanGame game;
     private final IAnimated pacman;
     private final double vitesse = PacmanGame.DEFAULT_SPEED;
+
     private List<Fantome> autresFantomes;
     private List<Cell> cheminBarrage = new ArrayList<>();
     private int indexProchaineCellule = 0;
+
+    private double lastDxPacman = 0;
+    private double lastDyPacman = 0;
 
     public DeplacementBarrage(Fantome fantome) {
         this.fantome = fantome;
@@ -28,9 +32,7 @@ public class DeplacementBarrage implements IStrategieDeplacement {
     private List<Fantome> rechercherAutresFantomes() {
         List<Fantome> fantomes = new ArrayList<>();
         for (IAnimated obj : game.getAnimatedObjects()) {
-            if (obj instanceof Fantome && obj != this.fantome) {
-                fantomes.add((Fantome)obj);
-            }
+            if (obj instanceof Fantome f && f != this.fantome) fantomes.add(f);
         }
         return fantomes;
     }
@@ -41,6 +43,11 @@ public class DeplacementBarrage implements IStrategieDeplacement {
         Cell celluleFantome = game.getCellOf(fantome);
         if (celluleFantome == null) return;
 
+        if (directionPacmanChangee()) {
+            cheminBarrage.clear();
+            indexProchaineCellule = 0;
+        }
+
         if (cheminBarrage.isEmpty() || indexProchaineCellule >= cheminBarrage.size()
                 || celluleFantome.equals(cheminBarrage.get(indexProchaineCellule))) {
 
@@ -48,7 +55,6 @@ public class DeplacementBarrage implements IStrategieDeplacement {
             if (cible == null) return;
 
             cheminBarrage = reconstruireCheminBFS(carte, celluleFantome, cible);
-            cheminBarrage = optimiserChemin(cheminBarrage, carte);
             indexProchaineCellule = 0;
         }
 
@@ -76,83 +82,126 @@ public class DeplacementBarrage implements IStrategieDeplacement {
         }
     }
 
+    private boolean directionPacmanChangee() {
+        double dx = Math.signum(pacman.getHorizontalSpeed());
+        double dy = Math.signum(pacman.getVerticalSpeed());
+        if (dx != lastDxPacman || dy != lastDyPacman) {
+            lastDxPacman = dx;
+            lastDyPacman = dy;
+            return true;
+        }
+        return false;
+    }
+
     private Cell determinerCelluleBarrage(GameMap carte, Cell celluleFantome) {
         Cell cellulePacman = game.getCellOf(pacman);
         if (cellulePacman == null) return null;
 
-        double distFantome = distance(celluleFantome, cellulePacman);
-        int anticipation = Math.min(8, Math.max(2, (int)(distFantome/3)));
+        double dist = distance(celluleFantome, cellulePacman);
+        // Plus il est loin, plus il anticipe
+        int anticipation = Math.min(15, Math.max(4, (int) (dist / 2)));
 
-        int dxPac = (int)Math.signum(pacman.getHorizontalSpeed());
-        int dyPac = (int)Math.signum(pacman.getVerticalSpeed());
+        int dxPac = (int) Math.signum(pacman.getHorizontalSpeed());
+        int dyPac = (int) Math.signum(pacman.getVerticalSpeed());
 
-        int projRow = cellulePacman.getRow() + dyPac * anticipation;
-        int projCol = cellulePacman.getColumn() + dxPac * anticipation;
+        Fantome chasseur = trouverChasseur();
+        List<Cell> cheminChasseur = chasseur != null ? getCheminChasseur(chasseur) : new ArrayList<>();
 
-        if (!carte.isOnMap(projRow, projCol)) {
-            projRow = cellulePacman.getRow();
-            projCol = cellulePacman.getColumn();
+        Cell embuscadeGauche = projectionEmbuscade(carte, cellulePacman, dxPac, dyPac, anticipation, true);
+        Cell embuscadeDroite = projectionEmbuscade(carte, cellulePacman, dxPac, dyPac, anticipation, false);
+
+        Cell cible = choisirEmbuscade(carte, celluleFantome, chasseur, cheminChasseur, embuscadeGauche, embuscadeDroite);
+
+        return (cible != null) ? cible : cellulePacman;
+    }
+
+    private Cell projectionEmbuscade(GameMap carte, Cell pacman, int dx, int dy, int anticipation, boolean gauche) {
+        if (dx == 0 && dy == 0) dx = 1;
+
+        int perpX = dy;
+        int perpY = -dx;
+        if (!gauche) {
+            perpX *= -1;
+            perpY *= -1;
         }
 
-        Fantome chasseur = null;
-        List<Cell> cheminChasseur = new ArrayList<>();
+        int projRow = pacman.getRow() + dy * anticipation + perpY * 2;
+        int projCol = pacman.getColumn() + dx * anticipation + perpX * 2;
 
-        // recherche du fantome le plus proche (rose)
-        double bestDist = Double.MAX_VALUE;
+        if (carte.isOnMap(projRow, projCol)) {
+            Cell c = carte.getAt(projRow, projCol);
+            if (c.isEmpty()) return c;
+        }
+        return pacman;
+    }
+
+    private Fantome trouverChasseur() {
+        Fantome chasseur = null;
+        double best = Double.MAX_VALUE;
         for (Fantome f : autresFantomes) {
             Cell c = game.getCellOf(f);
-            if (c == null) continue;
-            double d = distance(c, cellulePacman);
-            if (d < bestDist) {
-                bestDist = d;
+            Cell p = game.getCellOf(pacman);
+            if (c == null || p == null) continue;
+            double d = distance(c, p);
+            if (d < best) {
+                best = d;
                 chasseur = f;
             }
         }
+        return chasseur;
+    }
 
-        // cas agressif si proche
-        if (distFantome < 5) return cellulePacman;
-
-        // positions candidates latérales
-        List<Cell> candidats = new ArrayList<>();
-        int perpX = dyPac;
-        int perpY = -dxPac;
-        for (int i=1; i<=4; i++) {
-            int r1 = projRow + perpY*i;
-            int c1 = projCol + perpX*i;
-            int r2 = projRow - perpY*i;
-            int c2 = projCol - perpX*i;
-            if (carte.isOnMap(r1,c1)) candidats.add(carte.getAt(r1,c1));
-            if (carte.isOnMap(r2,c2)) candidats.add(carte.getAt(r2,c2));
-        }
-
-        Cell meilleur = null;
-        double meilleurScore = Double.NEGATIVE_INFINITY;
-        for (Cell cand : candidats) {
-            if (cand == null || !cand.isEmpty()) continue;
-            double score = distance(cand, cellulePacman); // plus proche → mieux
-            // pénaliser si proche du chasseur
-            if (chasseur != null) {
-                Cell cCh = game.getCellOf(chasseur);
-                if (cCh != null && distance(cand,cCh)<2) score -= 1000;
+    private List<Cell> getCheminChasseur(Fantome chasseur) {
+        try {
+            if (chasseur.getStrategieDeplacement() instanceof DeplacementVersJoueur strat) {
+                return strat.getCheminVersPacman();
             }
-            if (score > meilleurScore) {
-                meilleurScore = score;
-                meilleur = cand;
+        } catch (Exception ignored) {}
+        return new ArrayList<>();
+    }
+
+    private Cell choisirEmbuscade(GameMap carte, Cell celluleFantome, Fantome chasseur,
+                                  List<Cell> cheminChasseur, Cell gauche, Cell droite) {
+
+        Cell cChasseur = (chasseur != null) ? game.getCellOf(chasseur) : null;
+        double distG = (gauche != null && cChasseur != null) ? distance(gauche, cChasseur) : 0;
+        double distD = (droite != null && cChasseur != null) ? distance(droite, cChasseur) : 0;
+
+        Cell prioritaire = (distG > distD) ? gauche : droite;
+        Cell secondaire = (distG > distD) ? droite : gauche;
+
+        List<Cell> chemin1 = reconstruireCheminBFS(carte, celluleFantome, prioritaire);
+        if (!chemin1.isEmpty() && !cheminChevaucheChasseur(chemin1, cheminChasseur)) return prioritaire;
+
+        List<Cell> chemin2 = reconstruireCheminBFS(carte, celluleFantome, secondaire);
+        if (!chemin2.isEmpty() && !cheminChevaucheChasseur(chemin2, cheminChasseur)) return secondaire;
+
+        return null;
+    }
+
+    private boolean cheminChevaucheChasseur(List<Cell> chemin, List<Cell> cheminChasseur) {
+        for (Cell c : chemin) {
+            for (Cell cc : cheminChasseur) {
+                if (cc == null) continue;
+                int dr = Math.abs(c.getRow() - cc.getRow());
+                int dc = Math.abs(c.getColumn() - cc.getColumn());
+                if (dr <= 1 && dc <= 1) return true;
             }
         }
-
-        if (meilleur != null) return meilleur;
-        return cellulePacman;
+        return false;
     }
 
     private List<Cell> reconstruireCheminBFS(GameMap carte, Cell depart, Cell arrivee) {
-        if (depart.equals(arrivee)) return new ArrayList<>();
+        if (depart == null || arrivee == null || depart.equals(arrivee)) return new ArrayList<>();
+
         Queue<Cell> queue = new LinkedList<>();
         Map<Cell, Cell> precedent = new HashMap<>();
         Set<Cell> visite = new HashSet<>();
+
         queue.add(depart);
         visite.add(depart);
         boolean trouve = false;
+
         while (!queue.isEmpty()) {
             Cell actuelle = queue.poll();
             if (actuelle.equals(arrivee)) {
@@ -166,6 +215,7 @@ public class DeplacementBarrage implements IStrategieDeplacement {
                 queue.add(voisin);
             }
         }
+
         List<Cell> chemin = new ArrayList<>();
         if (!trouve) return chemin;
         Cell current = arrivee;
@@ -176,47 +226,23 @@ public class DeplacementBarrage implements IStrategieDeplacement {
         return chemin;
     }
 
-    private List<Cell> optimiserChemin(List<Cell> chemin, GameMap carte) {
-        if (chemin.size() < 4) return chemin;
-        List<Cell> optim = new ArrayList<>();
-        optim.add(chemin.get(0));
-        for (int i=1;i<chemin.size()-1;i++) {
-            Cell a = optim.get(optim.size()-1);
-            Cell b = chemin.get(i+1);
-            if (peutAllerDirect(a,b,carte)) continue;
-            optim.add(chemin.get(i));
-        }
-        optim.add(chemin.get(chemin.size()-1));
-        return optim;
-    }
-
-    private boolean peutAllerDirect(Cell a, Cell b, GameMap carte) {
-        int dr = Integer.signum(b.getRow()-a.getRow());
-        int dc = Integer.signum(b.getColumn()-a.getColumn());
-        int r=a.getRow(), c=a.getColumn();
-        while (r!=b.getRow() || c!=b.getColumn()) {
-            if (!carte.isOnMap(r,c)) return false;
-            if (!carte.getAt(r,c).isEmpty()) return false;
-            r+=dr; c+=dc;
-        }
-        return true;
-    }
-
-    private double distance(Cell a, Cell b) {
-        int dx = a.getColumn()-b.getColumn();
-        int dy = a.getRow()-b.getRow();
-        return Math.sqrt(dx*dx+dy*dy);
-    }
-
     private List<Cell> obtenirVoisins(GameMap carte, Cell cellule) {
         List<Cell> voisins = new ArrayList<>();
-        int l=cellule.getRow(), c=cellule.getColumn();
-        if (carte.isOnMap(l-1,c)) voisins.add(carte.getAt(l-1,c));
-        if (carte.isOnMap(l+1,c)) voisins.add(carte.getAt(l+1,c));
-        if (carte.isOnMap(l,c-1)) voisins.add(carte.getAt(l,c-1));
-        if (carte.isOnMap(l,c+1)) voisins.add(carte.getAt(l,c+1));
+        int l = cellule.getRow(), c = cellule.getColumn();
+        if (carte.isOnMap(l - 1, c)) voisins.add(carte.getAt(l - 1, c));
+        if (carte.isOnMap(l + 1, c)) voisins.add(carte.getAt(l + 1, c));
+        if (carte.isOnMap(l, c - 1)) voisins.add(carte.getAt(l, c - 1));
+        if (carte.isOnMap(l, c + 1)) voisins.add(carte.getAt(l, c + 1));
         return voisins;
     }
 
-    public List<Cell> getCheminBarrage() { return cheminBarrage; }
+    private double distance(Cell a, Cell b) {
+        int dx = a.getColumn() - b.getColumn();
+        int dy = a.getRow() - b.getRow();
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    public List<Cell> getCheminBarrage() {
+        return cheminBarrage;
+    }
 }
