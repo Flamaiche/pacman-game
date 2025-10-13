@@ -23,6 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import fr.univartois.butinfo.r304.pacman.model.animated.*;
 
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
+import fr.univartois.butinfo.r304.pacman.model.map.ChoisirMapAleatoirement;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
 import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
@@ -231,12 +232,18 @@ public final class PacmanGame {
 
         SpriteStore spriteStore = new SpriteStore();
         Sprite gomme = spriteStore.getSprite("pacgum");
+        Sprite megaGomme = spriteStore.getSprite("megagum");
 
         int y, x;
         for (Cell emptyCell : gameMap.getEmptyCells()) {
+            PacGomme pg;
             y = emptyCell.getColumn();
             x = emptyCell.getRow();
-            PacGomme pg = new PacGomme(this, x, y, gomme);
+            if (RANDOM.nextInt(100) == 0) { // 1% de chance
+                pg = new PacGomme(this, x, y, megaGomme);
+                pg.setMegaGum(true);
+            }
+            else pg = new PacGomme(this, x, y, gomme);
             spawnAnimated(pg, x, y);
             addAnimated(pg);
         }
@@ -393,12 +400,17 @@ public final class PacmanGame {
      * @param gum La pac-gomme qui a été mangée.
      */
     public void pacGumEaten(IAnimated gum) {
+        if (gum instanceof PacGomme && ((PacGomme) gum).isMegaGum()) megaPacGumEaten(gum);
         nbGums--;
         removeAnimated(gum);
 
         if (nbGums <= 0) {
             gameOver("YOU WIN!");
         }
+    }
+
+    public void megaPacGumEaten(IAnimated megaGum) {
+        System.out.println("Mega Pac-Gomme");
     }
 
     /**
@@ -416,6 +428,17 @@ public final class PacmanGame {
     private void gameOver(String message) {
         animation.stop();
         controller.gameOver(message);
+
+        System.out.println("Fin de la partie" + message);
+        System.out.println("Choix de une carte aleatoire");
+
+        ChoisirMapAleatoirement choix = new ChoisirMapAleatoirement();
+        ICarte nouvelleCarte = choix.choisirMap();
+        this.setIcarte(nouvelleCarte);
+
+        start();
+
+        System.out.println("Nouvelle partie lancee avec la nouvelle carte" + nouvelleCarte.getClass().getSimpleName());
     }
 
     public GameMap getGameMap() {

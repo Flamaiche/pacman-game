@@ -6,6 +6,7 @@ import fr.univartois.butinfo.r304.pacman.view.Sprite;
 
 public class PacGomme extends AbstractAnimated {
 
+    private boolean isMegaGum = false;
 
     /**
      * Crée une nouvelle instance de AbstractAnimated.
@@ -42,5 +43,13 @@ public class PacGomme extends AbstractAnimated {
     @Override
     public void onCollisionWith(PacGomme pacGomme) {
         // ne fait rien
+    }
+
+    public boolean isMegaGum() {
+        return isMegaGum;
+    }
+
+    public void setMegaGum(boolean megaGum) {
+        isMegaGum = megaGum;
     }
 }
