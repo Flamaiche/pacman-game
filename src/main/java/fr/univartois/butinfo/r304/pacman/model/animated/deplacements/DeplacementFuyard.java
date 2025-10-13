@@ -6,6 +6,8 @@ import fr.univartois.butinfo.r304.pacman.model.animated.Fantome;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class DeplacementFuyard implements IStrategieDeplacement {
@@ -30,8 +32,7 @@ public class DeplacementFuyard implements IStrategieDeplacement {
         Cell celluleFantome = game.getCellOf(fantome);
         Cell cellulePacman = game.getCellOf(pacman);
 
-        if (celluleFantome == null || cellulePacman == null)
-            return;
+        if (celluleFantome == null || cellulePacman == null) return;
 
         double dx = cellulePacman.getColumn() - celluleFantome.getColumn();
         double dy = cellulePacman.getRow() - celluleFantome.getRow();
@@ -39,30 +40,40 @@ public class DeplacementFuyard implements IStrategieDeplacement {
         double vitesse = PacmanGame.DEFAULT_SPEED;
 
         if (distance < DISTANCE_FUITE) {
-            int dirX = 0;
-            int dirY = 0;
+            List<int[]> directionsLibres = new ArrayList<>();
+            int[][] directions = {{1,0},{-1,0},{0,1},{0,-1}};
 
-            if (Math.abs(dx) > Math.abs(dy)) {
-                dirX = dx > 0 ? -1 : 1;
-            } else {
-                dirY = dy > 0 ? -1 : 1;
-            }
-
-            int nextRow = celluleFantome.getRow() + dirY;
-            int nextCol = celluleFantome.getColumn() + dirX;
-
-            if (!carte.isOnMap(nextRow, nextCol) || !carte.getAt(nextRow, nextCol).isEmpty()) {
-                if (dirX != 0) {
-                    dirX = 0;
-                    dirY = random.nextBoolean() ? 1 : -1;
-                } else {
-                    dirY = 0;
-                    dirX = random.nextBoolean() ? 1 : -1;
+            for (int[] dir : directions) {
+                int newRow = celluleFantome.getRow() + dir[1];
+                int newCol = celluleFantome.getColumn() + dir[0];
+                if (carte.isOnMap(newRow, newCol) && carte.getAt(newRow, newCol).isEmpty()) {
+                    directionsLibres.add(dir);
                 }
             }
-            fantome.setHorizontalSpeed(dirX * vitesse);
-            fantome.setVerticalSpeed(dirY * vitesse);
+
+            if (directionsLibres.isEmpty()) {
+                fantome.setHorizontalSpeed(0);
+                fantome.setVerticalSpeed(0);
+                return;
+            }
+
+            int[] choix = directionsLibres.get(0);
+            double maxDistance = distance;
+            for (int[] dir : directionsLibres) {
+                double newDx = cellulePacman.getColumn() - (celluleFantome.getColumn() + dir[0]);
+                double newDy = cellulePacman.getRow() - (celluleFantome.getRow() + dir[1]);
+                double newDistance = Math.sqrt(newDx*newDx + newDy*newDy);
+                if (newDistance > maxDistance) {
+                    maxDistance = newDistance;
+                    choix = dir;
+                }
+            }
+
+            fantome.setHorizontalSpeed(choix[0] * vitesse);
+            fantome.setVerticalSpeed(choix[1] * vitesse);
+
         } else {
+            reset();
             versJoueur.mouvement();
         }
     }
