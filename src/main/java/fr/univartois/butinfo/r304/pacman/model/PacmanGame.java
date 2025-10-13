@@ -231,12 +231,18 @@ public final class PacmanGame {
 
         SpriteStore spriteStore = new SpriteStore();
         Sprite gomme = spriteStore.getSprite("pacgum");
+        Sprite megaGomme = spriteStore.getSprite("megagum");
 
         int y, x;
         for (Cell emptyCell : gameMap.getEmptyCells()) {
+            PacGomme pg;
             y = emptyCell.getColumn();
             x = emptyCell.getRow();
-            PacGomme pg = new PacGomme(this, x, y, gomme);
+            if (RANDOM.nextInt(100) == 0) { // 1% de chance
+                pg = new PacGomme(this, x, y, megaGomme);
+                pg.setMegaGum(true);
+            }
+            else pg = new PacGomme(this, x, y, gomme);
             spawnAnimated(pg, x, y);
             addAnimated(pg);
         }
@@ -393,12 +399,17 @@ public final class PacmanGame {
      * @param gum La pac-gomme qui a été mangée.
      */
     public void pacGumEaten(IAnimated gum) {
+        if (gum instanceof PacGomme && ((PacGomme) gum).isMegaGum()) megaPacGumEaten(gum);
         nbGums--;
         removeAnimated(gum);
 
         if (nbGums <= 0) {
             gameOver("YOU WIN!");
         }
+    }
+
+    public void megaPacGumEaten(IAnimated megaGum) {
+        System.out.println("Mega Pac-Gomme");
     }
 
     /**
