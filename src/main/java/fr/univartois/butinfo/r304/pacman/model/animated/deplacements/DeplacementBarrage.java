@@ -155,6 +155,8 @@ public class DeplacementBarrage implements IStrategieDeplacement {
         try {
             if (chasseur.getStrategieDeplacement() instanceof DeplacementVersJoueur strat) {
                 return strat.getCheminVersPacman();
+            } else if (chasseur.getStrategieDeplacement() instanceof DeplacementBarrage strat) {
+                return strat.getCheminBarrage();
             }
         } catch (Exception ignored) {}
         return new ArrayList<>();

@@ -29,7 +29,7 @@ public enum CouleurFantome {
                 dvj.setAnticipation(4);
                 mouvement =  dvj;
                 break;
-            case BLUE :
+            case RED: case BLUE :
                 mouvement = new DeplacementBarrage(fantome);
                 break;
             default :
