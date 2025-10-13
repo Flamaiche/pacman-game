@@ -13,7 +13,7 @@ public class DeplacementBarrage implements IStrategieDeplacement {
     private final Fantome fantome;
     private final PacmanGame game;
     private final IAnimated pacman;
-    private final double vitesse = PacmanGame.DEFAULT_SPEED;
+    private final double vitesse = PacmanGame.DEFAULT_SPEED*0.85;
 
     private List<Fantome> autresFantomes;
     private List<Cell> cheminBarrage = new ArrayList<>();
