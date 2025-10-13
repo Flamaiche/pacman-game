@@ -20,8 +20,7 @@ import java.io.IOException;
 
 import fr.univartois.butinfo.r304.pacman.controller.PacmanController;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
-import fr.univartois.butinfo.r304.pacman.model.map.Carte;
-import fr.univartois.butinfo.r304.pacman.model.map.Carte_2;
+import fr.univartois.butinfo.r304.pacman.model.map.carte.Carte_2;
 import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 import javafx.application.Application;

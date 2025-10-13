@@ -9,7 +9,8 @@ public class Fantome extends AbstractAnimated {
 
     private CouleurFantome couleurFantome;
     private IStrategieDeplacement strategieDeplacement;
-
+    private int spawnX = 0;
+    private int spawnY = 0;
 
     public Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite, CouleurFantome couleurFantome) {
         super(game, xPosition, yPosition, sprite);
@@ -58,8 +59,22 @@ public class Fantome extends AbstractAnimated {
         return super.onStep(delta);
     }
 
+    public void respawn() {
+        setX(spawnX);
+        setY(spawnY);
+        strategieDeplacement.reset();
+    }
+
+    public void setSpawnPoint(int x, int y) {
+        spawnX = x;
+        spawnY = y;
+    }
+
     public PacmanGame getGame(){
         return game;
     }
 
+    public IStrategieDeplacement getStrategieDeplacement() {
+        return strategieDeplacement;
+    }
 }
