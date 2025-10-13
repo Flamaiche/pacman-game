@@ -1,5 +1,8 @@
-package fr.univartois.butinfo.r304.pacman.model.map;
+package fr.univartois.butinfo.r304.pacman.model.map.carte;
 
+import fr.univartois.butinfo.r304.pacman.model.map.Cell;
+import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
+import fr.univartois.butinfo.r304.pacman.model.map.Wall;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 
@@ -38,7 +41,7 @@ public class CarteFacile extends Carte {
                     if (x < centreX) {
                         map.setAt(y, x+1, new Cell(wall));
                     }
-                } else if (y == (int)centreY && (x > 3 && x < largeur-4)) {
+                } else if (y == (int)centreY && (x > 3 && x < largeur-4) && x%11 != 0) {
                     map.setAt(y, x, new Cell(wall));
                     if (y < centreY) {
                         map.setAt(y+1, x, new Cell(wall));

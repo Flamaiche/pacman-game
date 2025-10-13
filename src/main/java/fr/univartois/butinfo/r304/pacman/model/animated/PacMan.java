@@ -10,6 +10,8 @@ public class PacMan extends AbstractAnimated {
 
     private final IntegerProperty pointsDeVie;
     private final IntegerProperty score;
+    private int spawnX = 0;
+    private int spawnY = 0;
 
     private long animationTimer = 0;
     private int animationFrame = 0;
@@ -88,14 +90,20 @@ public class PacMan extends AbstractAnimated {
 
     @Override
     public void onCollisionWith(Fantome fantome) {
+        fantome.respawn();
         setPointsDeVie(getPointsDeVie() - 1 );
         if (pointsDeVie.get() <= 0) {
             game.playerIsDead();
         } else {
-            setX(game.getHeight() / 2); // todo : utiliser spawn() de la classe Game
-            setY(game.getHeight() / 2);
+            setX(spawnX);
+            setY(spawnY);
             game.stopMoving();
         }
+    }
+
+    public void setSpawnPoint(int x, int y) {
+        spawnX = x;
+        spawnY = y;
     }
 
     @Override
