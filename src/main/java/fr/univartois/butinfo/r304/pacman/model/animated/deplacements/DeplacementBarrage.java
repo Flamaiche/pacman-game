@@ -247,4 +247,11 @@ public class DeplacementBarrage implements IStrategieDeplacement {
     public List<Cell> getCheminBarrage() {
         return cheminBarrage;
     }
+
+    public void reset() {
+        indexProchaineCellule = 0;
+        lastDxPacman = 0;
+        lastDyPacman = 0;
+        cheminBarrage.clear();
+    }
 }

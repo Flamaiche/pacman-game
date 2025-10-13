@@ -152,4 +152,9 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
     public List<Cell> getCheminVersPacman() {
         return cheminVersPacman;
     }
+
+    public void reset() {
+        indexProchaineCellule = 0;
+        cheminVersPacman.clear();
+    }
 }

@@ -41,7 +41,7 @@ public class CarteFacile extends Carte {
                     if (x < centreX) {
                         map.setAt(y, x+1, new Cell(wall));
                     }
-                } else if (y == (int)centreY && (x > 3 && x < largeur-4)) {
+                } else if (y == (int)centreY && (x > 3 && x < largeur-4) && x != 15) {
                     map.setAt(y, x, new Cell(wall));
                     if (y < centreY) {
                         map.setAt(y+1, x, new Cell(wall));

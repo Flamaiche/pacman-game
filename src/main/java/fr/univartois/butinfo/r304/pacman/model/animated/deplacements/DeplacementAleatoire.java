@@ -36,4 +36,8 @@ public class DeplacementAleatoire implements IStrategieDeplacement {
         }
     }
 
+    public void reset() {
+            compteurDeplacement = 0;
+    }
+
 }

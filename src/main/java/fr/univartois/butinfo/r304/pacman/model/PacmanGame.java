@@ -214,6 +214,7 @@ public final class PacmanGame {
 
         player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("pacman/right/closed"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
         spawnAnimated(player);
+        player.setSpawnPoint(player.getX(), player.getY());
         addMoving(player);
 
 
@@ -224,6 +225,7 @@ public final class PacmanGame {
             Fantome ghost = new Fantome(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
             spawnAnimated(ghost);
+            ghost.setSpawnPoint(ghost.getX(), ghost.getY());
             addMoving(ghost);
         }
 
