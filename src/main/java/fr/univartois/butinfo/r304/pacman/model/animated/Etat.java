@@ -24,4 +24,8 @@ public enum Etat {
     public boolean estMort() {
         return estMort;
     }
+
+    static public int getDureeEtat() {
+        return DUREE_ETAT;
+    }
 }
