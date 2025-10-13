@@ -23,6 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import fr.univartois.butinfo.r304.pacman.model.animated.*;
 
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
+import fr.univartois.butinfo.r304.pacman.model.map.ChoisirMapAleatoirement;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
 import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
@@ -416,6 +417,17 @@ public final class PacmanGame {
     private void gameOver(String message) {
         animation.stop();
         controller.gameOver(message);
+
+        System.out.println("Fin de la partie" + message);
+        System.out.println("Choix de une carte aleatoire");
+
+        ChoisirMapAleatoirement choix = new ChoisirMapAleatoirement();
+        ICarte nouvelleCarte = choix.choisirMap();
+        this.setIcarte(nouvelleCarte);
+
+        start();
+
+        System.out.println("Nouvelle partie lancee avec la nouvelle carte" + nouvelleCarte.getClass().getSimpleName());
     }
 
     public GameMap getGameMap() {
