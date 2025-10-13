@@ -393,12 +393,17 @@ public final class PacmanGame {
      * @param gum La pac-gomme qui a été mangée.
      */
     public void pacGumEaten(IAnimated gum) {
+        if (gum instanceof PacGomme && ((PacGomme) gum).isMegaGum()) megaPacGumEaten(gum);
         nbGums--;
         removeAnimated(gum);
 
         if (nbGums <= 0) {
             gameOver("YOU WIN!");
         }
+    }
+
+    public void megaPacGumEaten(IAnimated megaGum) {
+        System.out.println("Mega Pac-Gomme");
     }
 
     /**
