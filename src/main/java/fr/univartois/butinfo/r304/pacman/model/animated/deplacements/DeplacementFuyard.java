@@ -8,7 +8,6 @@ import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class DeplacementFuyard implements IStrategieDeplacement {
 
@@ -17,7 +16,6 @@ public class DeplacementFuyard implements IStrategieDeplacement {
     private final IAnimated pacman;
     private final DeplacementVersJoueur versJoueur;
     private static final double DISTANCE_FUITE = 5.0;
-    private final Random random = new Random();
 
     public DeplacementFuyard(Fantome fantome) {
         this.fantome = fantome;
@@ -39,7 +37,16 @@ public class DeplacementFuyard implements IStrategieDeplacement {
         double distance = Math.sqrt(dx * dx + dy * dy);
         double vitesse = PacmanGame.DEFAULT_SPEED;
 
-        if (distance < DISTANCE_FUITE) {
+        double dirPacX = Math.signum(pacman.getHorizontalSpeed());
+        double dirPacY = Math.signum(pacman.getVerticalSpeed());
+
+        double vx = celluleFantome.getColumn() - cellulePacman.getColumn();
+        double vy = celluleFantome.getRow() - cellulePacman.getRow();
+        double produitScalaire = dirPacX * vx + dirPacY * vy;
+
+        boolean pacmanSeDirigeVersFantome = produitScalaire > 0;
+
+        if (distance < DISTANCE_FUITE && pacmanSeDirigeVersFantome) {
             List<int[]> directionsLibres = new ArrayList<>();
             int[][] directions = {{1,0},{-1,0},{0,1},{0,-1}};
 
@@ -57,23 +64,29 @@ public class DeplacementFuyard implements IStrategieDeplacement {
                 return;
             }
 
-            int[] choix = directionsLibres.get(0);
-            double maxDistance = distance;
+            int[] meilleur = directionsLibres.get(0);
+            double meilleureDistance = distance;
+
             for (int[] dir : directionsLibres) {
-                double newDx = cellulePacman.getColumn() - (celluleFantome.getColumn() + dir[0]);
-                double newDy = cellulePacman.getRow() - (celluleFantome.getRow() + dir[1]);
-                double newDistance = Math.sqrt(newDx*newDx + newDy*newDy);
-                if (newDistance > maxDistance) {
-                    maxDistance = newDistance;
-                    choix = dir;
+                int futureRow = celluleFantome.getRow() + dir[1] * 2;
+                int futureCol = celluleFantome.getColumn() + dir[0] * 2;
+
+                if (!carte.isOnMap(futureRow, futureCol) || !carte.getAt(futureRow, futureCol).isEmpty())
+                    continue;
+
+                double newDx = cellulePacman.getColumn() - futureCol;
+                double newDy = cellulePacman.getRow() - futureRow;
+                double newDistance = Math.sqrt(newDx * newDx + newDy * newDy);
+
+                if (newDistance > meilleureDistance) {
+                    meilleureDistance = newDistance;
+                    meilleur = dir;
                 }
             }
-
-            fantome.setHorizontalSpeed(choix[0] * vitesse);
-            fantome.setVerticalSpeed(choix[1] * vitesse);
+            fantome.setHorizontalSpeed(meilleur[0] * vitesse * 1.1);
+            fantome.setVerticalSpeed(meilleur[1] * vitesse * 1.1);
 
         } else {
-            reset();
             versJoueur.mouvement();
         }
     }
