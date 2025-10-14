@@ -89,6 +89,11 @@ public class Fantome extends AbstractAnimated implements IEtat {
         return "ghosts/";
     }
 
+    @Override
+    public String getCustomPath() {
+        return couleurFantome.getFolderName() + "/";
+    }
+
     public IStrategieDeplacement getStrategieDeplacement() {
         return strategieDeplacement;
     }

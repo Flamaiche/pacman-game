@@ -15,6 +15,10 @@ public interface IEtat {
 
     String getFolderSprite();
 
+    default String getCustomPath() {
+        return "";
+    }
+
     Etat getEtat();
     void setEtat(Etat etat);
 
@@ -28,7 +32,7 @@ public interface IEtat {
 
     void setSprite(Sprite sprite);
 
-    default String getPath() {
+    default String getDirection() {
         if (getVerticalSpeed() != 0) {
             if (getVerticalSpeed() < 0) return "up/";
             else return "down/";
@@ -39,9 +43,13 @@ public interface IEtat {
         return "right/"; // droite par défaut
     }
 
+    default String getPath() {
+        return getFolderSprite() + getDirection() + getCustomPath();
+    }
+
     default void setSprite(String[] currentSprites) {
         setAnimationFrame((getAnimationFrame() + 1) % currentSprites.length);
-        setSprite(getGame().getSpriteStore().getSprite(getFolderSprite()+ getPath() + getCurrentSprites()[getAnimationFrame()]));
+        setSprite(getGame().getSpriteStore().getSprite(getPath() + getCurrentSprites()[getAnimationFrame()]));
     }
 
     default void animate(long delta) {
