@@ -23,6 +23,10 @@ public class PacMan extends AbstractAnimated implements Mortel {
             "open",
             "half-open"
     };
+    private static final String[] SPRITES_BOOST = {
+            "open",
+            "half-open",
+    };
 
     public PacMan(PacmanGame game, int xPosition, int yPosition, Sprite sprite, IntegerProperty pointsDeVie, IntegerProperty score) {
         super(game, xPosition, yPosition, sprite);
@@ -62,9 +66,14 @@ public class PacMan extends AbstractAnimated implements Mortel {
     public void animate(long delta) {
         animationTimer += delta;
         if (animationTimer >= 120) {
+            String[] currentSprites;
+            switch (etat) {
+                case INVULNERABLE ->  currentSprites = SPRITES_BOOST;
+                default -> currentSprites = SPRITES;
+            }
             animationTimer=0;
-            animationFrame = (animationFrame + 1) % SPRITES.length;
-            setSprite(getGame().getSpriteStore().getSprite("pacman/"+getDirection()+"/"+SPRITES[animationFrame]));
+            animationFrame = (animationFrame + 1) % currentSprites.length;
+            setSprite(getGame().getSpriteStore().getSprite("pacman/"+getDirection()+"/"+currentSprites[animationFrame]));
         }
     }
 
