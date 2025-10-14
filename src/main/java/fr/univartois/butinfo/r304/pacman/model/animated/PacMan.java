@@ -4,9 +4,8 @@ import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import javafx.beans.property.IntegerProperty;
-import javafx.scene.paint.LinearGradient;
 
-public class PacMan extends AbstractAnimated implements Mortel {
+public class PacMan extends AbstractAnimated implements IEtat {
 
     private final IntegerProperty pointsDeVie;
     private final IntegerProperty score;
@@ -63,20 +62,6 @@ public class PacMan extends AbstractAnimated implements Mortel {
         this.score.set(score);
     }
 
-    public void animate(long delta) {
-        animationTimer += delta;
-        if (animationTimer >= 120) {
-            String[] currentSprites;
-            switch (etat) {
-                case INVULNERABLE ->  currentSprites = SPRITES_BOOST;
-                default -> currentSprites = SPRITES;
-            }
-            animationTimer=0;
-            animationFrame = (animationFrame + 1) % currentSprites.length;
-            setSprite(getGame().getSpriteStore().getSprite("pacman/"+getDirection()+"/"+currentSprites[animationFrame]));
-        }
-    }
-
     private String getDirection() {
         if (getVerticalSpeed() != 0) {
             if (getVerticalSpeed() < 0) return "up";
@@ -86,6 +71,12 @@ public class PacMan extends AbstractAnimated implements Mortel {
             else return "right";
         }
         return "right"; // droite par défaut
+    }
+
+    @Override
+    public void setSprite(String[] currentSprites) {
+        animationFrame = (animationFrame + 1) % currentSprites.length;
+        setSprite(getGame().getSpriteStore().getSprite("pacman/"+getDirection()+"/"+currentSprites[animationFrame]));
     }
 
     @Override
@@ -122,14 +113,42 @@ public class PacMan extends AbstractAnimated implements Mortel {
         setScore(getScore() + 1);
     }
 
+    @Override
     public Etat getEtat() {
         return etat;
     }
 
+    @Override
     public void setEtat(Etat etat) {
         if (etat == Etat.PRESQUE_INVULNERABLE) {
             throw new IllegalArgumentException("Etat interdit pour le pacman: " + etat);
         }
         this.etat = etat;
+    }
+
+    @Override
+    public int getAnimationFrame() {
+        return animationFrame;
+    }
+
+    @Override
+    public long getAnimationTimer() {
+        return animationTimer;
+    }
+
+    @Override
+    public void setAnimationTimer(long animationTimer) {
+        this.animationTimer = animationTimer;
+    }
+
+    @Override
+    public void setAnimationFrame(int animationFrame) {
+        this.animationFrame = animationFrame;
+    }
+
+    @Override
+    public String[] getCurrentSprites() {
+        if (etat == Etat.INVULNERABLE) return SPRITES_BOOST;
+        return SPRITES;
     }
 }

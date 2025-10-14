@@ -30,7 +30,6 @@ import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 import javafx.animation.AnimationTimer;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 /**
@@ -417,7 +416,7 @@ public final class PacmanGame {
         player.setEtatTemp(Etat.INVULNERABLE);
         for (IAnimated moving : movingObjects) {
             if (moving instanceof Fantome) {
-                ((Mortel) moving).setEtatTemp(Etat.VULNERABLE);
+                ((IEtat) moving).setEtatTemp(Etat.VULNERABLE);
             }
         }
     }

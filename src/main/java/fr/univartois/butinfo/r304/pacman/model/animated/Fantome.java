@@ -5,13 +5,20 @@ import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.IStrategieDeplacement;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 
-public class Fantome extends AbstractAnimated implements Mortel {
+public class Fantome extends AbstractAnimated implements IEtat {
 
     private CouleurFantome couleurFantome;
     private IStrategieDeplacement strategieDeplacement;
     private int spawnX = 0;
     private int spawnY = 0;
+
     private Etat etat;
+    private long animationTimer;
+    private int animationFrame;
+    private final static String[] SPRITES = {
+            "",
+            ""
+    };
 
     public Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite, CouleurFantome couleurFantome) {
         super(game, xPosition, yPosition, sprite);
@@ -72,6 +79,7 @@ public class Fantome extends AbstractAnimated implements Mortel {
         spawnY = y;
     }
 
+    @Override
     public PacmanGame getGame(){
         return game;
     }
@@ -80,11 +88,43 @@ public class Fantome extends AbstractAnimated implements Mortel {
         return strategieDeplacement;
     }
 
+    @Override
     public Etat getEtat() {
         return etat;
     }
 
+    @Override
     public void setEtat(Etat etat) {
         this.etat = etat;
+    }
+
+    @Override
+    public String[] getCurrentSprites() {
+        return new String[0];
+    }
+
+    @Override
+    public int getAnimationFrame() {
+        return animationFrame;
+    }
+
+    @Override
+    public long getAnimationTimer() {
+        return animationTimer;
+    }
+
+    @Override
+    public void setAnimationFrame(int animationFrame) {
+        this.animationFrame = animationFrame;
+    }
+
+    @Override
+    public void setAnimationTimer(long animationTimer) {
+        this.animationTimer = animationTimer;
+    }
+
+    @Override
+    public void setSprite(String[] currentSprites) {
+
     }
 }
