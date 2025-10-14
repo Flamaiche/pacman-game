@@ -441,7 +441,6 @@ public final class PacmanGame {
         ICarte nouvelleCarte = choix.choisirMap();
         this.setIcarte(nouvelleCarte);
 
-        start();
 
         System.out.println("Nouvelle partie lancee avec la nouvelle carte" + nouvelleCarte.getClass().getSimpleName());
     }
