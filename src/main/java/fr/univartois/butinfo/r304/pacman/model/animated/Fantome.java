@@ -19,6 +19,10 @@ public class Fantome extends AbstractAnimated implements IEtat {
             "1",
             "2"
     };
+    private final static String[] SPRITES_PRESQUE_INVULNERABLE = {
+            "../hurt/1",
+            "2"
+    };
 
     public Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite, CouleurFantome couleurFantome) {
         super(game, xPosition, yPosition, sprite);
@@ -91,6 +95,11 @@ public class Fantome extends AbstractAnimated implements IEtat {
 
     @Override
     public String getCustomPath() {
+        if (etat == Etat.VULNERABLE) {
+            return "afraid/";
+        } else if (etat == Etat.MORT) {
+            return "hurt/";
+        }
         return couleurFantome.getFolderName() + "/";
     }
 

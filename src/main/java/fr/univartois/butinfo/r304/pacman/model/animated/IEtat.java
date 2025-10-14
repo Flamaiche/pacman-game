@@ -62,20 +62,22 @@ public interface IEtat {
     }
 
 
-    default void timerSetEtat(Etat etat) {
+    default void timerSetEtat(Etat etat, int delay) {
 
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
                 setEtat(etat);
             }
-        }, Etat.getDureeEtat());
+        }, delay);
     }
 
     default void setEtatTemp(Etat etat) {
         Etat ancienEtat = getEtat();
         if (ancienEtat == etat) return; // si etat == ancienEtat == INVULNERABLE
-        timerSetEtat(ancienEtat);
+        if (etat == Etat.MORT) {
+            timerSetEtat(ancienEtat, Etat.getDureeMort());
+        } else timerSetEtat(ancienEtat, Etat.getDureeEtat());
 
         setEtat(etat);
     }
