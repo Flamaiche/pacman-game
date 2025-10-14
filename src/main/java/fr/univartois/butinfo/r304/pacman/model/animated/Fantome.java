@@ -114,12 +114,14 @@ public class Fantome extends AbstractAnimated implements IEtat {
 
     @Override
     public void setEtat(Etat etat) {
+        System.out.println("Fantome"+ getCouleurFantome().getFolderName() +".setEtat()" + etat.name());
         this.etat = etat;
     }
 
     @Override
     public String[] getCurrentSprites() {
-        return SPRITES;
+        if (etat == Etat.PRESQUE_INVULNERABLE) return SPRITES_PRESQUE_INVULNERABLE;
+        else return SPRITES;
     }
 
     @Override

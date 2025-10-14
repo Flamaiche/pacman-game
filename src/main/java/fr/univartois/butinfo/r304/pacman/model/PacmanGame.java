@@ -415,8 +415,8 @@ public final class PacmanGame {
     public void megaPacGumEaten(IAnimated megaGum) {
         player.setEtatTemp(Etat.INVULNERABLE);
         for (IAnimated moving : movingObjects) {
-            if (moving instanceof Fantome) {
-                ((IEtat) moving).setEtatTemp(Etat.VULNERABLE);
+            if (moving instanceof Fantome fantome) {
+                fantome.setEtatTemp(Etat.VULNERABLE);
             }
         }
     }

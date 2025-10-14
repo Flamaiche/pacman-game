@@ -80,14 +80,18 @@ public class PacMan extends AbstractAnimated implements IEtat {
 
     @Override
     public void onCollisionWith(Fantome fantome) {
-        fantome.respawn();
-        setPointsDeVie(getPointsDeVie() - 1 );
-        if (pointsDeVie.get() <= 0) {
-            game.playerIsDead();
+        if (fantome.getEtat() == Etat.VULNERABLE) {
+            fantome.setEtat(Etat.MORT);
         } else {
-            setX(spawnX);
-            setY(spawnY);
-            game.stopMoving();
+            fantome.respawn();
+            setPointsDeVie(getPointsDeVie() - 1 );
+            if (pointsDeVie.get() <= 0) {
+                game.playerIsDead();
+            } else {
+                setX(spawnX);
+                setY(spawnY);
+                game.stopMoving();
+            }
         }
     }
 
