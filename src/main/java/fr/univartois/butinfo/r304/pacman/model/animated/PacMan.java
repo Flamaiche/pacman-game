@@ -62,21 +62,9 @@ public class PacMan extends AbstractAnimated implements IEtat {
         this.score.set(score);
     }
 
-    private String getDirection() {
-        if (getVerticalSpeed() != 0) {
-            if (getVerticalSpeed() < 0) return "up";
-            else return "down";
-        } else if (getHorizontalSpeed() != 0) {
-            if (getHorizontalSpeed() < 0) return "left";
-            else return "right";
-        }
-        return "right"; // droite par défaut
-    }
-
     @Override
-    public void setSprite(String[] currentSprites) {
-        animationFrame = (animationFrame + 1) % currentSprites.length;
-        setSprite(getGame().getSpriteStore().getSprite("pacman/"+getDirection()+"/"+currentSprites[animationFrame]));
+    public String getFolderSprite() {
+        return "pacman/";
     }
 
     @Override

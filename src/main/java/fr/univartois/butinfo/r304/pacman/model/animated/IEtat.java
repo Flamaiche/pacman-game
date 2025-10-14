@@ -10,6 +10,11 @@ public interface IEtat {
 
     PacmanGame getGame();
 
+    double getVerticalSpeed();
+    double getHorizontalSpeed();
+
+    String getFolderSprite();
+
     Etat getEtat();
     void setEtat(Etat etat);
 
@@ -23,9 +28,20 @@ public interface IEtat {
 
     void setSprite(Sprite sprite);
 
+    default String getPath() {
+        if (getVerticalSpeed() != 0) {
+            if (getVerticalSpeed() < 0) return "up/";
+            else return "down/";
+        } else if (getHorizontalSpeed() != 0) {
+            if (getHorizontalSpeed() < 0) return "left/";
+            else return "right/";
+        }
+        return "right/"; // droite par défaut
+    }
+
     default void setSprite(String[] currentSprites) {
         setAnimationFrame((getAnimationFrame() + 1) % currentSprites.length);
-        setSprite(getGame().getSpriteStore().getSprite(getCurrentSprites()[getAnimationFrame()]));
+        setSprite(getGame().getSpriteStore().getSprite(getFolderSprite()+ getPath() + getCurrentSprites()[getAnimationFrame()]));
     }
 
     default void animate(long delta) {

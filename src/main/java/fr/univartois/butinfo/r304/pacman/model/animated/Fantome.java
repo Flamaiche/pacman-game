@@ -16,8 +16,8 @@ public class Fantome extends AbstractAnimated implements IEtat {
     private long animationTimer;
     private int animationFrame;
     private final static String[] SPRITES = {
-            "",
-            ""
+            "1",
+            "2"
     };
 
     public Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite, CouleurFantome couleurFantome) {
@@ -84,6 +84,11 @@ public class Fantome extends AbstractAnimated implements IEtat {
         return game;
     }
 
+    @Override
+    public String getFolderSprite() {
+        return "ghosts/";
+    }
+
     public IStrategieDeplacement getStrategieDeplacement() {
         return strategieDeplacement;
     }
@@ -100,7 +105,7 @@ public class Fantome extends AbstractAnimated implements IEtat {
 
     @Override
     public String[] getCurrentSprites() {
-        return new String[0];
+        return SPRITES;
     }
 
     @Override
@@ -123,8 +128,4 @@ public class Fantome extends AbstractAnimated implements IEtat {
         this.animationTimer = animationTimer;
     }
 
-    @Override
-    public void setSprite(String[] currentSprites) {
-
-    }
 }
