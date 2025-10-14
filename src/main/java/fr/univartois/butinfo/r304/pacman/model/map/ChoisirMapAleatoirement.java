@@ -17,7 +17,9 @@ public class ChoisirMapAleatoirement {
 
         this.cartes.add(new Carte());
         this.cartes.add(new Carte_2());
-        this.cartes.add(new Carte_3());
+        this.cartes.add(new Carte_4());
+        this.cartes.add(new Carte_5());
+
 
         System.out.println("Cartes disponibles :");
         for (ICarte c : cartes) {
