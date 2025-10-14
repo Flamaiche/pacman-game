@@ -76,6 +76,7 @@ public interface IEtat {
         Etat ancienEtat = getEtat();
         if (ancienEtat == etat) return; // si etat == ancienEtat == INVULNERABLE
         if (etat == Etat.MORT) {
+            timerSetEtat(Etat.PRESQUE_INVULNERABLE, Etat.getDureeEtat());
             timerSetEtat(ancienEtat, Etat.getDureeMort());
         } else timerSetEtat(ancienEtat, Etat.getDureeEtat());
 
