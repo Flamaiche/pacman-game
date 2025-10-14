@@ -227,10 +227,25 @@ public final class PacmanGame {
             String spritePath = "ghosts/" + couleur.getFolderName() + "/1";
             Fantome ghost = new Fantome(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
-            spawnAnimated(ghost);
-            while ( player.getX() - zoneSafe/2 < ghost.getX() && ghost.getX() < player.getX() + zoneSafe/2 && player.getY() - zoneSafe/2 < ghost.getY() && ghost.getY() < player.getY() + zoneSafe/2 ){
+
+
+            int playerRow = player.getY() / spriteStore.getSpriteSize();
+            int playerCol = player.getX() / spriteStore.getSpriteSize();
+
+            boolean tooClose;
+            do {
                 spawnAnimated(ghost);
-            }
+
+                int ghostRow = ghost.getY() / spriteStore.getSpriteSize();
+                int ghostCol = ghost.getX() / spriteStore.getSpriteSize();
+
+                int dx = playerCol - ghostCol;
+                int dy = playerRow - ghostRow;
+                double distance = Math.sqrt(dx * dx + dy * dy);
+
+                tooClose = distance < zoneSafe;
+            } while (tooClose);
+
             ghost.setSpawnPoint(ghost.getX(), ghost.getY());
             addMoving(ghost);
         }
