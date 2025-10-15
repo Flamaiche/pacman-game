@@ -218,7 +218,7 @@ public final class PacmanGame {
         player.setSpawnPoint(player.getX(), player.getY());
         addMoving(player);
 
-        int zoneSafe = 6;
+        int zoneSafe = 6 * ISpriteStore.DEFAULT_SPRITE_SIZE;
 
 
         // On crée ensuite les fantômes sur la carte.
@@ -228,23 +228,9 @@ public final class PacmanGame {
             Fantome ghost = new Fantome(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
 
-
-            int playerRow = player.getY() / spriteStore.getSpriteSize();
-            int playerCol = player.getX() / spriteStore.getSpriteSize();
-
-            boolean tooClose;
             do {
                 spawnAnimated(ghost);
-
-                int ghostRow = ghost.getY() / spriteStore.getSpriteSize();
-                int ghostCol = ghost.getX() / spriteStore.getSpriteSize();
-
-                int dx = playerCol - ghostCol;
-                int dy = playerRow - ghostRow;
-                double distance = Math.sqrt(dx * dx + dy * dy);
-
-                tooClose = distance < zoneSafe;
-            } while (tooClose);
+            } while (player.getX() - zoneSafe < ghost.getX() && player.getX() + zoneSafe > ghost.getX() && player.getY() - zoneSafe < ghost.getY() && player.getY() + zoneSafe > ghost.getY());
 
             ghost.setSpawnPoint(ghost.getX(), ghost.getY());
             addMoving(ghost);
