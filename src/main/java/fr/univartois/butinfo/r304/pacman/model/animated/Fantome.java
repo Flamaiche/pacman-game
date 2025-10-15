@@ -76,12 +76,13 @@ public class Fantome extends AbstractAnimated implements IEtat {
     }
 
     private void updateStrategieDeplacement() {
+        IStrategieDeplacement deplacement = deplacementCurrent;
         switch (etat) {
             case MORT -> setDeplacementCurrent(deplacementAleatoire);
             case VULNERABLE -> setDeplacementCurrent(deplacementFuyard);
             default -> setDeplacementCurrent(deplacementDefault);
         }
-        if (deplacementCurrent != null) deplacementCurrent.reset();
+        if (deplacementCurrent != null && deplacement != deplacementCurrent) deplacementCurrent.reset();
     }
 
     public boolean onStep(long delta){
