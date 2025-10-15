@@ -30,7 +30,6 @@ import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 import javafx.animation.AnimationTimer;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 /**
@@ -224,7 +223,7 @@ public final class PacmanGame {
         // On crée ensuite les fantômes sur la carte.
         for (int i = 0; i < nbGhosts; i++) {
             CouleurFantome couleur =CouleurFantome.values()[ (i % CouleurFantome.values().length) ];
-            String spritePath = "ghosts/" + couleur.getFolderName() + "/1";
+            String spritePath = "ghosts/right/" + couleur.getFolderName() + "/1";
             Fantome ghost = new Fantome(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
 
@@ -260,7 +259,6 @@ public final class PacmanGame {
      * Initialise les statistiques de cette partie.
      */
     private void initStatistics() {
-        // TODO Lier les propriétés du joueur avec celles du contrôleur.
         controller.bindLife(player.pointsDeVieProperty());
         controller.bindScore(player.scoreProperty());
     }
@@ -416,7 +414,12 @@ public final class PacmanGame {
     }
 
     public void megaPacGumEaten(IAnimated megaGum) {
-        System.out.println("Mega Pac-Gomme");
+        player.setEtat(Etat.INVULNERABLE);
+        for (IAnimated moving : movingObjects) {
+            if (moving instanceof Fantome fantome) {
+                fantome.setEtat(Etat.VULNERABLE);
+            }
+        }
     }
 
     /**
