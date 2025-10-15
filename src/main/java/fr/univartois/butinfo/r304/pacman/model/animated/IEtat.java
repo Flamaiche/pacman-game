@@ -6,6 +6,9 @@ import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Interface pour les objets ayant un Etat et étant animé.
+ */
 public interface IEtat {
 
     PacmanGame getGame();
@@ -27,6 +30,9 @@ public interface IEtat {
 
     int getAnimationFrame();
     void setAnimationFrame(int animationFrame);
+
+    Timer getEtatTimer();
+    void setEtatTimer(Timer timer);
 
     String[] getCurrentSprites();
 
@@ -61,22 +67,41 @@ public interface IEtat {
         }
     }
 
+    default void cancelEtatTimer() {
+        if (getEtatTimer() != null) {
+            getEtatTimer().cancel();
+            setEtatTimer(null);
+        }
+    }
 
-    default void timerSetEtat(Etat etat, int delay) {
+    default void setEtatLater(Etat etat, int delay) {
+        cancelEtatTimer();
 
-        new Timer().schedule(new TimerTask() {
+        Timer timer = new Timer();
+        setEtatTimer(timer);
+
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 setEtat(etat);
             }
         }, delay);
     }
-
-    default void setEtatTemp(Etat etat) {
-        Etat ancienEtat = getEtat();
-        if (ancienEtat == etat) return; // si etat == ancienEtat == INVULNERABLE
-
-        timerSetEtat(ancienEtat, Etat.getDureeEtat());
-        setEtat(etat);
+    default void setEtatLater(Etat etat) {
+        setEtatLater(etat, Etat.getDureeEtat());
     }
+
+    /**
+     * Ajoute pendant Etat.DUREE_ETAT ms un etat puis restitue l'état
+     *
+     * @param etat
+     */
+//    default void setEtatTemp(Etat etat) {
+//        Etat ancienEtat = getEtat();
+//
+//        if (ancienEtat == Etat.MORT) throw new Error("Impossible set l'état mort pour une durée indéfini");
+//
+//        setEtatLater(ancienEtat, Etat.getDureeEtat());
+//        setEtat(etat);
+//    }
 }

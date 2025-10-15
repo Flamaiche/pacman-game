@@ -5,6 +5,8 @@ import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import javafx.beans.property.IntegerProperty;
 
+import java.util.Timer;
+
 public class PacMan extends AbstractAnimated implements IEtat {
 
     private final IntegerProperty pointsDeVie;
@@ -12,6 +14,7 @@ public class PacMan extends AbstractAnimated implements IEtat {
     private int spawnX = 0;
     private int spawnY = 0;
     private Etat etat;
+    private Timer etatTimer;
 
     private long animationTimer = 0;
     private int animationFrame = 0;
@@ -83,7 +86,7 @@ public class PacMan extends AbstractAnimated implements IEtat {
         if (fantome.getEtat().estMort()) return;
         if (fantome.getEtat().estVulnerable()) {
             fantome.setEtat(Etat.MORT);
-        } else {
+        } else if (this.etat != Etat.INVULNERABLE) {
             fantome.respawn();
             setPointsDeVie(getPointsDeVie() - 1 );
             if (pointsDeVie.get() <= 0) {
@@ -93,6 +96,8 @@ public class PacMan extends AbstractAnimated implements IEtat {
                 setY(spawnY);
                 game.stopMoving();
             }
+        } else {
+            System.out.println("Le fantome revient de la mort et est donc invulnérable mais le pacman est invulnérable");
         }
     }
 
@@ -109,14 +114,6 @@ public class PacMan extends AbstractAnimated implements IEtat {
     @Override
     public Etat getEtat() {
         return etat;
-    }
-
-    @Override
-    public void setEtat(Etat etat) {
-        if (etat == Etat.PRESQUE_INVULNERABLE) {
-            throw new IllegalArgumentException("Etat interdit pour le pacman: " + etat);
-        }
-        this.etat = etat;
     }
 
     @Override
@@ -137,6 +134,27 @@ public class PacMan extends AbstractAnimated implements IEtat {
     @Override
     public void setAnimationFrame(int animationFrame) {
         this.animationFrame = animationFrame;
+    }
+
+    @Override
+    public Timer getEtatTimer() {
+        return etatTimer;
+    }
+
+    @Override
+    public void setEtatTimer(Timer etatTimer) {
+        this.etatTimer = etatTimer;
+    }
+
+    @Override
+    public void setEtat(Etat etat) {
+        if (etat == Etat.PRESQUE_INVULNERABLE || etat == Etat.MORT) {
+            throw new IllegalArgumentException("Etat interdit pour le pacman: " + etat);
+        }
+
+        if (etat == Etat.INVULNERABLE) setEtatLater(Etat.VULNERABLE);
+
+        this.etat = etat;
     }
 
     @Override

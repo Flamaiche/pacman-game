@@ -5,6 +5,8 @@ import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.IStrategieDeplacement;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 
+import java.util.Timer;
+
 public class Fantome extends AbstractAnimated implements IEtat {
 
     private CouleurFantome couleurFantome;
@@ -15,6 +17,7 @@ public class Fantome extends AbstractAnimated implements IEtat {
     private Etat etat;
     private long animationTimer;
     private int animationFrame;
+    private Timer etatTimer;
     private final static String[] SPRITES = {
             "1",
             "2"
@@ -113,18 +116,6 @@ public class Fantome extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public void setEtat(Etat etat) {
-        System.out.println("Fantome."+ getCouleurFantome().getFolderName() +".setEtat()" + etat.name());
-        this.etat = etat;
-    }
-
-    @Override
-    public String[] getCurrentSprites() {
-        if (etat == Etat.PRESQUE_INVULNERABLE) return SPRITES_PRESQUE_INVULNERABLE;
-        else return SPRITES;
-    }
-
-    @Override
     public int getAnimationFrame() {
         return animationFrame;
     }
@@ -145,20 +136,33 @@ public class Fantome extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public void setEtatTemp(Etat etat) {
-        Etat ancienEtat = getEtat();
-        if (ancienEtat == etat) return; // si etat == ancienEtat == INVULNERABLE
+    public Timer getEtatTimer() {
+        return etatTimer;
+    }
+
+    @Override
+    public void setEtatTimer(Timer etatTimer) {
+        this.etatTimer = etatTimer;
+    }
+
+    @Override
+    public void setEtat(Etat etat) {
+        System.out.println("Fantome."+ getCouleurFantome().getFolderName() +".setEtat()" + etat.name());
+
         if (this.etat == Etat.MORT && etat != Etat.INVULNERABLE) return;
 
-        if (etat == Etat.VULNERABLE) {
-            timerSetEtat(Etat.PRESQUE_INVULNERABLE, Etat.getDureeEtat());
-            timerSetEtat(ancienEtat, Etat.getDureePreventive());
-        } else if (etat == Etat.MORT) {
-            timerSetEtat(Etat.INVULNERABLE, Etat.getDureeMort());
-        }else {
-            timerSetEtat(ancienEtat, Etat.getDureeEtat());
+        switch (etat) {
+            case VULNERABLE -> setEtatLater(Etat.PRESQUE_INVULNERABLE);
+            case PRESQUE_INVULNERABLE -> setEtatLater(Etat.INVULNERABLE, Etat.getDureePreventive());
+            case MORT ->  setEtatLater(Etat.INVULNERABLE, Etat.getDureeMort());
         }
 
-        setEtat(etat);
+        this.etat = etat;
+    }
+
+    @Override
+    public String[] getCurrentSprites() {
+        if (etat == Etat.PRESQUE_INVULNERABLE) return SPRITES_PRESQUE_INVULNERABLE;
+        else return SPRITES;
     }
 }

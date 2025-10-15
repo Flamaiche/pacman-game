@@ -11,7 +11,7 @@ public enum Etat {
     private boolean estMort;
 
     private final static int DUREE_ETAT = 3_000; // en ms
-    private final static int DUREE_PREVENTIVE = DUREE_ETAT + 2_000; // en ms
+    private final static int DUREE_PREVENTIVE = 2_000; // en ms
 
     private final static int DUREE_MORT = 8_000; // en ms
 
