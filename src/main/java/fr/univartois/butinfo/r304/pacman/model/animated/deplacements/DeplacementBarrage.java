@@ -153,9 +153,9 @@ public class DeplacementBarrage implements IStrategieDeplacement {
 
     private List<Cell> getCheminChasseur(Fantome chasseur) {
         try {
-            if (chasseur.getStrategieDeplacement() instanceof DeplacementVersJoueur strat) {
+            if (chasseur.getDeplacementCurrent() instanceof DeplacementVersJoueur strat) {
                 return strat.getCheminVersPacman();
-            } else if (chasseur.getStrategieDeplacement() instanceof DeplacementBarrage strat) {
+            } else if (chasseur.getDeplacementCurrent() instanceof DeplacementBarrage strat) {
                 return strat.getCheminBarrage();
             }
         } catch (Exception ignored) {}

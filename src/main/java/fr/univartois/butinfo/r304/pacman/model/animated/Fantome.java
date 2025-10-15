@@ -2,6 +2,8 @@ package fr.univartois.butinfo.r304.pacman.model.animated;
 
 import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
+import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.DeplacementAleatoire;
+import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.DeplacementFuyard;
 import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.IStrategieDeplacement;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 
@@ -10,7 +12,7 @@ import java.util.Timer;
 public class Fantome extends AbstractAnimated implements IEtat {
 
     private CouleurFantome couleurFantome;
-    private IStrategieDeplacement strategieDeplacement;
+    private IStrategieDeplacement deplacementCurrent;
     private int spawnX = 0;
     private int spawnY = 0;
 
@@ -27,11 +29,16 @@ public class Fantome extends AbstractAnimated implements IEtat {
             "2"
     };
 
+    private final IStrategieDeplacement deplacementDefault;
+    private final IStrategieDeplacement deplacementFuyard = new DeplacementFuyard(this);
+    private final IStrategieDeplacement deplacementAleatoire = new DeplacementAleatoire(this);
+
     public Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite, CouleurFantome couleurFantome) {
         super(game, xPosition, yPosition, sprite);
         this.couleurFantome = couleurFantome;
-        this.strategieDeplacement = couleurFantome.getStrategie(this);
+        this.deplacementCurrent = couleurFantome.getStrategie(this);
         this.etat = Etat.INVULNERABLE;
+        deplacementDefault = deplacementCurrent;
     }
 
     private CouleurFantome getCouleurFantome() {
@@ -64,13 +71,22 @@ public class Fantome extends AbstractAnimated implements IEtat {
         // ne fait rien
     }
 
-    public void setStrategieDeplacement(IStrategieDeplacement strategieDeplacement) {
-        this.strategieDeplacement = strategieDeplacement;
+    private void setDeplacementCurrent(IStrategieDeplacement deplacementCurrent) {
+        this.deplacementCurrent = deplacementCurrent;
+    }
+
+    private void updateStrategieDeplacement() {
+        switch (etat) {
+            case MORT -> setDeplacementCurrent(deplacementAleatoire);
+            case VULNERABLE -> setDeplacementCurrent(deplacementFuyard);
+            default -> setDeplacementCurrent(deplacementDefault);
+        }
+
     }
 
     public boolean onStep(long delta){
-        if(strategieDeplacement!=null){
-            strategieDeplacement.mouvement();
+        if(deplacementCurrent !=null){
+            deplacementCurrent.mouvement();
         }
         return super.onStep(delta);
     }
@@ -78,7 +94,7 @@ public class Fantome extends AbstractAnimated implements IEtat {
     public void respawn() {
         setX(spawnX);
         setY(spawnY);
-        strategieDeplacement.reset();
+        deplacementCurrent.reset();
     }
 
     public void setSpawnPoint(int x, int y) {
@@ -106,8 +122,8 @@ public class Fantome extends AbstractAnimated implements IEtat {
         return couleurFantome.getFolderName() + "/";
     }
 
-    public IStrategieDeplacement getStrategieDeplacement() {
-        return strategieDeplacement;
+    public IStrategieDeplacement getDeplacementCurrent() {
+        return deplacementCurrent;
     }
 
     @Override
@@ -158,6 +174,7 @@ public class Fantome extends AbstractAnimated implements IEtat {
         }
 
         this.etat = etat;
+        updateStrategieDeplacement();
     }
 
     @Override
