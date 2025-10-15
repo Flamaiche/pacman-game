@@ -96,8 +96,6 @@ public class PacMan extends AbstractAnimated implements IEtat {
                 setY(spawnY);
                 game.stopMoving();
             }
-        } else {
-            System.out.println("Le fantome revient de la mort et est donc invulnérable mais le pacman est invulnérable");
         }
     }
 
