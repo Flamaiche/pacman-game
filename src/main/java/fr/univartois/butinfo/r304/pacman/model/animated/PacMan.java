@@ -80,7 +80,8 @@ public class PacMan extends AbstractAnimated implements IEtat {
 
     @Override
     public void onCollisionWith(Fantome fantome) {
-        if (etat == Etat.INVULNERABLE) {
+        if (fantome.getEtat().estMort()) return;
+        if (fantome.getEtat().estVulnerable()) {
             fantome.setEtat(Etat.MORT);
         } else {
             fantome.respawn();

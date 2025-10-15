@@ -11,8 +11,9 @@ public enum Etat {
     private boolean estMort;
 
     private final static int DUREE_ETAT = 3_000; // en ms
+    private final static int DUREE_PREVENTIVE = DUREE_ETAT + 2_000; // en ms
 
-    private final static int DUREE_MORT = 5_000; // en ms
+    private final static int DUREE_MORT = 8_000; // en ms
 
     Etat(boolean estVulnerable,  boolean estMort) {
         this.estVulnerable = estVulnerable;
@@ -29,6 +30,10 @@ public enum Etat {
 
     static public int getDureeEtat() {
         return DUREE_ETAT;
+    }
+
+    public static int getDureePreventive() {
+        return DUREE_PREVENTIVE;
     }
 
     public static int getDureeMort() {

@@ -114,8 +114,7 @@ public class Fantome extends AbstractAnimated implements IEtat {
 
     @Override
     public void setEtat(Etat etat) {
-        if (this.etat == Etat.MORT)
-        System.out.println("Fantome"+ getCouleurFantome().getFolderName() +".setEtat()" + etat.name());
+        System.out.println("Fantome."+ getCouleurFantome().getFolderName() +".setEtat()" + etat.name());
         this.etat = etat;
     }
 
@@ -147,16 +146,16 @@ public class Fantome extends AbstractAnimated implements IEtat {
 
     @Override
     public void setEtatTemp(Etat etat) {
-        System.out.println("Fantome.setEtatTemp : " + etat);
         Etat ancienEtat = getEtat();
         if (ancienEtat == etat) return; // si etat == ancienEtat == INVULNERABLE
-
-        // TODO: Configurer ici, pour éviter les conflits de timer
+        if (this.etat == Etat.MORT && etat != Etat.INVULNERABLE) return;
 
         if (etat == Etat.VULNERABLE) {
             timerSetEtat(Etat.PRESQUE_INVULNERABLE, Etat.getDureeEtat());
-            timerSetEtat(ancienEtat, Etat.getDureeMort());
-        } else {
+            timerSetEtat(ancienEtat, Etat.getDureePreventive());
+        } else if (etat == Etat.MORT) {
+            timerSetEtat(Etat.INVULNERABLE, Etat.getDureeMort());
+        }else {
             timerSetEtat(ancienEtat, Etat.getDureeEtat());
         }
 
