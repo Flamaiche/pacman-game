@@ -90,7 +90,11 @@ public class PacMan extends AbstractAnimated {
 
     @Override
     public void onCollisionWith(Fantome fantome) {
-        fantome.respawn();
+        for (IAnimated animated : getGame().getAnimatedObjects()) {
+            if (animated instanceof Fantome) {
+                ((Fantome) animated).respawn();
+            }
+        }
         setPointsDeVie(getPointsDeVie() - 1 );
         if (pointsDeVie.get() <= 0) {
             game.playerIsDead();
