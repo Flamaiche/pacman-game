@@ -230,7 +230,7 @@ public final class PacmanGame {
 
             do {
                 spawnAnimated(ghost);
-            } while (player.getX() - zoneSafe < ghost.getX() && player.getX() + zoneSafe > ghost.getX() && player.getY() - zoneSafe < ghost.getY() && player.getY() + zoneSafe > ghost.getY());
+            } while (isInZone(player, ghost, zoneSafe));
 
             ghost.setSpawnPoint(ghost.getX(), ghost.getY());
             addMoving(ghost);
@@ -254,6 +254,11 @@ public final class PacmanGame {
             addAnimated(pg);
         }
         nbGums = gameMap.getEmptyCells().size();
+    }
+
+    private boolean isInZone(IAnimated inCenterZone, IAnimated animated, int zoneSafe) {
+        return inCenterZone.getX() - zoneSafe < animated.getX() && inCenterZone.getX() + zoneSafe > animated.getX()
+                && inCenterZone.getY() - zoneSafe < animated.getY() && inCenterZone.getY() + zoneSafe > animated.getY();
     }
 
     /**
