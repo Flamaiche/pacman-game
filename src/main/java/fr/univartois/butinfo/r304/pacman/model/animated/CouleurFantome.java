@@ -1,9 +1,6 @@
 package fr.univartois.butinfo.r304.pacman.model.animated;
 
-import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.DeplacementAleatoire;
-import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.DeplacementBarrage;
-import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.DeplacementVersJoueur;
-import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.IStrategieDeplacement;
+import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.*;
 
 public enum CouleurFantome {
     RED("red"),
@@ -32,6 +29,10 @@ public enum CouleurFantome {
             case RED: case BLUE :
                 mouvement = new DeplacementBarrage(fantome);
                 break;
+            case ORANGE :
+                mouvement = new DeplacementFuyard(fantome);
+                break;
+
             default :
                 mouvement = new DeplacementAleatoire(fantome);
         };
