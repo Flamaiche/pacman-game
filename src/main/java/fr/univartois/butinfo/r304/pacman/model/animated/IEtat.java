@@ -73,18 +73,10 @@ public interface IEtat {
     }
 
     default void setEtatTemp(Etat etat) {
-        if (this instanceof Fantome) {
-            System.out.println(this.getClass() + "setEtatTemp : " + etat);
-        }
         Etat ancienEtat = getEtat();
         if (ancienEtat == etat) return; // si etat == ancienEtat == INVULNERABLE
-        if (etat == Etat.VULNERABLE) {
-            timerSetEtat(Etat.PRESQUE_INVULNERABLE, Etat.getDureeEtat());
-            timerSetEtat(ancienEtat, Etat.getDureeMort());
-        } else {
-            timerSetEtat(ancienEtat, Etat.getDureeEtat());
-        }
 
+        timerSetEtat(ancienEtat, Etat.getDureeEtat());
         setEtat(etat);
     }
 }

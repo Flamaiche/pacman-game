@@ -3,7 +3,7 @@ package fr.univartois.butinfo.r304.pacman.model.animated;
 public enum Etat {
     VULNERABLE(true, false),
     INVULNERABLE(false, false),
-    PRESQUE_INVULNERABLE(false, false),
+    PRESQUE_INVULNERABLE(true, false),
     MORT(false, true);
 
     private boolean estVulnerable;

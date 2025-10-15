@@ -20,7 +20,7 @@ public class Fantome extends AbstractAnimated implements IEtat {
             "2"
     };
     private final static String[] SPRITES_PRESQUE_INVULNERABLE = {
-            "../hurt/1",
+            "../afraid/1",
             "2"
     };
 
@@ -114,6 +114,7 @@ public class Fantome extends AbstractAnimated implements IEtat {
 
     @Override
     public void setEtat(Etat etat) {
+        if (this.etat == Etat.MORT)
         System.out.println("Fantome"+ getCouleurFantome().getFolderName() +".setEtat()" + etat.name());
         this.etat = etat;
     }
@@ -144,4 +145,21 @@ public class Fantome extends AbstractAnimated implements IEtat {
         this.animationTimer = animationTimer;
     }
 
+    @Override
+    public void setEtatTemp(Etat etat) {
+        System.out.println("Fantome.setEtatTemp : " + etat);
+        Etat ancienEtat = getEtat();
+        if (ancienEtat == etat) return; // si etat == ancienEtat == INVULNERABLE
+
+        // TODO: Configurer ici, pour éviter les conflits de timer
+
+        if (etat == Etat.VULNERABLE) {
+            timerSetEtat(Etat.PRESQUE_INVULNERABLE, Etat.getDureeEtat());
+            timerSetEtat(ancienEtat, Etat.getDureeMort());
+        } else {
+            timerSetEtat(ancienEtat, Etat.getDureeEtat());
+        }
+
+        setEtat(etat);
+    }
 }
