@@ -153,6 +153,7 @@ public class PacMan extends AbstractAnimated implements IEtat {
         if (etat == Etat.INVULNERABLE) setEtatLater(Etat.VULNERABLE);
 
         this.etat = etat;
+        applySpeed();
     }
 
     @Override
