@@ -14,14 +14,14 @@ public class DeplacementFuyard implements IStrategieDeplacement {
     private final Fantome fantome;
     private final PacmanGame game;
     private final IAnimated pacman;
-    private final DeplacementVersJoueur versJoueur;
+    private final DeplacementAleatoire aleatoire;
     private static final double DISTANCE_FUITE = 5.0;
 
     public DeplacementFuyard(Fantome fantome) {
         this.fantome = fantome;
         this.game = fantome.getGame();
         this.pacman = game.getPlayer();
-        this.versJoueur = new DeplacementVersJoueur(fantome);
+        this.aleatoire = new DeplacementAleatoire(fantome);
     }
 
     @Override
@@ -87,13 +87,13 @@ public class DeplacementFuyard implements IStrategieDeplacement {
             fantome.setVerticalSpeed(meilleur[1] * vitesse * 1.1);
 
         } else {
-            versJoueur.mouvement();
+            aleatoire.mouvement();
         }
     }
 
     @Override
     public void reset() {
-        versJoueur.reset();
+        aleatoire.reset();
         fantome.setHorizontalSpeed(0);
         fantome.setVerticalSpeed(0);
     }

@@ -8,7 +8,7 @@ import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 
 import java.util.*;
 
-public class DeplacementVersJoueur implements IStrategieDeplacement {
+public class DeplacementChasseur implements IStrategieDeplacement {
 
     private final Fantome fantome;
     private final PacmanGame game;
@@ -18,7 +18,7 @@ public class DeplacementVersJoueur implements IStrategieDeplacement {
     private List<Cell> cheminVersPacman = new ArrayList<>();
     private int indexProchaineCellule = 0;
 
-    public DeplacementVersJoueur(Fantome fantome) {
+    public DeplacementChasseur(Fantome fantome) {
         this.fantome = fantome;
         this.game = fantome.getGame();
         this.pacman = game.getPlayer();
