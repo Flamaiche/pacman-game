@@ -78,11 +78,16 @@ public abstract class AbstractAnimated implements IAnimated {
      * La vitesse horizontale actuelle de cet objet (en pixels/s).
      */
     protected double horizontalSpeed;
+    protected double requestedHorizontalSpeed = 0;
 
     /**
      * La vitesse verticale actuelle de cet objet (en pixels/s).
      */
     protected double verticalSpeed;
+    protected double requestedVerticalSpeed = 0;
+
+    private static final double BOOST_COEFFICIENT = 1.5;
+    private static final double BOOST_SPEED = PacmanGame.DEFAULT_SPEED * BOOST_COEFFICIENT;
 
     /**
      * Si cet objet animé a été détruit.
@@ -98,9 +103,6 @@ public abstract class AbstractAnimated implements IAnimated {
      *
      */
     protected final ObjectProperty<Image> image;
-
-    protected double requestedHorizontalSpeed = 0;
-    protected double requestedVerticalSpeed = 0;
 
     /**
      * Crée une nouvelle instance de AbstractAnimated.
@@ -208,7 +210,7 @@ public abstract class AbstractAnimated implements IAnimated {
      */
     @Override
     public void setHorizontalSpeed(double speed) {
-        requestedHorizontalSpeed = speed * getSpeedBoost();
+        requestedHorizontalSpeed = getSpeedBoost(speed);
     }
 
     /*
@@ -228,7 +230,19 @@ public abstract class AbstractAnimated implements IAnimated {
      */
     @Override
     public void setVerticalSpeed(double speed) {
-        requestedVerticalSpeed = speed * getSpeedBoost();
+        requestedVerticalSpeed = getSpeedBoost(speed);
+    }
+
+    private double getSpeedBoost(double speed) {
+        if (speed == 0) return 0;
+
+        double speedBoost;
+        if (this instanceof PacMan pacMan && !pacMan.getEtat().estVulnerable()) {
+            if (speed < 0) speedBoost = -BOOST_SPEED;
+            else speedBoost = BOOST_SPEED;
+        } else speedBoost = speed;
+
+        return speedBoost;
     }
 
     /*
@@ -380,11 +394,6 @@ public abstract class AbstractAnimated implements IAnimated {
         yPosition.set(newY);
 
         return true;
-    }
-
-    private double getSpeedBoost() {
-        if (this instanceof PacMan pacman && !pacman.getEtat().estVulnerable()) return 2;
-        return 1d;
     }
 
     public void applySpeed() {
