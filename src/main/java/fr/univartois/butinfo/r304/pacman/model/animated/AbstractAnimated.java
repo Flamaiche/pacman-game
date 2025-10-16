@@ -387,7 +387,7 @@ public abstract class AbstractAnimated implements IAnimated {
         return 1d;
     }
 
-    public void resetSpeed() {
+    public void applySpeed() {
         setHorizontalSpeed(horizontalSpeed);
         setVerticalSpeed(verticalSpeed);
     }
