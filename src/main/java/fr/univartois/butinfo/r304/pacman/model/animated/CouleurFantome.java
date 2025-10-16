@@ -33,7 +33,7 @@ public enum CouleurFantome {
 
             default :
                 mouvement = new DeplacementAleatoire(fantome);
-        };
+        }
         return mouvement;
     }
 }
