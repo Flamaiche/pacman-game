@@ -150,12 +150,10 @@ public class PacMan extends AbstractAnimated implements IEtat {
             throw new IllegalArgumentException("Etat interdit pour le pacman: " + etat);
         }
 
-        if (etat == Etat.INVULNERABLE) {
-            setEtatLater(Etat.VULNERABLE);
-            boostPacMan();
-        }
+        if (etat == Etat.INVULNERABLE) setEtatLater(Etat.VULNERABLE);
 
         this.etat = etat;
+        resetSpeed();
     }
 
     @Override

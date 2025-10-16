@@ -208,7 +208,7 @@ public abstract class AbstractAnimated implements IAnimated {
      */
     @Override
     public void setHorizontalSpeed(double speed) {
-        requestedHorizontalSpeed = speed;
+        requestedHorizontalSpeed = speed * getSpeedBoost();
     }
 
     /*
@@ -228,7 +228,7 @@ public abstract class AbstractAnimated implements IAnimated {
      */
     @Override
     public void setVerticalSpeed(double speed) {
-        requestedVerticalSpeed = speed;
+        requestedVerticalSpeed = speed * getSpeedBoost();
     }
 
     /*
@@ -347,7 +347,6 @@ public abstract class AbstractAnimated implements IAnimated {
         // Si l'objet est aligné avec la grille, on applique la direction demandée.
         if (isAlignedWithGrid(ALIGN_TOLERANCE)) {
             if ((requestedHorizontalSpeed != horizontalSpeed) || (requestedVerticalSpeed != verticalSpeed)) {
-                boostPacMan();
                 horizontalSpeed = requestedHorizontalSpeed;
                 verticalSpeed = requestedVerticalSpeed;
                 alignToGrid();
@@ -383,14 +382,14 @@ public abstract class AbstractAnimated implements IAnimated {
         return true;
     }
 
-    private double getBoostPacMan() {
-        if (this instanceof PacMan pacman && !pacman.getEtat().estVulnerable()) return 1.5;
+    private double getSpeedBoost() {
+        if (this instanceof PacMan pacman && !pacman.getEtat().estVulnerable()) return 2;
         return 1d;
     }
-    public void boostPacMan() {
-        double boostPacMan = getBoostPacMan();
-        setHorizontalSpeed(horizontalSpeed * boostPacMan);
-        setVerticalSpeed(verticalSpeed * boostPacMan);
+
+    public void resetSpeed() {
+        setHorizontalSpeed(horizontalSpeed);
+        setVerticalSpeed(verticalSpeed);
     }
 
     public void alignToGrid() {
