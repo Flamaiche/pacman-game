@@ -27,7 +27,7 @@ public enum CouleurFantome {
                 mouvement =  dvj;
                 break;
 
-            case RED: case BLUE :
+            case RED, BLUE :
                 mouvement = new DeplacementBarrage(fantome);
                 break;
 
