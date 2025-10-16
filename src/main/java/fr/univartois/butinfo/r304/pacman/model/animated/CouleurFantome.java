@@ -22,7 +22,7 @@ public enum CouleurFantome {
         IStrategieDeplacement mouvement;
         switch (this) {
             case PINK, ORANGE:
-                DeplacementVersJoueur dvj = new DeplacementVersJoueur(fantome);
+                DeplacementChasseur dvj = new DeplacementChasseur(fantome);
                 dvj.setAnticipation(4);
                 mouvement =  dvj;
                 break;
