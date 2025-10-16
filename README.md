@@ -340,17 +340,17 @@ PacmanController o-- "1" PacmanGame
 
 ### Jalon n°3 - TP n°5
 
-| Fonctionnalité                             | Patron de Conception ? | Terminée ? | Auteur(s)                                     |
-| ------------------------------------------ | ---------------------- | ---------- | --------------------------------------------- |
-| Pac-Man vulnérable                         |                        |            |                                               |
-| Pac-Man invulnérable                       |                        |            |                                               |
-| Fantômes vulnérables                       |                        |            |                                               |
-| Fantômes fuyants                           |                        |            |                                               |
-| Fantômes presque invulnérables             |                        |            |                                               |
-| Fantômes invulnérables                     |                        |            |                                               |
-| Fantômes invulnérables                     |                        |            |                                               |
-| Réutilisation des fantômes existants       |                        |            |                                               |
-| Ajout des méga-gommes                      |                        |            |                                               |
+| Fonctionnalité                             | Patron de Conception ? | Terminée ? | Auteur(s) |
+| ------------------------------------------ |------------------------|------------|-----------|
+| Pac-Man vulnérable                         | l'état (state)         | oui        | Membre 1  |
+| Pac-Man invulnérable                       | l'état (state)         | oui        | Membre 1  |
+| Fantômes vulnérables                       | l'état (state)         | oui        | Membre 1  |
+| Fantômes fuyants                           |                        | oui        |           |
+| Fantômes presque invulnérables             | l'état (state)         | oui        | Membre 1  |
+| Fantômes invulnérables                     | l'état (state)         | oui        | Membre 1  |
+| Fantômes invulnérables                     | l'état (state)         | oui        | Membre 1  |
+| Réutilisation des fantômes existants       |                        |            |           |
+| Ajout des méga-gommes                      | l'état (state)         | oui        | Membre 1  |
 
 ### Jalon n°4 - TP n°6
 
