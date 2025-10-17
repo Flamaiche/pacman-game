@@ -87,7 +87,7 @@ public class PacMan extends AbstractAnimated implements IEtat {
         if (fantome.getEtat().estVulnerable()) {
             fantome.setEtat(Etat.MORT);
         } else if (this.etat != Etat.INVULNERABLE) {
-            fantome.respawn();
+            game.respawnFantome();
             setPointsDeVie(getPointsDeVie() - 1 );
             if (pointsDeVie.get() <= 0) {
                 game.playerIsDead();
