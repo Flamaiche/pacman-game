@@ -5,9 +5,12 @@ import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.model.animated.Fantome;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 import java.util.*;
 
+@StrategyDesignPattern(strategy = IStrategieDeplacement.class, participant = StrategyParticipant.INTERFACE)
 public class DeplacementBarrage implements IStrategieDeplacement {
 
     private final Fantome fantome;
