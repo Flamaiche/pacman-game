@@ -33,6 +33,6 @@ javafx {
 }
 
 dependencies {
-    implementation files("path/to/dp-processor.jar")
-    annotationProcessor files("path/to/dp-processor.jar")
+    implementation files("lib/dp-processor.jar")
+    annotationProcessor files("lib/dp-processor.jar")
 }
