@@ -327,16 +327,16 @@ PacmanController o-- "1" PacmanGame
 | Intégration de Pac-Man dans la partie      | Oui        | membre 2  |
 | Représentation des fantômes                | Oui        | membre 3  |
 | Intégration des fantômes dans la partie    | Oui        | membre 3  |
-| Création de la carte du jeu                | Partiel    | membre 4  |
+| Création de la carte du jeu                | Oui        | membre 4  |
 | Ajout des pac-gommes sur la carte          | Oui        | membre 4  |
 
 ### Jalon n°2 - TP n°4
 
-| Fonctionnalité                             | Patron de Conception ?     | Terminée ? | Auteur(s)                 |
-| ------------------------------------------ |----------------------------|------------|---------------------------|
-| Variantes de génération de labyrinthe      |                            |            |                           |
-| Complétion d'un labyrinthe existant        |                            |            |                           |
-| Variantes de déplacement pour les fantômes | Patron Stratégie(strategy) | Démarrage  | Popieul Mathéo (membre 3) |
+| Fonctionnalité                             | Patron de Conception ?     | Terminée ? | Auteur(s)           |
+| ------------------------------------------ |----------------------------|------------|---------------------|
+| Variantes de génération de labyrinthe      |  Factory Method            | Oui        | membre 1 & membre 2 |
+| Complétion d'un labyrinthe existant        |  Decorator                 | Oui        | membre 1            |
+| Variantes de déplacement pour les fantômes | Patron Stratégie(strategy) | Oui        | membre 3 & membre 1 |
 
 ### Jalon n°3 - TP n°5
 
@@ -345,11 +345,11 @@ PacmanController o-- "1" PacmanGame
 | Pac-Man vulnérable                         | l'état (state)         | oui        | Membre 1  |
 | Pac-Man invulnérable                       | l'état (state)         | oui        | Membre 1  |
 | Fantômes vulnérables                       | l'état (state)         | oui        | Membre 1  |
-| Fantômes fuyants                           |                        | oui        |           |
+| Fantômes fuyants                           | Stratégie              | oui        | Membre 3  |
 | Fantômes presque invulnérables             | l'état (state)         | oui        | Membre 1  |
 | Fantômes invulnérables                     | l'état (state)         | oui        | Membre 1  |
 | Fantômes invulnérables                     | l'état (state)         | oui        | Membre 1  |
-| Réutilisation des fantômes existants       |                        |            |           |
+| Réutilisation des fantômes existants       | Stratégie              | oui        | Membre 4  |
 | Ajout des méga-gommes                      | l'état (state)         | oui        | Membre 1  |
 
 ### Jalon n°4 - TP n°6
