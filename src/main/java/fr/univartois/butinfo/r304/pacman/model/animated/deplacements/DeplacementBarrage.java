@@ -31,7 +31,7 @@ public class DeplacementBarrage implements IStrategieDeplacement {
 
     private List<Fantome> rechercherAutresFantomes() {
         List<Fantome> fantomes = new ArrayList<>();
-        for (IAnimated obj : game.getAnimatedObjects()) {
+        for (IAnimated obj : game.getMovingObjects()) {
             if (obj instanceof Fantome f && f != this.fantome) fantomes.add(f);
         }
         return fantomes;

@@ -403,6 +403,14 @@ public final class PacmanGame {
         animatedObjects.clear();
     }
 
+    public void respawnFantome() {
+        for (IAnimated animated : movingObjects) {
+            if (animated instanceof Fantome fantome) {
+                fantome.respawn();
+            }
+        }
+    }
+
     /**
      * Indique que le joueur a mangé une pac-gomme.
      *
@@ -462,7 +470,7 @@ public final class PacmanGame {
         return player;
     }
 
-    public List<IAnimated> getAnimatedObjects() {
-        return animatedObjects;
+    public List<IAnimated> getMovingObjects() {
+        return movingObjects;
     }
 }
