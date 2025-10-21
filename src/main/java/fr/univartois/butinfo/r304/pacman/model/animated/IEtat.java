@@ -93,18 +93,7 @@ public interface IEtat {
     default void setEtatLater(Etat etat) {
         setEtatLater(etat, Etat.getDureeEtat());
     }
-
-    /**
-     * Ajoute pendant Etat.DUREE_ETAT ms un etat puis restitue l'état
-     *
-     * @param etat
-     */
-//    default void setEtatTemp(Etat etat) {
-//        Etat ancienEtat = getEtat();
-//
-//        if (ancienEtat == Etat.MORT) throw new Error("Impossible set l'état mort pour une durée indéfini");
-//
-//        setEtatLater(ancienEtat, Etat.getDureeEtat());
-//        setEtat(etat);
-//    }
+    default IEtat nextState() {
+        return this;
+    }
 }

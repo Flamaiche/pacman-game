@@ -3,13 +3,13 @@ package fr.univartois.butinfo.r304.pacman.model.animated;
 import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
-import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
-import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
+import fr.univartois.dpprocessor.designpatterns.state.StateDesignPattern;
+import fr.univartois.dpprocessor.designpatterns.state.StateParticipant;
 import javafx.beans.property.IntegerProperty;
 
 import java.util.Timer;
 
-@StrategyDesignPattern(strategy = IEtat.class, participant = StrategyParticipant.IMPLEMENTATION)
+@StateDesignPattern(state = IEtat.class, participant = StateParticipant.IMPLEMENTATION)
 public class PacMan extends AbstractAnimated implements IEtat {
 
     private final IntegerProperty pointsDeVie;
