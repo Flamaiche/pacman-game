@@ -334,8 +334,8 @@ PacmanController o-- "1" PacmanGame
 
 | Fonctionnalité                             | Patron de Conception ?     | Terminée ? | Auteur(s)           |
 | ------------------------------------------ |----------------------------|------------|---------------------|
-| Variantes de génération de labyrinthe      |  Factory Method            | Oui        | membre 1 & membre 2 |
-| Complétion d'un labyrinthe existant        |  Decorator                 | Oui        | membre 1            |
+| Variantes de génération de labyrinthe      | Patron Stratégie(strategy) | Oui        | membre 1 & membre 2 |
+| Complétion d'un labyrinthe existant        | Decorator                  | Oui        | membre 1            |
 | Variantes de déplacement pour les fantômes | Patron Stratégie(strategy) | Oui        | membre 3 & membre 1 |
 
 ### Jalon n°3 - TP n°5
