@@ -7,7 +7,7 @@ import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 import java.util.Random;
 
-@StrategyDesignPattern(strategy = IStrategieDeplacement.class, participant = StrategyParticipant.INTERFACE)
+@StrategyDesignPattern(strategy = IStrategieDeplacement.class, participant = StrategyParticipant.IMPLEMENTATION)
 public class DeplacementAleatoire implements IStrategieDeplacement {
     private final Fantome fantome;
     private final Random random = new Random();

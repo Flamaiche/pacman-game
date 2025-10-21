@@ -10,7 +10,7 @@ import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 import java.util.*;
 
-@StrategyDesignPattern(strategy = IStrategieDeplacement.class, participant = StrategyParticipant.INTERFACE)
+@StrategyDesignPattern(strategy = IStrategieDeplacement.class, participant = StrategyParticipant.IMPLEMENTATION)
 public class DeplacementChasseur implements IStrategieDeplacement {
 
     private final Fantome fantome;
