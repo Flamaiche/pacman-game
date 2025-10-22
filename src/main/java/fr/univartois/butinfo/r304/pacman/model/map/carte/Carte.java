@@ -6,11 +6,15 @@ import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
 import fr.univartois.butinfo.r304.pacman.model.map.Wall;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
+import fr.univartois.dpprocessor.designpatterns.decorator.DecoratorDesignPattern;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 /*
 le labyrinth sera genera à partir Carte
 Carte est un générateur de Cell pour GameMap
  */
+@StrategyDesignPattern(strategy = ICarte.class, participant = StrategyParticipant.IMPLEMENTATION)
 public class Carte implements ICarte {
 
     public Carte() {}

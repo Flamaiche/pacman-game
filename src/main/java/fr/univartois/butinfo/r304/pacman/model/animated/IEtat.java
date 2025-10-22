@@ -2,6 +2,8 @@ package fr.univartois.butinfo.r304.pacman.model.animated;
 
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
+import fr.univartois.dpprocessor.designpatterns.state.StateDesignPattern;
+import fr.univartois.dpprocessor.designpatterns.state.StateParticipant;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -9,6 +11,7 @@ import java.util.TimerTask;
 /**
  * Interface pour les objets ayant un Etat et étant animé.
  */
+@StateDesignPattern(state = IEtat.class, participant = StateParticipant.INTERFACE)
 public interface IEtat {
 
     PacmanGame getGame();
@@ -90,18 +93,7 @@ public interface IEtat {
     default void setEtatLater(Etat etat) {
         setEtatLater(etat, Etat.getDureeEtat());
     }
-
-    /**
-     * Ajoute pendant Etat.DUREE_ETAT ms un etat puis restitue l'état
-     *
-     * @param etat
-     */
-//    default void setEtatTemp(Etat etat) {
-//        Etat ancienEtat = getEtat();
-//
-//        if (ancienEtat == Etat.MORT) throw new Error("Impossible set l'état mort pour une durée indéfini");
-//
-//        setEtatLater(ancienEtat, Etat.getDureeEtat());
-//        setEtat(etat);
-//    }
+    default IEtat nextState() {
+        return this;
+    }
 }

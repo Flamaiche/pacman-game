@@ -2,9 +2,12 @@ package fr.univartois.butinfo.r304.pacman.model.animated.deplacements;
 
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.model.animated.Fantome;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 import java.util.Random;
 
+@StrategyDesignPattern(strategy = IStrategieDeplacement.class, participant = StrategyParticipant.IMPLEMENTATION)
 public class DeplacementAleatoire implements IStrategieDeplacement {
     private final Fantome fantome;
     private final Random random = new Random();

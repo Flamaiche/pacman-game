@@ -2,17 +2,21 @@ package fr.univartois.butinfo.r304.pacman.model.map.carte;
 
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
+import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
 import fr.univartois.butinfo.r304.pacman.model.map.Wall;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
+@StrategyDesignPattern(strategy = ICarte.class, participant = StrategyParticipant.IMPLEMENTATION)
 public class Carte_2 extends Carte {
 
     public Carte_2() {}
 
     @Override
     public GameMap createMap(int largeur, int hauteur) {
-        GameMap map = new Carte().createMap(largeur, hauteur);
+        GameMap map = super.createMap(largeur, hauteur);
         ajoutMursInterieurs(map, largeur, hauteur);
         return map;
     }

@@ -29,6 +29,8 @@ import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
 import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -39,6 +41,7 @@ import javafx.beans.property.SimpleIntegerProperty;
  *
  * @version 0.1.0
  */
+@StrategyDesignPattern(strategy = ICarte.class, participant = StrategyParticipant.CONTEXT)
 public final class PacmanGame {
 
     /**

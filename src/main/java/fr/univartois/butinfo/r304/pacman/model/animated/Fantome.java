@@ -6,9 +6,15 @@ import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.Deplacement
 import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.DeplacementFuyard;
 import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.IStrategieDeplacement;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
+import fr.univartois.dpprocessor.designpatterns.state.StateDesignPattern;
+import fr.univartois.dpprocessor.designpatterns.state.StateParticipant;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 import java.util.Timer;
 
+@StateDesignPattern(state = IEtat.class, participant = StateParticipant.IMPLEMENTATION)
+@StrategyDesignPattern(strategy = IStrategieDeplacement.class, participant = StrategyParticipant.CONTEXT)
 public class Fantome extends AbstractAnimated implements IEtat {
 
     private CouleurFantome couleurFantome;
