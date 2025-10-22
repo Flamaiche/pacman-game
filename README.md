@@ -349,8 +349,8 @@ PacmanController o-- "1" PacmanGame
 | Fantômes presque invulnérables             | l'état (state)         | oui        | Membre 1  |
 | Fantômes invulnérables                     | l'état (state)         | oui        | Membre 1  |
 | Fantômes invulnérables                     | l'état (state)         | oui        | Membre 1  |
-| Réutilisation des fantômes existants       | Stratégie              | oui        | Membre 4  |
-| Ajout des méga-gommes                      | l'état (state)         | oui        | Membre 1  |
+| Réutilisation des fantômes existants       | Aucun                  | oui        | Membre 4  |
+| Ajout des méga-gommes                      | Aucun                  | oui        | Membre 1  |
 
 ### Jalon n°4 - TP n°6
 
