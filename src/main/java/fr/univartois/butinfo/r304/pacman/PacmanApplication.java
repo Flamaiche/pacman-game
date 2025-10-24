@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import fr.univartois.butinfo.r304.pacman.controller.PacmanController;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
+import fr.univartois.butinfo.r304.pacman.model.map.*;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -64,9 +65,15 @@ public final class PacmanApplication extends Application {
         PacmanController controller = fxmlLoader.getController();
         controller.setStage(stage);
 
+
+        // Choisir une carte aléatoirement
+        ChoisirMapAleatoirement choix = new ChoisirMapAleatoirement();
+        ICarte carte = choix.choisirMap();
+
+
         // On crée ensuite le jeu, que l'on lie au contrôleur.
         PacmanGame game = new PacmanGame(
-                GAME_WIDTH, GAME_HEIGHT, new SpriteStore(), NB_GHOSTS);
+                GAME_WIDTH, GAME_HEIGHT, new SpriteStore(), NB_GHOSTS, carte);
         controller.setGame(game);
         game.setController(controller);
         game.prepare();
@@ -77,6 +84,8 @@ public final class PacmanApplication extends Application {
         stage.setTitle("PacmanFX");
         stage.setResizable(false);
         stage.show();
+
+
     }
 
     /**

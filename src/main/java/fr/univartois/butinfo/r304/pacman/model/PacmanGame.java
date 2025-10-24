@@ -16,23 +16,22 @@
 
 package fr.univartois.butinfo.r304.pacman.model;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.univartois.butinfo.r304.pacman.model.animated.CouleurFantome;
-import fr.univartois.butinfo.r304.pacman.model.animated.Fantome;
-import fr.univartois.butinfo.r304.pacman.model.animated.PacMan;
-import fr.univartois.butinfo.r304.pacman.model.animated.PacGomme;
-import fr.univartois.butinfo.r304.pacman.model.map.Carte;
+import fr.univartois.butinfo.r304.pacman.model.animated.*;
+
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
+import fr.univartois.butinfo.r304.pacman.model.map.ChoisirMapAleatoirement;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
+import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
 import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 import javafx.animation.AnimationTimer;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 /**
@@ -42,6 +41,7 @@ import javafx.beans.property.SimpleIntegerProperty;
  *
  * @version 0.1.0
  */
+@StrategyDesignPattern(strategy = ICarte.class, participant = StrategyParticipant.CONTEXT)
 public final class PacmanGame {
 
     /**
@@ -103,12 +103,15 @@ public final class PacmanGame {
     /**
      * L'animation du jeu, qui s'assure que les différents objets évoluent.
      */
-    private final AnimationTimer animation = new GameAnimation(movingObjects, animatedObjects);
+    private AnimationTimer animation = new GameAnimation(movingObjects, animatedObjects);
 
     /**
      * Le contrôleur du jeu.
      */
     private IPacmanController controller;
+
+
+    private ICarte carte;
 
     /**
      * Crée une nouvelle instance de PacmanGame.
@@ -119,11 +122,12 @@ public final class PacmanGame {
      *        {@link Sprite} du jeu.
      * @param nbGhosts Le nombre de fantômes dans le jeu.
      */
-    public PacmanGame(int gameWidth, int gameHeight, ISpriteStore spriteStore, int nbGhosts) {
+    public PacmanGame(int gameWidth, int gameHeight, ISpriteStore spriteStore, int nbGhosts, ICarte carte) {
         this.width = gameWidth;
         this.height = gameHeight;
         this.spriteStore = spriteStore;
         this.nbGhosts = nbGhosts;
+        this.carte = carte;
     }
 
     /**
@@ -180,7 +184,15 @@ public final class PacmanGame {
     private GameMap createMap() {
         int nbCellLargeur = width / ISpriteStore.DEFAULT_SPRITE_SIZE;
         int nbCellHauteur = height / ISpriteStore.DEFAULT_SPRITE_SIZE;
-        return Carte.createMap(nbCellLargeur, nbCellHauteur);
+        return carte.createMap(nbCellLargeur, nbCellHauteur);
+
+
+
+    }
+
+    public void setIcarte(ICarte carte){
+        this.carte=carte;
+
     }
 
     /**
@@ -190,6 +202,8 @@ public final class PacmanGame {
         prepare();
         createAnimated();
         initStatistics();
+        if (animation != null) animation.stop(); // sécure
+        animation = new GameAnimation(movingObjects, animatedObjects);
         animation.start();
     }
 
@@ -199,40 +213,60 @@ public final class PacmanGame {
     private void createAnimated() {
         // On commence par enlever tous les éléments mobiles encore présents.
         clearAnimated();
+        movingObjects.clear();
 
-        player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("pacman/half-open"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
-        animatedObjects.add(player);
+        player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("pacman/right/closed"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
         spawnAnimated(player);
+        player.setSpawnPoint(player.getX(), player.getY());
+        addMoving(player);
+
+        int zoneSafe = 6 * ISpriteStore.DEFAULT_SPRITE_SIZE;
 
 
         // On crée ensuite les fantômes sur la carte.
         for (int i = 0; i < nbGhosts; i++) {
             CouleurFantome couleur =CouleurFantome.values()[ (i % CouleurFantome.values().length) ];
-            IAnimated ghost = new Fantome(this,0,0,spriteStore.getSprite("ghosts/blue/1"), couleur);
+            String spritePath = "ghosts/right/" + couleur.getFolderName() + "/1";
+            Fantome ghost = new Fantome(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
-            animatedObjects.add(ghost);
-            spawnAnimated(ghost);
+
+            do {
+                spawnAnimated(ghost);
+            } while (isInZone(player, ghost, zoneSafe));
+
+            ghost.setSpawnPoint(ghost.getX(), ghost.getY());
+            addMoving(ghost);
         }
 
         SpriteStore spriteStore = new SpriteStore();
         Sprite gomme = spriteStore.getSprite("pacgum");
+        Sprite megaGomme = spriteStore.getSprite("megagum");
 
         int y, x;
         for (Cell emptyCell : gameMap.getEmptyCells()) {
+            PacGomme pg;
             y = emptyCell.getColumn();
             x = emptyCell.getRow();
-            PacGomme pg = new PacGomme(this, x, y, gomme);
-            animatedObjects.add(pg);
-            spawnAnimated(pg);
+            if (RANDOM.nextInt(100) == 0) { // 1% de chance
+                pg = new PacGomme(this, x, y, megaGomme);
+                pg.setMegaGum(true);
+            }
+            else pg = new PacGomme(this, x, y, gomme);
+            spawnAnimated(pg, x, y);
+            addAnimated(pg);
         }
         nbGums = gameMap.getEmptyCells().size();
+    }
+
+    private boolean isInZone(IAnimated inCenterZone, IAnimated animated, int zoneSafe) {
+        return inCenterZone.getX() - zoneSafe < animated.getX() && inCenterZone.getX() + zoneSafe > animated.getX()
+                && inCenterZone.getY() - zoneSafe < animated.getY() && inCenterZone.getY() + zoneSafe > animated.getY();
     }
 
     /**
      * Initialise les statistiques de cette partie.
      */
     private void initStatistics() {
-        // TODO Lier les propriétés du joueur avec celles du contrôleur.
         controller.bindLife(player.pointsDeVieProperty());
         controller.bindScore(player.scoreProperty());
     }
@@ -248,8 +282,13 @@ public final class PacmanGame {
             Cell cell = spawnableCells.get(RANDOM.nextInt(spawnableCells.size()));
             animated.setX(cell.getColumn() * spriteStore.getSpriteSize());
             animated.setY(cell.getRow() * spriteStore.getSpriteSize());
-            addMoving(animated);
         }
+    }
+
+    private void spawnAnimated(IAnimated animated, int x, int y) {
+        Cell cell = gameMap.getAt(x, y);
+        animated.setX(cell.getColumn() * spriteStore.getSpriteSize());
+        animated.setY(cell.getRow() * spriteStore.getSpriteSize());
     }
 
     /**
@@ -300,7 +339,7 @@ public final class PacmanGame {
      *
      * @return La cellule occupée par l'objet mobile.
      */
-    private Cell getCellOf(IAnimated animated) {
+    public Cell getCellOf(IAnimated animated) {
         // On commence par récupérer la position du centre de l'objet.
         int midX = animated.getX() + (animated.getWidth() / 2);
         int midY = animated.getY() + (animated.getHeight() / 2);
@@ -367,17 +406,35 @@ public final class PacmanGame {
         animatedObjects.clear();
     }
 
+    public void respawnFantome() {
+        for (IAnimated animated : movingObjects) {
+            if (animated instanceof Fantome fantome) {
+                fantome.respawn();
+            }
+        }
+    }
+
     /**
      * Indique que le joueur a mangé une pac-gomme.
      *
      * @param gum La pac-gomme qui a été mangée.
      */
     public void pacGumEaten(IAnimated gum) {
+        if (gum instanceof PacGomme && ((PacGomme) gum).isMegaGum()) megaPacGumEaten(gum);
         nbGums--;
         removeAnimated(gum);
 
         if (nbGums <= 0) {
             gameOver("YOU WIN!");
+        }
+    }
+
+    public void megaPacGumEaten(IAnimated megaGum) {
+        player.setEtat(Etat.INVULNERABLE);
+        for (IAnimated moving : movingObjects) {
+            if (moving instanceof Fantome fantome) {
+                fantome.setEtat(Etat.VULNERABLE);
+            }
         }
     }
 
@@ -396,6 +453,27 @@ public final class PacmanGame {
     private void gameOver(String message) {
         animation.stop();
         controller.gameOver(message);
+
+        System.out.println("Fin de la partie" + message);
+        System.out.println("Choix de une carte aleatoire");
+
+        ChoisirMapAleatoirement choix = new ChoisirMapAleatoirement();
+        ICarte nouvelleCarte = choix.choisirMap();
+        this.setIcarte(nouvelleCarte);
+
+
+        System.out.println("Nouvelle partie lancee avec la nouvelle carte" + nouvelleCarte.getClass().getSimpleName());
     }
 
+    public GameMap getGameMap() {
+        return gameMap;
+    }
+
+    public PacMan getPlayer() {
+        return player;
+    }
+
+    public List<IAnimated> getMovingObjects() {
+        return movingObjects;
+    }
 }

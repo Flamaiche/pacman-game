@@ -31,3 +31,8 @@ javafx {
     version = '21.0.1'
     modules = ['javafx.controls', 'javafx.fxml']
 }
+
+dependencies {
+    implementation files("lib/dp-processor.jar")
+    annotationProcessor files("lib/dp-processor.jar")
+}

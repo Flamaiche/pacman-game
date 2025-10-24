@@ -3,19 +3,41 @@ package fr.univartois.butinfo.r304.pacman.model.animated;
 import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
+import fr.univartois.dpprocessor.designpatterns.state.StateDesignPattern;
+import fr.univartois.dpprocessor.designpatterns.state.StateParticipant;
 import javafx.beans.property.IntegerProperty;
-import javafx.scene.paint.LinearGradient;
 
-public class PacMan extends AbstractAnimated {
+import java.util.Timer;
+
+@StateDesignPattern(state = IEtat.class, participant = StateParticipant.IMPLEMENTATION)
+public class PacMan extends AbstractAnimated implements IEtat {
 
     private final IntegerProperty pointsDeVie;
     private final IntegerProperty score;
+    private int spawnX = 0;
+    private int spawnY = 0;
+    private Etat etat;
+    private Timer etatTimer;
 
+    private long animationTimer = 0;
+    private int animationFrame = 0;
+    private static final String[] SPRITES = {
+            "closed",
+            "half-open",
+            "open",
+            "open",
+            "half-open"
+    };
+    private static final String[] SPRITES_BOOST = {
+            "open",
+            "half-open",
+    };
 
     public PacMan(PacmanGame game, int xPosition, int yPosition, Sprite sprite, IntegerProperty pointsDeVie, IntegerProperty score) {
         super(game, xPosition, yPosition, sprite);
         this.pointsDeVie = pointsDeVie;
         this.score = score;
+        this.etat = Etat.VULNERABLE;
     }
 
     public PacmanGame getGame() {
@@ -46,10 +68,15 @@ public class PacMan extends AbstractAnimated {
         this.score.set(score);
     }
 
+    @Override
+    public String getFolderSprite() {
+        return "pacman/";
+    }
 
     @Override
     public void onCollisionWith(IAnimated other) {
-
+        // toutes les collisions arrivent ici ( voir GameAnimation.checkCollision() )
+        other.onCollisionWith(this);
     }
 
     @Override
@@ -59,21 +86,82 @@ public class PacMan extends AbstractAnimated {
 
     @Override
     public void onCollisionWith(Fantome fantome) {
-        setPointsDeVie(getPointsDeVie() - 1 );
-        if (pointsDeVie.get() <= 0) {
-            game.playerIsDead();
-        } else {
-            setX(game.getHeight() / 2);
-            setY(game.getHeight() / 2);
-            setHorizontalSpeed(0);
-            setVerticalSpeed(0);
+        if (fantome.getEtat().estMort()) return;
+        if (fantome.getEtat().estVulnerable()) {
+            fantome.setEtat(Etat.MORT);
+        } else if (this.etat != Etat.INVULNERABLE) {
+            game.respawnFantome();
+            setPointsDeVie(getPointsDeVie() - 1 );
+            if (pointsDeVie.get() <= 0) {
+                game.playerIsDead();
+            } else {
+                setX(spawnX);
+                setY(spawnY);
+                game.stopMoving();
+            }
         }
+    }
 
+    public void setSpawnPoint(int x, int y) {
+        spawnX = x;
+        spawnY = y;
     }
 
     @Override
     public void onCollisionWith(PacGomme pacGomme) {
-        pacGomme.onCollisionWith(this);
         setScore(getScore() + 1);
+    }
+
+    @Override
+    public Etat getEtat() {
+        return etat;
+    }
+
+    @Override
+    public int getAnimationFrame() {
+        return animationFrame;
+    }
+
+    @Override
+    public long getAnimationTimer() {
+        return animationTimer;
+    }
+
+    @Override
+    public void setAnimationTimer(long animationTimer) {
+        this.animationTimer = animationTimer;
+    }
+
+    @Override
+    public void setAnimationFrame(int animationFrame) {
+        this.animationFrame = animationFrame;
+    }
+
+    @Override
+    public Timer getEtatTimer() {
+        return etatTimer;
+    }
+
+    @Override
+    public void setEtatTimer(Timer etatTimer) {
+        this.etatTimer = etatTimer;
+    }
+
+    @Override
+    public void setEtat(Etat etat) {
+        if (etat == Etat.PRESQUE_INVULNERABLE || etat == Etat.MORT) {
+            throw new IllegalArgumentException("Etat interdit pour le pacman: " + etat);
+        }
+
+        if (etat == Etat.INVULNERABLE) setEtatLater(Etat.VULNERABLE);
+
+        this.etat = etat;
+        applySpeed();
+    }
+
+    @Override
+    public String[] getCurrentSprites() {
+        if (etat == Etat.INVULNERABLE) return SPRITES_BOOST;
+        return SPRITES;
     }
 }

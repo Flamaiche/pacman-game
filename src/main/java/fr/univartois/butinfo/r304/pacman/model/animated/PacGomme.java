@@ -6,6 +6,7 @@ import fr.univartois.butinfo.r304.pacman.view.Sprite;
 
 public class PacGomme extends AbstractAnimated {
 
+    private boolean isMegaGum = false;
 
     /**
      * Crée une nouvelle instance de AbstractAnimated.
@@ -19,20 +20,36 @@ public class PacGomme extends AbstractAnimated {
         super(game, xPosition, yPosition, sprite);
     }
 
+    @Override
+    public void onCollisionWith(IAnimated other) {
+        // par défaut on laisse l'autre gérer
+        other.onCollisionWith(this);
+    }
 
     @Override
     public void onCollisionWith(PacMan pacMan) {
-        game.pacGumEaten(this);
+        // on renvoie l'appel à PacMan avec le type dynamique
+        pacMan.onCollisionWith(this);
+        if (isDestroyed()) return;
         this.onDestruction();
+        game.pacGumEaten(this);
     }
 
     @Override
     public void onCollisionWith(Fantome fantome) {
-        // ne se passe rien
+        // ne fait rien
     }
 
     @Override
     public void onCollisionWith(PacGomme pacGomme) {
-        // ne se passe rien non plus
+        // ne fait rien
+    }
+
+    public boolean isMegaGum() {
+        return isMegaGum;
+    }
+
+    public void setMegaGum(boolean megaGum) {
+        isMegaGum = megaGum;
     }
 }

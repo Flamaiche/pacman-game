@@ -40,8 +40,24 @@ public abstract class AbstractAnimated implements IAnimated {
 
     /**
      * La marge de sécurité pour les obstacles (en pixels).
+     *
+     * WARNING (hard) : Les marges sont reliés entre elle.
      */
-    private static final int MARGIN = 5;
+    private static final int MARGIN = 1;
+
+    /**
+     * La marge de sécurité pour les collisions (fantome, pac-gomme)
+     *
+     * WARNING (light) : Les marges sont reliés entre elle.
+     */
+    private static final int MARGIN_COLLISION = 5;
+
+    /**
+     * La marge de pixels pour considérer aligner un IAnimated sur la grille
+     *
+     * WARNING (hard) : Les marges sont reliés entre elle.
+     */
+    private static final int ALIGN_TOLERANCE = 4;
 
     /**
      * Le jeu dans lequel cet objet animé évolue.
@@ -62,11 +78,16 @@ public abstract class AbstractAnimated implements IAnimated {
      * La vitesse horizontale actuelle de cet objet (en pixels/s).
      */
     protected double horizontalSpeed;
+    protected double requestedHorizontalSpeed = 0;
 
     /**
      * La vitesse verticale actuelle de cet objet (en pixels/s).
      */
     protected double verticalSpeed;
+    protected double requestedVerticalSpeed = 0;
+
+    private static final double BOOST_COEFFICIENT = 1.5;
+    private static final double BOOST_SPEED = PacmanGame.DEFAULT_SPEED * BOOST_COEFFICIENT;
 
     /**
      * Si cet objet animé a été détruit.
@@ -189,7 +210,7 @@ public abstract class AbstractAnimated implements IAnimated {
      */
     @Override
     public void setHorizontalSpeed(double speed) {
-        this.horizontalSpeed = speed;
+        requestedHorizontalSpeed = getSpeedBoost(speed);
     }
 
     /*
@@ -209,7 +230,19 @@ public abstract class AbstractAnimated implements IAnimated {
      */
     @Override
     public void setVerticalSpeed(double speed) {
-        this.verticalSpeed = speed;
+        requestedVerticalSpeed = getSpeedBoost(speed);
+    }
+
+    private double getSpeedBoost(double speed) {
+        if (speed == 0) return 0;
+
+        double speedBoost;
+        if (this instanceof PacMan pacMan && !pacMan.getEtat().estVulnerable()) {
+            if (speed < 0) speedBoost = -BOOST_SPEED;
+            else speedBoost = BOOST_SPEED;
+        } else speedBoost = speed;
+
+        return speedBoost;
     }
 
     /*
@@ -324,33 +357,61 @@ public abstract class AbstractAnimated implements IAnimated {
      */
     @Override
     public boolean onStep(long delta) {
-        // On met à jour la position de l'objet sur l'axe x.
+
+        // Si l'objet est aligné avec la grille, on applique la direction demandée.
+        if (isAlignedWithGrid(ALIGN_TOLERANCE)) {
+            if ((requestedHorizontalSpeed != horizontalSpeed) || (requestedVerticalSpeed != verticalSpeed)) {
+                horizontalSpeed = requestedHorizontalSpeed;
+                verticalSpeed = requestedVerticalSpeed;
+                alignToGrid();
+            }
+        }
+
+        // On calcule la nouvelle position sur l'axe X.
         int limitMaxX = game.getWidth() - getWidth();
         double newX = xPosition.get() + (horizontalSpeed * delta) / 1000;
         if ((newX < 0) || (newX > limitMaxX)) {
-            // L'objet a atteint la limite sur l'axe x.
+            // L'objet a atteint la limite sur l'axe X.
             return false;
         }
 
-        // On met à jour la position de l'objet sur l'axe y.
+        // On calcule la nouvelle position sur l'axe Y.
         int limitMaxY = game.getHeight() - getHeight();
         double newY = yPosition.get() + (verticalSpeed * delta) / 1000;
         if ((newY < 0) || (newY > limitMaxY)) {
-            // L'objet a atteint la limite sur l'axe y.
+            // L'objet a atteint la limite sur l'axe Y.
             return false;
         }
 
-        // On vérifie qu'il n'y a pas un obstacle.
+        // On vérifie s’il y a un mur à la nouvelle position.
         if (isOnWall((int) newX, (int) newY)) {
             // L'objet a atteint un mur.
             return false;
         }
 
-        // L'objet n'a atteint aucun obstacle
+        // Si tout est bon, on applique la nouvelle position.
         xPosition.set(newX);
         yPosition.set(newY);
+
         return true;
     }
+
+    public void applySpeed() {
+        setHorizontalSpeed(horizontalSpeed);
+        setVerticalSpeed(verticalSpeed);
+    }
+
+    public void alignToGrid() {
+        int cellWidth = game.getCellAt(0, 0).getWidth();
+        int cellHeight = game.getCellAt(0, 0).getHeight();
+
+        int alignedX = (int) Math.round((double) getX() / cellWidth) * cellWidth;
+        int alignedY = (int) Math.round((double) getY() / cellHeight) * cellHeight;
+
+        setX(alignedX);
+        setY(alignedY);
+    }
+
 
     /**
      * Vérifie si la nouvelle position de l'objet est sur un mur.
@@ -393,17 +454,18 @@ public abstract class AbstractAnimated implements IAnimated {
      */
     @Override
     public boolean isCollidingWith(IAnimated other) {
-        if (isDestroyed() || other.isDestroyed()) {
-            // L'un des deux objets au moins est déjà consommé.
-            // Il ne peut donc pas y avoir de collision.
-            return false;
-        }
+        if (isDestroyed() || other.isDestroyed()) return false;
 
-        Rectangle rectangle = new Rectangle(getX(), getY(), getWidth(), getHeight());
-        return rectangle.intersects(other.getX(), other.getY(), other.getWidth(),
-                other.getHeight());
+        Rectangle pacmanRect = new Rectangle(
+                getX() + MARGIN_COLLISION,
+                getY() + MARGIN_COLLISION,
+                getWidth() - 2 * MARGIN_COLLISION,
+                getHeight() - 2 * MARGIN_COLLISION
+        );
+
+        Rectangle otherRect = new Rectangle(other.getX(), other.getY(), other.getWidth(), other.getHeight());
+        return pacmanRect.intersects(otherRect.getBoundsInLocal());
     }
-
     /*
      * (non-Javadoc)
      *
@@ -472,6 +534,20 @@ public abstract class AbstractAnimated implements IAnimated {
     }
 
     public void onCollisionWith(IAnimated other) {
-        // ne fait rien
+        // ici on ne fait rien du tout car sinon appel recursive
+        // l'appel est fait dans les sous classes, ainsi le type dynamique est pris en compte
     }
+
+    public boolean isAlignedWithGrid(int alignTolerance) {
+        int cellWidth = game.getCellAt(0, 0).getWidth();
+        int cellHeight = game.getCellAt(0, 0).getHeight();
+
+        int modX = getX() % cellWidth;
+        int modY = getY() % cellHeight;
+
+        return (modX <= alignTolerance || modX >= cellWidth - alignTolerance)
+                && (modY <= alignTolerance || modY >= cellHeight - alignTolerance);
+    }
+
+
 }

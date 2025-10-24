@@ -18,6 +18,8 @@ package fr.univartois.butinfo.r304.pacman.model;
 
 import java.util.List;
 
+import fr.univartois.butinfo.r304.pacman.model.animated.Fantome;
+import fr.univartois.butinfo.r304.pacman.model.animated.PacMan;
 import javafx.animation.AnimationTimer;
 
 /**
@@ -97,6 +99,12 @@ final class GameAnimation extends AnimationTimer {
     private void updateObjects(long delta) {
         for (IAnimated movable : animatedObjects) {
             movable.onStep(delta);
+
+            if (movable instanceof PacMan pacMan) {
+                pacMan.animate(delta);
+            } else if (movable instanceof Fantome fantome) {
+                fantome.animate(delta);
+            }
         }
     }
 
@@ -105,13 +113,29 @@ final class GameAnimation extends AnimationTimer {
      * collision.
      */
     private void checkCollisions() {
+//        for (IAnimated moving : movingObjects) {
+//            for (IAnimated animated : animatedObjects) {
+//                if ((moving != animated) && moving.isCollidingWith(animated)) {
+//                    moving.onCollisionWith(animated);
+//                    animated.onCollisionWith(moving);
+//                }
+//            }
+//        }
+
+        PacMan pacMan = null;
         for (IAnimated moving : movingObjects) {
-            for (IAnimated animated : animatedObjects) {
-                if ((moving != animated) && moving.isCollidingWith(animated)) {
-                    // On informe les deux objets qu'ils sont entrés en collision.
-                    moving.onCollisionWith(animated);
-                    animated.onCollisionWith(moving);
-                }
+            if (moving instanceof PacMan) {
+                pacMan = (PacMan) moving;
+                break;
+            }
+        }
+
+        if (pacMan == null) return; // Sécurité
+
+        // On vérifie les collisions du joueur avec tous les objets animés (pas seulement mobiles)
+        for (IAnimated animated : animatedObjects) {
+            if (animated != pacMan && pacMan.isCollidingWith(animated)) {
+                pacMan.onCollisionWith(animated);
             }
         }
     }

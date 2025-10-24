@@ -231,6 +231,10 @@ public interface IAnimated {
 
     void onCollisionWith(PacGomme pacGomme);
 
+    boolean isAlignedWithGrid(int alignTolerance);
+
+    void alignToGrid();
+
     /**
      * Réinitialise ou libère certaines ressources lorsque cet objet animé est retiré de
      * l'affichage, sans toutefois être retiré du jeu.
