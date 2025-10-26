@@ -355,3 +355,4 @@ PacmanController o-- "1" PacmanGame
 ### Jalon n°4 - TP n°6
 
 *À venir...*
+
