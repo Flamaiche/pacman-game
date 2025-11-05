@@ -42,13 +42,13 @@ public interface IEtat {
     void setSprite(Sprite sprite);
 
     default String getDirection() {
-        if (getVerticalSpeed() != 0) {
-            if (getVerticalSpeed() < 0) return "up/";
-            else return "down/";
-        } else if (getHorizontalSpeed() != 0) {
-            if (getHorizontalSpeed() < 0) return "left/";
-            else return "right/";
-        }
+//        if (getVerticalSpeed() != 0) {
+//            if (getVerticalSpeed() < 0) return "up/";
+//            else return "down/";
+//        } else if (getHorizontalSpeed() != 0) {
+//            if (getHorizontalSpeed() < 0) return "left/";
+//            else return "right/";
+//        }
         return "right/"; // droite par défaut
     }
 
