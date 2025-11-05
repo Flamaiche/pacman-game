@@ -16,9 +16,6 @@ public interface IEtat {
 
     PacmanGame getGame();
 
-    double getVerticalSpeed();
-    double getHorizontalSpeed();
-
     String getFolderSprite();
 
     default String getCustomPath() {
@@ -41,19 +38,8 @@ public interface IEtat {
 
     void setSprite(Sprite sprite);
 
-    default String getDirection() {
-        if (getVerticalSpeed() != 0) {
-            if (getVerticalSpeed() < 0) return "up/";
-            else return "down/";
-        } else if (getHorizontalSpeed() != 0) {
-            if (getHorizontalSpeed() < 0) return "left/";
-            else return "right/";
-        }
-        return "right/"; // droite par défaut
-    }
-
     default String getPath() {
-        return getFolderSprite() + getDirection() + getCustomPath();
+        return getFolderSprite() + getCustomPath();
     }
 
     default void setSprite(String[] currentSprites) {
