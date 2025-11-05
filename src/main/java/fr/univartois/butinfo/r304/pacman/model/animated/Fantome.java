@@ -119,14 +119,25 @@ public class Fantome extends AbstractAnimated implements IEtat {
         return "ghosts/";
     }
 
+    private String getDirection() {
+        if (getVerticalSpeed() != 0) {
+            if (getVerticalSpeed() < 0) return "up/";
+            else return "down/";
+        } else if (getHorizontalSpeed() != 0) {
+            if (getHorizontalSpeed() < 0) return "left/";
+            else return "right/";
+        }
+        return "right/"; // droite par défaut
+    }
+
     @Override
     public String getCustomPath() {
         if (etat == Etat.VULNERABLE) {
-            return "afraid/";
+            return "default/afraid/";
         } else if (etat == Etat.MORT) {
-            return "hurt/";
+            return "default/hurt/";
         }
-        return couleurFantome.getFolderName() + "/";
+        return getDirection() + couleurFantome.getFolderName() + "/";
     }
 
     public IStrategieDeplacement getDeplacementCurrent() {
