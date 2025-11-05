@@ -31,7 +31,7 @@ public class Fantome extends AbstractAnimated implements IEtat {
             "2"
     };
     private final static String[] SPRITES_PRESQUE_INVULNERABLE = {
-            "../afraid/1",
+            "../../default/afraid/1",
             "2"
     };
 
