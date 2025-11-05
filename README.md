@@ -17,7 +17,11 @@ que *Developer* pour vous permettre de travailler ensemble sur ce projet.
 Vous pouvez retrouver ci-dessous les liens vers les sujets de TP vous guidant
 dans le développement de votre projet :
 
-- [Lancement du projet](https://gitlab.univ-artois.fr/enseignements-rwa/modules/but-2/r3-04/tp/-/tree/main/TP03)
+- [Lancement du projet](https://gitlab.univ-artois.fr/enseignements-rwa/modules/but-2/r3-04/tp/-/tree/main/tp/TP03)
+- [Des patrons de conception dans *Pac-Man* (1)](https://gitlab.univ-artois.fr/enseignements-rwa/modules/but-2/r3-04/tp/-/tree/main/tp/TP04)
+- [Des patrons de conception dans *Pac-Man* (2)](https://gitlab.univ-artois.fr/enseignements-rwa/modules/but-2/r3-04/tp/-/tree/main/tp/TP05)
+- [Des patrons de conception dans *Pac-Man* (3)](https://gitlab.univ-artois.fr/enseignements-rwa/modules/but-2/r3-04/tp/-/tree/main/tp/TP06)
+- [Bonnes pratiques de la POO dans le projet *Pac-Man*](https://gitlab.univ-artois.fr/enseignements-rwa/modules/but-2/r3-04/tp/-/tree/main/tp/TP07)
 
 ## Diagramme de classes
 
@@ -348,11 +352,27 @@ PacmanController o-- "1" PacmanGame
 | Fantômes fuyants                           | Stratégie              | oui        | Membre 3  |
 | Fantômes presque invulnérables             | l'état (state)         | oui        | Membre 1  |
 | Fantômes invulnérables                     | l'état (state)         | oui        | Membre 1  |
-| Fantômes invulnérables                     | l'état (state)         | oui        | Membre 1  |
 | Réutilisation des fantômes existants       | Aucun                  | oui        | Membre 4  |
 | Ajout des méga-gommes                      | Aucun                  | oui        | Membre 1  |
 
 ### Jalon n°4 - TP n°6
 
-*À venir...*
+| Fonctionnalité                                       | Patron de Conception ? | Terminée ? | Auteur(s)                                     |
+| ---------------------------------------------------- | ---------------------- | ---------- | --------------------------------------------- |
+| Définition d'un seul `SpriteStore`                   |                        |            |                                               |
+| Définition d'une seule instance quand c'est possible |                        |            |                                               |
+| Ajout des bonus de vitesse sur Pac-Man               |                        |            |                                               |
+| Ajout des bonus de vitesse sur les fantômes          |                        |            |                                               |
+| Ajout des bonus de score                             |                        |            |                                               |
+| Ajout des bonus multiples                            |                        |            |                                               |
+| Gestion des différents niveaux                       |                        |            |                                               |
 
+
+### Jalon n°5 - TP n°7
+
+| Fonctionnalité                             | Patron de Conception ? | Terminée ? | Auteur(s)                                     |
+| ------------------------------------------ | ---------------------- | ---------- | --------------------------------------------- |
+| Correction des avertissements              |                        |            |                                               |
+| Correction des défauts sur *SonarQube*     |                        |            |                                               |
+| Rangement des classes en paquetages        |                        |            |                                               |
+| Modularisation du projet                   |                        |            |                                               |

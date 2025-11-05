@@ -209,6 +209,7 @@ public final class PacmanController implements IPacmanController {
         ImageView view = new ImageView();
         view.xProperty().bind(animated.xProperty());
         view.yProperty().bind(animated.yProperty());
+        view.rotateProperty().bind(animated.rotateProperty());
         animatedPane.getChildren().add(view);
 
         // Lorsque le sprite de l'objet change, son image doit changer également.

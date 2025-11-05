@@ -9,7 +9,9 @@ build
 
 # Fichiers d'Eclipse.
 bin
+.apt_generated
 .classpath
+.factorypath
 .project
 .settings
 

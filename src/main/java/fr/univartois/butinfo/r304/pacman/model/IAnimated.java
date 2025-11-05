@@ -92,6 +92,27 @@ public interface IAnimated {
     DoubleProperty yProperty();
 
     /**
+     * Modifie la rotation de cet objet animé (en degrés).
+     *
+     * @param rotate La nouvelle rotation de cet objet animé.
+     */
+    void setRotate(double rotate);
+
+    /**
+     * Donne la rotation de cet objet animé (en degrés).
+     *
+     * @return La rotation de cet objet animé.
+     */
+    double getRotate();
+
+    /**
+     * Donne la propriété liée à la rotation de cet objet animé (en degrés).
+     *
+     * @return La propriété liée à la rotation de cet objet animé.
+     */
+    DoubleProperty rotateProperty();
+
+    /**
      * Modifie la vitesse horizontale de cet objet animé.
      *
      * @param speed La nouvelle vitesse horizontale de cet objet animé (en pixels/s).
@@ -218,7 +239,8 @@ public interface IAnimated {
      * objet.
      * Lors de l'appel à cette méthode, il est garanti que les deux objets sont entrés en
      * collision.
-     * Il n'est en particulier pas nécessaire d'utiliser {@link #isCollidingWith(IAnimated)}
+     * Il n'est en particulier pas nécessaire d'utiliser
+     * {@link #isCollidingWith(IAnimated)}
      * pour s'en assurer.
      *
      * @param other L'objet avec lequel cet objet est entré en collision.
@@ -242,7 +264,8 @@ public interface IAnimated {
     void onDespawn();
 
     /**
-     * Réinitialise ou libère certaines ressources lorsque cet objet animé est retiré du jeu.
+     * Réinitialise ou libère certaines ressources lorsque cet objet animé est retiré du
+     * jeu.
      */
     void onDestruction();
 

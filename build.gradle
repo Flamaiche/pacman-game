@@ -21,6 +21,12 @@ repositories {
     mavenCentral()
 }
 
+// Les dépendances du projet (en particulier le processeur d'annotations).
+dependencies {
+    implementation files("lib/dp-processor.jar")
+    annotationProcessor files("lib/dp-processor.jar")
+}
+
 // Le nom de la classe contenant la méthode "main".
 application {
     mainClass = 'fr.univartois.butinfo.r304.pacman.PacmanApplication'
