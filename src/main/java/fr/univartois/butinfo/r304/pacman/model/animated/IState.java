@@ -79,7 +79,4 @@ public interface IState {
     default void setStateLater(State state) {
         setStateLater(state, State.getStateDuration());
     }
-    default IState nextState() {
-        return this;
-    }
 }
