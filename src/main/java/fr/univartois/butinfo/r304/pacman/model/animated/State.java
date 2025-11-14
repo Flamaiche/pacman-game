@@ -10,10 +10,10 @@ public enum State {
 
     private boolean isDie;
 
-    private final static int STATE_DURATION = 3_000; // en ms
-    private final static int PREVENTIVE_DURATION = 2_000; // en ms
+    private static final int STATE_DURATION = 3_000; // en ms
+    private static final int PREVENTIVE_DURATION = 2_000; // en ms
 
-    private final static int DIE_DURATION = 12_000; // en ms
+    private static final int DIE_DURATION = 12_000; // en ms
 
     State(boolean isVulnerable, boolean isDie) {
         this.isVulnerable = isVulnerable;
