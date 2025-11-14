@@ -15,50 +15,49 @@ public class EasyMap extends Map {
     public EasyMap() {}
 
     @Override
-    public GameMap createMap(int largeur, int hauteur) {
+    public GameMap createMap(int width, int height) {
 
 
-        GameMap map = super.createMap(largeur, hauteur);
-        ajoutMursInterieurs(map, largeur, hauteur);
+        GameMap map = super.createMap(width, height);
+        addInternWall(map, width, height);
         return map;
     }
 
-    private void ajoutMursInterieurs(GameMap map, int largeur, int hauteur) {
+    private void addInternWall(GameMap map, int width, int height) {
         SpriteStore spriteStore = new SpriteStore();
         Wall wall = new Wall(spriteStore.getSprite("wall"));
-        Sprite path = spriteStore.getSprite("path");
 
-        double centreX = (largeur-1) / 2.0;
-        double centreY = (hauteur-1) / 2.0;
+        double centreX = (width-1) / 2.0;
+        double centreY = (height-1) / 2.0;
 
-        for (int x = 0; x < largeur; x++) {
-            for (int y = 0; y < hauteur; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 // coins
-                if ((y == 3 || y == hauteur-4) && ((x > 2 && x <= 5) || (x > largeur-7 && x <= largeur-4))) {
+                if ((y == 3 || y == height-4) && ((x > 2 && x <= 5) || (x > width-7 && x <= width-4))) {
                     map.setAt(y, x, new Cell(wall));
-                } else if ((x == 3 || x == largeur-4) && ((y > 2 && y <= 5) || (y > hauteur-7 && y <= hauteur-4))) {
+                } else if ((x == 3 || x == width-4) && ((y > 2 && y <= 5) || (y > height-7 && y <= height-4))) {
                     map.setAt(y, x, new Cell(wall));
                 // centre
-                } else if (x == (int)centreX && (x < 3 || x > hauteur-3)) {
+                } else if (x == (int)centreX && (x < 3 || x > height-3)) {
                     map.setAt(y, x, new Cell(wall));
                     if (x < centreX) {
                         map.setAt(y, x+1, new Cell(wall));
                     }
-                } else if (y == (int)centreY && (x > 3 && x < largeur-4) && x%11 != 0) {
+                } else if (y == (int)centreY && (x > 3 && x < width-4) && x%11 != 0) {
                     map.setAt(y, x, new Cell(wall));
                     if (y < centreY) {
                         map.setAt(y+1, x, new Cell(wall));
                     }
-                } else if (x == (int)centreX && (y > 3 && y < hauteur-4)) {
+                } else if (x == (int)centreX && (y > 3 && y < height-4)) {
                     map.setAt(y, x, new Cell(wall));
                     if (x < centreX) {
                         map.setAt(y, x + 1, new Cell(wall));
                     }
                 }
                 // autres
-                else if ((y == 6 || y == hauteur-7) && (x > 5 && x < largeur-6) && x%3!=0) {
+                else if ((y == 6 || y == height-7) && (x > 5 && x < width-6) && x%3!=0) {
                     map.setAt(y, x, new Cell(wall));
-                } else if ((x == 6 || x == largeur-7) && (y > 5 && y < hauteur-6) && y%3!=0) {
+                } else if ((x == 6 || x == width-7) && (y > 5 && y < height-6) && y%3!=0) {
                     map.setAt(y, x, new Cell(wall));
                 }
             }
