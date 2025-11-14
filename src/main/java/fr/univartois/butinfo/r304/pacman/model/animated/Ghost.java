@@ -42,7 +42,7 @@ public class Ghost extends AbstractAnimated implements IEtat {
     public Ghost(PacmanGame game, double xPosition, double yPosition, Sprite sprite, GhostColor ghostColor) {
         super(game, xPosition, yPosition, sprite);
         this.ghostColor = ghostColor;
-        this.currentMovement = ghostColor.getStrategie(this);
+        this.currentMovement = ghostColor.getStrategy(this);
         this.state = State.INVULNERABLE;
         defaultMovement = currentMovement;
     }

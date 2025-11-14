@@ -18,7 +18,7 @@ public enum GhostColor {
         return folderName;
     }
 
-    public IMovementStrategy getStrategie(Ghost ghost) {
+    public IMovementStrategy getStrategy(Ghost ghost) {
         IMovementStrategy mouvement;
         switch (this) {
             case PINK, ORANGE:
