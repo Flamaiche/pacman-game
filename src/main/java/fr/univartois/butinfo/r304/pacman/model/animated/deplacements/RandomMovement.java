@@ -26,13 +26,13 @@ public class RandomMovement implements IMovementStrategy {
         public void movement() {
             movementCounter++;
             if(movementCounter >= DELAY){
-                choixDirection();
+                chooseDirection();
                 movementCounter = 0;
             }
 
         }
 
-    private void choixDirection() {
+    private void chooseDirection() {
 
         if(random.nextBoolean()){
             ghost.setHorizontalSpeed(SPEED * (random.nextBoolean() ? 1 : -1));
