@@ -13,14 +13,15 @@ import java.util.*;
 @StrategyDesignPattern(strategy = IMovementStrategy.class, participant = StrategyParticipant.IMPLEMENTATION)
 public class DamMovement implements IMovementStrategy {
 
+    private static final double SPEED = PacmanGame.DEFAULT_SPEED*0.85;
+
     private final Ghost ghost;
     private final PacmanGame game;
     private final IAnimated pacman;
-    private final double vitesse = PacmanGame.DEFAULT_SPEED*0.85;
 
-    private List<Ghost> autresGhosts;
-    private List<Cell> cheminBarrage = new ArrayList<>();
-    private int indexProchaineCellule = 0;
+    private List<Ghost> otherGhosts;
+    private List<Cell> damPath = new ArrayList<>();
+    private int indexNextCell = 0;
 
     private double lastDxPacman = 0;
     private double lastDyPacman = 0;
@@ -29,7 +30,7 @@ public class DamMovement implements IMovementStrategy {
         this.ghost = ghost;
         this.game = ghost.getGame();
         this.pacman = game.getPlayer();
-        this.autresGhosts = rechercherAutresFantomes();
+        this.otherGhosts = rechercherAutresFantomes();
     }
 
     private List<Ghost> rechercherAutresFantomes() {
@@ -46,46 +47,46 @@ public class DamMovement implements IMovementStrategy {
         Cell celluleFantome = game.getCellOf(ghost);
         if (celluleFantome == null) return;
 
-        if (directionPacmanChangee()) {
-            cheminBarrage.clear();
-            indexProchaineCellule = 0;
+        if (pacManHasRotate()) {
+            damPath.clear();
+            indexNextCell = 0;
         }
 
-        if (cheminBarrage.isEmpty() || indexProchaineCellule >= cheminBarrage.size()
-                || celluleFantome.equals(cheminBarrage.get(indexProchaineCellule))) {
+        if (damPath.isEmpty() || indexNextCell >= damPath.size()
+                || celluleFantome.equals(damPath.get(indexNextCell))) {
 
-            Cell cible = determinerCelluleBarrage(carte, celluleFantome);
+            Cell cible = getDamCell(carte, celluleFantome);
             if (cible == null) return;
 
-            cheminBarrage = reconstruireCheminBFS(carte, celluleFantome, cible);
-            indexProchaineCellule = 0;
+            damPath = rebuildPathBFS(carte, celluleFantome, cible);
+            indexNextCell = 0;
         }
 
-        if (!cheminBarrage.isEmpty() && indexProchaineCellule < cheminBarrage.size()) {
-            Cell prochaine = cheminBarrage.get(indexProchaineCellule);
+        if (!damPath.isEmpty() && indexNextCell < damPath.size()) {
+            Cell prochaine = damPath.get(indexNextCell);
             if (celluleFantome.equals(prochaine)) {
-                indexProchaineCellule++;
-                if (indexProchaineCellule >= cheminBarrage.size()) {
+                indexNextCell++;
+                if (indexNextCell >= damPath.size()) {
                     ghost.setHorizontalSpeed(0);
                     ghost.setVerticalSpeed(0);
                     return;
                 }
-                prochaine = cheminBarrage.get(indexProchaineCellule);
+                prochaine = damPath.get(indexNextCell);
             }
 
             int dx = prochaine.getColumn() - celluleFantome.getColumn();
             int dy = prochaine.getRow() - celluleFantome.getRow();
             if (Math.abs(dx) > 0) {
-                ghost.setHorizontalSpeed(dx > 0 ? vitesse : -vitesse);
+                ghost.setHorizontalSpeed(dx > 0 ? SPEED : -SPEED);
                 ghost.setVerticalSpeed(0);
             } else if (Math.abs(dy) > 0) {
-                ghost.setVerticalSpeed(dy > 0 ? vitesse : -vitesse);
+                ghost.setVerticalSpeed(dy > 0 ? SPEED : -SPEED);
                 ghost.setHorizontalSpeed(0);
             }
         }
     }
 
-    private boolean directionPacmanChangee() {
+    private boolean pacManHasRotate() {
         double dx = Math.signum(pacman.getHorizontalSpeed());
         double dy = Math.signum(pacman.getVerticalSpeed());
         if (dx != lastDxPacman || dy != lastDyPacman) {
@@ -96,7 +97,7 @@ public class DamMovement implements IMovementStrategy {
         return false;
     }
 
-    private Cell determinerCelluleBarrage(GameMap carte, Cell celluleFantome) {
+    private Cell getDamCell(GameMap carte, Cell celluleFantome) {
         Cell cellulePacman = game.getCellOf(pacman);
         if (cellulePacman == null) return null;
 
@@ -107,18 +108,18 @@ public class DamMovement implements IMovementStrategy {
         int dxPac = (int) Math.signum(pacman.getHorizontalSpeed());
         int dyPac = (int) Math.signum(pacman.getVerticalSpeed());
 
-        Ghost chasseur = trouverChasseur();
-        List<Cell> cheminChasseur = chasseur != null ? getCheminChasseur(chasseur) : new ArrayList<>();
+        Ghost chasseur = findHunter();
+        List<Cell> cheminChasseur = chasseur != null ? getHunterPath(chasseur) : new ArrayList<>();
 
-        Cell embuscadeGauche = projectionEmbuscade(carte, cellulePacman, dxPac, dyPac, anticipation, true);
-        Cell embuscadeDroite = projectionEmbuscade(carte, cellulePacman, dxPac, dyPac, anticipation, false);
+        Cell embuscadeGauche = futureDam(carte, cellulePacman, dxPac, dyPac, anticipation, true);
+        Cell embuscadeDroite = futureDam(carte, cellulePacman, dxPac, dyPac, anticipation, false);
 
-        Cell cible = choisirEmbuscade(carte, celluleFantome, chasseur, cheminChasseur, embuscadeGauche, embuscadeDroite);
+        Cell cible = chooseAmbush(carte, celluleFantome, chasseur, cheminChasseur, embuscadeGauche, embuscadeDroite);
 
         return (cible != null) ? cible : cellulePacman;
     }
 
-    private Cell projectionEmbuscade(GameMap carte, Cell pacman, int dx, int dy, int anticipation, boolean gauche) {
+    private Cell futureDam(GameMap carte, Cell pacman, int dx, int dy, int anticipation, boolean gauche) {
         if (dx == 0 && dy == 0) dx = 1;
 
         int perpX = dy;
@@ -138,10 +139,10 @@ public class DamMovement implements IMovementStrategy {
         return pacman;
     }
 
-    private Ghost trouverChasseur() {
+    private Ghost findHunter() {
         Ghost chasseur = null;
         double best = Double.MAX_VALUE;
-        for (Ghost f : autresGhosts) {
+        for (Ghost f : otherGhosts) {
             Cell c = game.getCellOf(f);
             Cell p = game.getCellOf(pacman);
             if (c == null || p == null) continue;
@@ -154,19 +155,19 @@ public class DamMovement implements IMovementStrategy {
         return chasseur;
     }
 
-    private List<Cell> getCheminChasseur(Ghost chasseur) {
+    private List<Cell> getHunterPath(Ghost chasseur) {
         try {
             if (chasseur.getDeplacementCurrent() instanceof HuntMovement strat) {
                 return strat.getCheminVersPacman();
             } else if (chasseur.getDeplacementCurrent() instanceof DamMovement strat) {
-                return strat.getCheminBarrage();
+                return strat.getDamPath();
             }
         } catch (Exception ignored) {}
         return new ArrayList<>();
     }
 
-    private Cell choisirEmbuscade(GameMap carte, Cell celluleFantome, Ghost chasseur,
-                                  List<Cell> cheminChasseur, Cell gauche, Cell droite) {
+    private Cell chooseAmbush(GameMap carte, Cell celluleFantome, Ghost chasseur,
+                              List<Cell> cheminChasseur, Cell gauche, Cell droite) {
 
         Cell cChasseur = (chasseur != null) ? game.getCellOf(chasseur) : null;
         double distG = (gauche != null && cChasseur != null) ? distance(gauche, cChasseur) : 0;
@@ -175,16 +176,16 @@ public class DamMovement implements IMovementStrategy {
         Cell prioritaire = (distG > distD) ? gauche : droite;
         Cell secondaire = (distG > distD) ? droite : gauche;
 
-        List<Cell> chemin1 = reconstruireCheminBFS(carte, celluleFantome, prioritaire);
-        if (!chemin1.isEmpty() && !cheminChevaucheChasseur(chemin1, cheminChasseur)) return prioritaire;
+        List<Cell> chemin1 = rebuildPathBFS(carte, celluleFantome, prioritaire);
+        if (!chemin1.isEmpty() && !pathHorseHunter(chemin1, cheminChasseur)) return prioritaire;
 
-        List<Cell> chemin2 = reconstruireCheminBFS(carte, celluleFantome, secondaire);
-        if (!chemin2.isEmpty() && !cheminChevaucheChasseur(chemin2, cheminChasseur)) return secondaire;
+        List<Cell> chemin2 = rebuildPathBFS(carte, celluleFantome, secondaire);
+        if (!chemin2.isEmpty() && !pathHorseHunter(chemin2, cheminChasseur)) return secondaire;
 
         return null;
     }
 
-    private boolean cheminChevaucheChasseur(List<Cell> chemin, List<Cell> cheminChasseur) {
+    private boolean pathHorseHunter(List<Cell> chemin, List<Cell> cheminChasseur) {
         for (Cell c : chemin) {
             for (Cell cc : cheminChasseur) {
                 if (cc == null) continue;
@@ -196,42 +197,42 @@ public class DamMovement implements IMovementStrategy {
         return false;
     }
 
-    private List<Cell> reconstruireCheminBFS(GameMap carte, Cell depart, Cell arrivee) {
-        if (depart == null || arrivee == null || depart.equals(arrivee)) return new ArrayList<>();
+    private List<Cell> rebuildPathBFS(GameMap carte, Cell begin, Cell end) {
+        if (begin == null || end == null || begin.equals(end)) return new ArrayList<>();
 
-        Queue<Cell> queue = new LinkedList<>();
-        Map<Cell, Cell> precedent = new HashMap<>();
-        Set<Cell> visite = new HashSet<>();
+        Queue<Cell> tail = new LinkedList<>();
+        Map<Cell, Cell> previous = new HashMap<>();
+        Set<Cell> visit = new HashSet<>();
 
-        queue.add(depart);
-        visite.add(depart);
-        boolean trouve = false;
+        tail.add(begin);
+        visit.add(begin);
+        boolean find = false;
 
-        while (!queue.isEmpty()) {
-            Cell actuelle = queue.poll();
-            if (actuelle.equals(arrivee)) {
-                trouve = true;
+        while (!tail.isEmpty()) {
+            Cell current = tail.poll();
+            if (current.equals(end)) {
+                find = true;
                 break;
             }
-            for (Cell voisin : obtenirVoisins(carte, actuelle)) {
-                if (!voisin.isEmpty() || visite.contains(voisin)) continue;
-                visite.add(voisin);
-                precedent.put(voisin, actuelle);
-                queue.add(voisin);
+            for (Cell neighbor : getNeighbor(carte, current)) {
+                if (!neighbor.isEmpty() || visit.contains(neighbor)) continue;
+                visit.add(neighbor);
+                previous.put(neighbor, current);
+                tail.add(neighbor);
             }
         }
 
         List<Cell> chemin = new ArrayList<>();
-        if (!trouve) return chemin;
-        Cell current = arrivee;
-        while (current != null && !current.equals(depart)) {
+        if (!find) return chemin;
+        Cell current = end;
+        while (current != null && !current.equals(begin)) {
             chemin.add(0, current);
-            current = precedent.get(current);
+            current = previous.get(current);
         }
         return chemin;
     }
 
-    private List<Cell> obtenirVoisins(GameMap carte, Cell cellule) {
+    private List<Cell> getNeighbor(GameMap carte, Cell cellule) {
         List<Cell> voisins = new ArrayList<>();
         int l = cellule.getRow(), c = cellule.getColumn();
         if (carte.isOnMap(l - 1, c)) voisins.add(carte.getAt(l - 1, c));
@@ -247,14 +248,14 @@ public class DamMovement implements IMovementStrategy {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    public List<Cell> getCheminBarrage() {
-        return cheminBarrage;
+    public List<Cell> getDamPath() {
+        return damPath;
     }
 
     public void reset() {
-        indexProchaineCellule = 0;
+        indexNextCell = 0;
         lastDxPacman = 0;
         lastDyPacman = 0;
-        cheminBarrage.clear();
+        damPath.clear();
     }
 }
