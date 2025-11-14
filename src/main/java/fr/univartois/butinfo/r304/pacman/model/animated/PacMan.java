@@ -169,4 +169,14 @@ public class PacMan extends AbstractAnimated implements IState {
         if (state == State.INVULNERABLE) return SPRITES_BOOST;
         return SPRITES;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

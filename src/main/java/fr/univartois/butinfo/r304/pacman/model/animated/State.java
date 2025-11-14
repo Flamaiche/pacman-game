@@ -6,9 +6,9 @@ public enum State {
     ALMOST_INVULNERABLE(true, false),
     DIE(false, true);
 
-    private boolean isVulnerable;
+    private final boolean isVulnerable;
 
-    private boolean isDie;
+    private final boolean isDie;
 
     private static final int STATE_DURATION = 3_000; // en ms
     private static final int PREVENTIVE_DURATION = 2_000; // en ms
