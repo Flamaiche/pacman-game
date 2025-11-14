@@ -14,8 +14,12 @@ public class PacGum extends AbstractAnimated {
      * @param yPosition La position en y initiale de l'objet animé.
      * @param sprite    L'instance de {@link Sprite} représentant l'objet animé.
      */
-    public PacGum(PacmanGame game, double xPosition, double yPosition, Sprite sprite) {
+    protected PacGum(PacmanGame game, double xPosition, double yPosition, Sprite sprite) {
         super(game, xPosition, yPosition, sprite);
+    }
+
+    public PacGum(PacmanGame game, double xPosition, double yPosition) {
+        this(game, xPosition, yPosition, game.getSpriteStore().getSprite("pacgum"));
     }
 
     @Override

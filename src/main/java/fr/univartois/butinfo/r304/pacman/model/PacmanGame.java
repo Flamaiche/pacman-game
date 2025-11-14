@@ -238,8 +238,6 @@ public final class PacmanGame {
         }
 
         SpriteStore spriteStore = new SpriteStore();
-        Sprite gomme = spriteStore.getSprite("pacgum");
-        Sprite megaGomme = spriteStore.getSprite("megagum");
 
         int y, x;
         for (Cell emptyCell : gameMap.getEmptyCells()) {
@@ -247,9 +245,9 @@ public final class PacmanGame {
             y = emptyCell.getColumn();
             x = emptyCell.getRow();
             if (RANDOM.nextInt(100) == 0) { // 1% de chance
-                pg = new MegaGum(this, x, y, megaGomme);
+                pg = new MegaGum(this, x, y);
             }
-            else pg = new PacGum(this, x, y, gomme);
+            else pg = new PacGum(this, x, y);
             spawnAnimated(pg, x, y);
             addAnimated(pg);
         }
