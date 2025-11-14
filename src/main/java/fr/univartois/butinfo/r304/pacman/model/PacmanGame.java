@@ -225,8 +225,8 @@ public final class PacmanGame {
 
         // On crée ensuite les fantômes sur la carte.
         for (int i = 0; i < nbGhosts; i++) {
-            GhostColor couleur = GhostColor.values()[ (i % GhostColor.values().length) ];
-            Ghost ghost = new Ghost(this, 0, 0, couleur);
+            GhostColor color = GhostColor.values()[ (i % GhostColor.values().length) ];
+            Ghost ghost = new Ghost(this, 0, 0, color);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
 
             do {
