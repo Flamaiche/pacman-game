@@ -185,9 +185,9 @@ public class Ghost extends AbstractAnimated implements IState {
         if (this.state == State.MORT && state != State.INVULNERABLE) return;
 
         switch (state) {
-            case VULNERABLE -> setEtatLater(State.PRESQUE_INVULNERABLE);
-            case PRESQUE_INVULNERABLE -> setEtatLater(State.INVULNERABLE, State.getDureePreventive());
-            case MORT ->  setEtatLater(State.INVULNERABLE, State.getDureeMort());
+            case VULNERABLE -> setStateLater(State.PRESQUE_INVULNERABLE);
+            case PRESQUE_INVULNERABLE -> setStateLater(State.INVULNERABLE, State.getDureePreventive());
+            case MORT ->  setStateLater(State.INVULNERABLE, State.getDureeMort());
         }
 
         this.state = state;

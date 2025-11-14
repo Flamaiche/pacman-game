@@ -63,7 +63,7 @@ public interface IState {
         }
     }
 
-    default void setEtatLater(State state, int delay) {
+    default void setStateLater(State state, int delay) {
         cancelStateTimer();
 
         Timer timer = new Timer();
@@ -76,8 +76,8 @@ public interface IState {
             }
         }, delay);
     }
-    default void setEtatLater(State state) {
-        setEtatLater(state, State.getDureeEtat());
+    default void setStateLater(State state) {
+        setStateLater(state, State.getDureeEtat());
     }
     default IState nextState() {
         return this;

@@ -266,7 +266,7 @@ public final class PacmanGame {
      * Initialise les statistiques de cette partie.
      */
     private void initStatistics() {
-        controller.bindLife(player.pointsDeVieProperty());
+        controller.bindLife(player.lifePointProperty());
         controller.bindScore(player.scoreProperty());
     }
 
