@@ -88,7 +88,7 @@ public class PacMan extends AbstractAnimated implements IState {
     public void onCollisionWith(Ghost ghost) {
         if (ghost.getState().estMort()) return;
         if (ghost.getState().estVulnerable()) {
-            ghost.setState(State.MORT);
+            ghost.setState(State.DIE);
         } else if (this.state != State.INVULNERABLE) {
             game.respawnFantome();
             setLifePoint(getLifePoint() - 1 );
@@ -149,7 +149,7 @@ public class PacMan extends AbstractAnimated implements IState {
 
     @Override
     public void setState(State state) {
-        if (state == State.PRESQUE_INVULNERABLE || state == State.MORT) {
+        if (state == State.ALMOST_INVULNERABLE || state == State.DIE) {
             throw new IllegalArgumentException("Prohibited State for PacMan: " + state);
         }
 

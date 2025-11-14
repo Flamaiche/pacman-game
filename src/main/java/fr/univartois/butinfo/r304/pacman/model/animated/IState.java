@@ -77,7 +77,7 @@ public interface IState {
         }, delay);
     }
     default void setStateLater(State state) {
-        setStateLater(state, State.getDureeEtat());
+        setStateLater(state, State.getStateDuration());
     }
     default IState nextState() {
         return this;

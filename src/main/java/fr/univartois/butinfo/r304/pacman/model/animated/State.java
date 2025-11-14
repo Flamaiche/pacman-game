@@ -3,40 +3,40 @@ package fr.univartois.butinfo.r304.pacman.model.animated;
 public enum State {
     VULNERABLE(true, false),
     INVULNERABLE(false, false),
-    PRESQUE_INVULNERABLE(true, false),
-    MORT(false, true);
+    ALMOST_INVULNERABLE(true, false),
+    DIE(false, true);
 
-    private boolean estVulnerable;
+    private boolean isVulnerable;
 
-    private boolean estMort;
+    private boolean isDie;
 
-    private final static int DUREE_ETAT = 3_000; // en ms
-    private final static int DUREE_PREVENTIVE = 2_000; // en ms
+    private final static int STATE_DURATION = 3_000; // en ms
+    private final static int PREVENTIVE_DURATION = 2_000; // en ms
 
-    private final static int DUREE_MORT = 12_000; // en ms
+    private final static int DIE_DURATION = 12_000; // en ms
 
-    State(boolean estVulnerable, boolean estMort) {
-        this.estVulnerable = estVulnerable;
-        this.estMort = estMort;
+    State(boolean isVulnerable, boolean isDie) {
+        this.isVulnerable = isVulnerable;
+        this.isDie = isDie;
     }
 
     public boolean estVulnerable() {
-        return estVulnerable;
+        return isVulnerable;
     }
 
     public boolean estMort() {
-        return estMort;
+        return isDie;
     }
 
-    static public int getDureeEtat() {
-        return DUREE_ETAT;
+    public static int getStateDuration() {
+        return STATE_DURATION;
     }
 
-    public static int getDureePreventive() {
-        return DUREE_PREVENTIVE;
+    public static int getPreventiveDuration() {
+        return PREVENTIVE_DURATION;
     }
 
-    public static int getDureeMort() {
-        return DUREE_MORT;
+    public static int getDieDuration() {
+        return DIE_DURATION;
     }
 }

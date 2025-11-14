@@ -84,7 +84,7 @@ public class Ghost extends AbstractAnimated implements IState {
     private void updateStrategieDeplacement() {
         IMovementStrategy movement = currentMovement;
         switch (state) {
-            case MORT -> setCurrentMovement(randomMovement);
+            case DIE -> setCurrentMovement(randomMovement);
             case VULNERABLE -> setCurrentMovement(fuyartMovement);
             default -> setCurrentMovement(defaultMovement);
         }
@@ -135,7 +135,7 @@ public class Ghost extends AbstractAnimated implements IState {
     public String getCustomPath() {
         if (state == State.VULNERABLE) {
             return "default/afraid/";
-        } else if (state == State.MORT) {
+        } else if (state == State.DIE) {
             return "default/hurt/";
         }
         return getDirection() + ghostColor.getFolderName() + "/";
@@ -182,12 +182,12 @@ public class Ghost extends AbstractAnimated implements IState {
 
     @Override
     public void setState(State state) {
-        if (this.state == State.MORT && state != State.INVULNERABLE) return;
+        if (this.state == State.DIE && state != State.INVULNERABLE) return;
 
         switch (state) {
-            case VULNERABLE -> setStateLater(State.PRESQUE_INVULNERABLE);
-            case PRESQUE_INVULNERABLE -> setStateLater(State.INVULNERABLE, State.getDureePreventive());
-            case MORT ->  setStateLater(State.INVULNERABLE, State.getDureeMort());
+            case VULNERABLE -> setStateLater(State.ALMOST_INVULNERABLE);
+            case ALMOST_INVULNERABLE -> setStateLater(State.INVULNERABLE, State.getPreventiveDuration());
+            case DIE ->  setStateLater(State.INVULNERABLE, State.getDieDuration());
         }
 
         this.state = state;
@@ -196,7 +196,7 @@ public class Ghost extends AbstractAnimated implements IState {
 
     @Override
     public String[] getCurrentSprites() {
-        if (state == State.PRESQUE_INVULNERABLE) return SPRITES_PRESQUE_INVULNERABLE;
+        if (state == State.ALMOST_INVULNERABLE) return SPRITES_PRESQUE_INVULNERABLE;
         else return SPRITES;
     }
 }
