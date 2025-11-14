@@ -226,8 +226,7 @@ public final class PacmanGame {
         // On crée ensuite les fantômes sur la carte.
         for (int i = 0; i < nbGhosts; i++) {
             GhostColor couleur = GhostColor.values()[ (i % GhostColor.values().length) ];
-            String spritePath = "ghosts/right/" + couleur.getFolderName() + "/1";
-            Ghost ghost = new Ghost(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
+            Ghost ghost = new Ghost(this, 0, 0, couleur);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
 
             do {
@@ -423,7 +422,6 @@ public final class PacmanGame {
      * @param gum La pac-gomme qui a été mangée.
      */
     public void pacGumEaten(IAnimated gum) {
-//        if (gum instanceof PacGomme && ((PacGomme) gum).isMegaGum()) megaPacGumEaten(gum);
         nbGums--;
         removeAnimated(gum);
 
@@ -432,7 +430,7 @@ public final class PacmanGame {
         }
     }
 
-    public void megaPacGumEaten(IAnimated megaGum) {
+    public void megaPacGumEaten() {
         player.setState(State.INVULNERABLE);
         for (IAnimated moving : movingObjects) {
             if (moving instanceof Ghost ghost) {

@@ -20,6 +20,6 @@ public class MegaGum extends PacGum {
     @Override
     public void onCollisionWith(PacMan pacMan) {
         super.onCollisionWith(pacMan);
-        game.megaPacGumEaten(this);
+        game.megaPacGumEaten();
     }
 }

@@ -47,6 +47,10 @@ public class Ghost extends AbstractAnimated implements IState {
         defaultMovement = currentMovement;
     }
 
+    public Ghost(PacmanGame game, double xPosition, double yPosition, GhostColor ghostColor) {
+        this(game, xPosition, yPosition, game.getSpriteStore().getSprite("ghosts/right/" + ghostColor.getFolderName() + "/1"), ghostColor);
+    }
+
     private GhostColor getGhostColor() {
         return ghostColor;
     }
