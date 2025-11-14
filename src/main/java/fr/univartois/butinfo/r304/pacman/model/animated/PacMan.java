@@ -86,7 +86,7 @@ public class PacMan extends AbstractAnimated implements IState {
 
     @Override
     public void onCollisionWith(Ghost ghost) {
-        if (ghost.getState().estMort()) return;
+        if (ghost.getState().isDie()) return;
         if (ghost.getState().estVulnerable()) {
             ghost.setState(State.DIE);
         } else if (this.state != State.INVULNERABLE) {

@@ -24,7 +24,7 @@ public enum State {
         return isVulnerable;
     }
 
-    public boolean estMort() {
+    public boolean isDie() {
         return isDie;
     }
 
