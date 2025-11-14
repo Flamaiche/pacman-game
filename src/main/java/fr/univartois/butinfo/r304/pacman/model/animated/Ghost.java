@@ -13,8 +13,6 @@ import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 import java.util.Timer;
 
-@StateDesignPattern(state = IState.class, participant = StateParticipant.IMPLEMENTATION)
-@StrategyDesignPattern(strategy = IMovementStrategy.class, participant = StrategyParticipant.CONTEXT)
 public class Ghost extends AbstractAnimated implements IState {
 
     private final GhostColor ghostColor;

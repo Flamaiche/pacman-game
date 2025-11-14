@@ -10,8 +10,11 @@ import javafx.beans.property.IntegerProperty;
 
 import java.util.Timer;
 
-@StateDesignPattern(state = IState.class, participant = StateParticipant.IMPLEMENTATION)
 public class PacMan extends AbstractAnimated implements IState {
+
+    private static final String SPRITE_1 = "closed";
+    private static final String SPRITE_2 = "half-open";
+    private static final String SPRITE_3 = "open";
 
     private final IntegerProperty lifePoint;
     private final IntegerProperty score;
@@ -23,15 +26,15 @@ public class PacMan extends AbstractAnimated implements IState {
     private long animationTimer = 0;
     private int animationFrame = 0;
     private static final String[] SPRITES = {
-            "closed",
-            "half-open",
-            "open",
-            "open",
-            "half-open"
+            SPRITE_1,
+            SPRITE_2,
+            SPRITE_3,
+            SPRITE_3,
+            SPRITE_2
     };
     private static final String[] SPRITES_BOOST = {
-            "open",
-            "half-open",
+            SPRITE_3,
+            SPRITE_2,
     };
 
     public PacMan(PacmanGame game, int xPosition, int yPosition, Sprite sprite, IntegerProperty lifePoint, IntegerProperty score) {
