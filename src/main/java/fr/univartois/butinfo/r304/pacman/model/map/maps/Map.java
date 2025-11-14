@@ -18,19 +18,19 @@ public class Map implements ICarte {
 
     public Map() {}
 
-    public GameMap createMap(int largeur, int hauteur) {
+    public GameMap createMap(int width, int height) {
         /*
         largeur & hauteur en nombre de cellules
          */
-        GameMap map = new GameMap(hauteur, largeur);
+        GameMap map = new GameMap(height, width);
 
         SpriteStore spriteStore = new SpriteStore();
         Wall wall = new Wall(spriteStore.getSprite("wall"));
         Sprite path = spriteStore.getSprite("path");
 
-        for (int i = 0; i < hauteur; i++) {
-            for (int j = 0; j < largeur; j++) {
-                if (i == 0 || i == hauteur - 1 || j == largeur - 1 || j == 0) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (i == 0 || i == height - 1 || j == width - 1 || j == 0) {
                     map.setAt(i, j, new Cell(wall));
                 } else {
                     map.setAt(i, j, new Cell(path));

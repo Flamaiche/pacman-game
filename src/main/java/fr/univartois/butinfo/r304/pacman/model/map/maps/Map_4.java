@@ -15,11 +15,11 @@ public class Map_4 extends Map {
     public Map_4() {}
 
     @Override
-    public GameMap createMap(int largeur, int hauteur) {
+    public GameMap createMap(int width, int height) {
 
 
-        GameMap map = super.createMap(largeur, hauteur);
-        ajoutMursInterieurs(map, largeur, hauteur);
+        GameMap map = super.createMap(width, height);
+        ajoutMursInterieurs(map, width, height);
         return map;
     }
 

@@ -15,9 +15,9 @@ public class Map_3 extends Map {
     public Map_3() {}
 
     @Override
-    public GameMap createMap(int largeur, int hauteur) {
-        GameMap map = super.createMap(largeur, hauteur);
-        genererLabyrintheComplet(map, largeur, hauteur);
+    public GameMap createMap(int width, int height) {
+        GameMap map = super.createMap(width, height);
+        genererLabyrintheComplet(map, width, height);
         return map;
     }
 
