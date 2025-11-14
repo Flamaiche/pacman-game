@@ -34,9 +34,4 @@ public class ChooseRandomMap {
         System.out.println("Carte choose : " + choose.getClass().getSimpleName());
         return choose;
     }
-
-    public static void main(String[] args) {
-        ChooseRandomMap choice = new ChooseRandomMap();
-        IMap map = choice.chooseMap();
-    }
 }

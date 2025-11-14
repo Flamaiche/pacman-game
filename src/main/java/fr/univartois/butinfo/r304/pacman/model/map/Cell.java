@@ -21,6 +21,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 
+import java.util.Objects;
+
 /**
  * La classe {@link Cell} représente une cellule de la carte du jeu Pac-Man.
  *
@@ -197,6 +199,11 @@ public final class Cell {
         if (!(obj instanceof Cell)) return false;
         Cell other = (Cell) obj;
         return this.row == other.row && this.column == other.column;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
 }
