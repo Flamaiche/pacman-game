@@ -3,6 +3,7 @@ package fr.univartois.butinfo.r304.pacman.model.animated;
 import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
+import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 import fr.univartois.dpprocessor.designpatterns.state.StateDesignPattern;
 import fr.univartois.dpprocessor.designpatterns.state.StateParticipant;
 import javafx.beans.property.IntegerProperty;
@@ -38,6 +39,10 @@ public class PacMan extends AbstractAnimated implements IState {
         this.lifePoint = lifePoint;
         this.score = score;
         this.state = State.VULNERABLE;
+    }
+
+    public PacMan(PacmanGame game, int xPosition, int yPosition, IntegerProperty lifePoint, IntegerProperty score) {
+        this(game, xPosition, yPosition, game.getSpriteStore().getSprite("pacman/closed"), lifePoint, score);
     }
 
     public PacmanGame getGame() {

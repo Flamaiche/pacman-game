@@ -111,7 +111,7 @@ public final class PacmanGame {
     private IPacmanController controller;
 
 
-    private IMap carte;
+    private IMap map;
 
     /**
      * Crée une nouvelle instance de PacmanGame.
@@ -122,12 +122,12 @@ public final class PacmanGame {
      *        {@link Sprite} du jeu.
      * @param nbGhosts Le nombre de fantômes dans le jeu.
      */
-    public PacmanGame(int gameWidth, int gameHeight, ISpriteStore spriteStore, int nbGhosts, IMap carte) {
+    public PacmanGame(int gameWidth, int gameHeight, ISpriteStore spriteStore, int nbGhosts, IMap map) {
         this.width = gameWidth;
         this.height = gameHeight;
         this.spriteStore = spriteStore;
         this.nbGhosts = nbGhosts;
-        this.carte = carte;
+        this.map = map;
     }
 
     /**
@@ -182,16 +182,16 @@ public final class PacmanGame {
      * @return La carte du jeu ayant été créée.
      */
     private GameMap createMap() {
-        int nbCellLargeur = width / ISpriteStore.DEFAULT_SPRITE_SIZE;
-        int nbCellHauteur = height / ISpriteStore.DEFAULT_SPRITE_SIZE;
-        return carte.createMap(nbCellLargeur, nbCellHauteur);
+        int nbCellWidth = width / ISpriteStore.DEFAULT_SPRITE_SIZE;
+        int nbCellHeight = height / ISpriteStore.DEFAULT_SPRITE_SIZE;
+        return map.createMap(nbCellWidth, nbCellHeight);
 
 
 
     }
 
-    public void setIcarte(IMap carte){
-        this.carte=carte;
+    public void setMap(IMap map){
+        this.map = map;
 
     }
 
@@ -215,7 +215,7 @@ public final class PacmanGame {
         clearAnimated();
         movingObjects.clear();
 
-        player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("pacman/closed"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
+        player =  new PacMan(this, 0, 0, new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
         spawnAnimated(player);
         player.setSpawnPoint(player.getX(), player.getY());
         addMoving(player);
@@ -225,9 +225,8 @@ public final class PacmanGame {
 
         // On crée ensuite les fantômes sur la carte.
         for (int i = 0; i < nbGhosts; i++) {
-            GhostColor couleur = GhostColor.values()[ (i % GhostColor.values().length) ];
-            String spritePath = "ghosts/right/" + couleur.getFolderName() + "/1";
-            Ghost ghost = new Ghost(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
+            GhostColor color = GhostColor.values()[ (i % GhostColor.values().length) ];
+            Ghost ghost = new Ghost(this, 0, 0, color);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
 
             do {
@@ -239,8 +238,6 @@ public final class PacmanGame {
         }
 
         SpriteStore spriteStore = new SpriteStore();
-        Sprite gomme = spriteStore.getSprite("pacgum");
-        Sprite megaGomme = spriteStore.getSprite("megagum");
 
         int y, x;
         for (Cell emptyCell : gameMap.getEmptyCells()) {
@@ -248,9 +245,9 @@ public final class PacmanGame {
             y = emptyCell.getColumn();
             x = emptyCell.getRow();
             if (RANDOM.nextInt(100) == 0) { // 1% de chance
-                pg = new MegaGum(this, x, y, megaGomme);
+                pg = new MegaGum(this, x, y);
             }
-            else pg = new PacGum(this, x, y, gomme);
+            else pg = new PacGum(this, x, y);
             spawnAnimated(pg, x, y);
             addAnimated(pg);
         }
@@ -423,7 +420,6 @@ public final class PacmanGame {
      * @param gum La pac-gomme qui a été mangée.
      */
     public void pacGumEaten(IAnimated gum) {
-//        if (gum instanceof PacGomme && ((PacGomme) gum).isMegaGum()) megaPacGumEaten(gum);
         nbGums--;
         removeAnimated(gum);
 
@@ -432,7 +428,7 @@ public final class PacmanGame {
         }
     }
 
-    public void megaPacGumEaten(IAnimated megaGum) {
+    public void megaPacGumEaten() {
         player.setState(State.INVULNERABLE);
         for (IAnimated moving : movingObjects) {
             if (moving instanceof Ghost ghost) {
@@ -462,7 +458,7 @@ public final class PacmanGame {
 
         ChooseRandomMap choix = new ChooseRandomMap();
         IMap nouvelleCarte = choix.chooseMap();
-        this.setIcarte(nouvelleCarte);
+        this.setMap(nouvelleCarte);
 
 
         System.out.println("Nouvelle partie lancee avec la nouvelle carte" + nouvelleCarte.getClass().getSimpleName());
