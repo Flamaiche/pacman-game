@@ -158,7 +158,7 @@ public class DamMovement implements IMovementStrategy {
     private List<Cell> getHunterPath(Ghost chasseur) {
         try {
             if (chasseur.getDeplacementCurrent() instanceof HuntMovement strat) {
-                return strat.getCheminVersPacman();
+                return strat.getPathToPacMan();
             } else if (chasseur.getDeplacementCurrent() instanceof DamMovement strat) {
                 return strat.getDamPath();
             }

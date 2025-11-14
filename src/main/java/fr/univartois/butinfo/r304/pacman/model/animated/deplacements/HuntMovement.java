@@ -13,13 +13,14 @@ import java.util.*;
 @StrategyDesignPattern(strategy = IMovementStrategy.class, participant = StrategyParticipant.IMPLEMENTATION)
 public class HuntMovement implements IMovementStrategy {
 
+    private static final double SPEED = PacmanGame.DEFAULT_SPEED*0.85;
+
     private final Ghost ghost;
     private final PacmanGame game;
     private final IAnimated pacman;
-    private final double vitesse = PacmanGame.DEFAULT_SPEED*0.85;
     private int anticipation = 0;
-    private List<Cell> cheminVersPacman = new ArrayList<>();
-    private int indexProchaineCellule = 0;
+    private List<Cell> pathToPacMan = new ArrayList<>();
+    private int indexNextCell = 0;
 
     public HuntMovement(Ghost ghost) {
         this.ghost = ghost;
@@ -34,130 +35,131 @@ public class HuntMovement implements IMovementStrategy {
     @Override
     public void movement() {
         GameMap carte = game.getGameMap();
-        Cell celluleFantome = game.getCellOf(ghost);
-        if (celluleFantome == null) return;
+        Cell ghostCell = game.getCellOf(ghost);
+        if (ghostCell == null) return;
 
         // Recalcul du chemin si nécessaire
-        if (cheminVersPacman.isEmpty() || indexProchaineCellule >= cheminVersPacman.size() ||
-                celluleFantome.equals(cheminVersPacman.get(indexProchaineCellule))) {
-            Cell cible = determinerCelluleCible();
-            if (cible != null) {
-                cheminVersPacman = reconstruireCheminBFS(carte, celluleFantome, cible);
-                indexProchaineCellule = 0;
+        if (pathToPacMan.isEmpty() || indexNextCell >= pathToPacMan.size() ||
+                ghostCell.equals(pathToPacMan.get(indexNextCell))) {
+            Cell targetCell = determineTargetCell();
+            if (targetCell != null) {
+                pathToPacMan = rebuildPathBFS(carte, ghostCell, targetCell);
+                indexNextCell = 0;
             }
         }
 
-        // Avancer vers la prochaine cellule
-        if (!cheminVersPacman.isEmpty() && indexProchaineCellule < cheminVersPacman.size()) {
-            Cell prochaine = cheminVersPacman.get(indexProchaineCellule);
-            if (celluleFantome.equals(prochaine)) {
-                indexProchaineCellule++;
-                if (indexProchaineCellule >= cheminVersPacman.size()) {
+        // Move to the next cell
+        if (!pathToPacMan.isEmpty() && indexNextCell < pathToPacMan.size()) {
+            Cell nextCell = pathToPacMan.get(indexNextCell);
+            if (ghostCell.equals(nextCell)) {
+                indexNextCell++;
+                if (indexNextCell >= pathToPacMan.size()) {
                     ghost.setHorizontalSpeed(0);
                     ghost.setVerticalSpeed(0);
                     return;
                 }
-                prochaine = cheminVersPacman.get(indexProchaineCellule);
+                nextCell = pathToPacMan.get(indexNextCell);
             }
 
-            int dx = prochaine.getColumn() - celluleFantome.getColumn();
-            int dy = prochaine.getRow() - celluleFantome.getRow();
+            int dx = nextCell.getColumn() - ghostCell.getColumn();
+            int dy = nextCell.getRow() - ghostCell.getRow();
 
             if (Math.abs(dx) > 0) {
-                ghost.setHorizontalSpeed(dx > 0 ? vitesse : -vitesse);
+                ghost.setHorizontalSpeed(dx > 0 ? SPEED : -SPEED);
                 ghost.setVerticalSpeed(0);
             } else if (Math.abs(dy) > 0) {
-                ghost.setVerticalSpeed(dy > 0 ? vitesse : -vitesse);
+                ghost.setVerticalSpeed(dy > 0 ? SPEED : -SPEED);
                 ghost.setHorizontalSpeed(0);
             }
         }
     }
 
-    private Cell determinerCelluleCible() {
-        Cell cellulePacman = game.getCellOf(pacman);
-        if (cellulePacman == null) return null;
+    private Cell determineTargetCell() {
+        Cell pacManCell = game.getCellOf(pacman);
+        if (pacManCell == null) return null;
 
-        double vitessePacman = Math.sqrt(Math.pow(pacman.getHorizontalSpeed(), 2) + Math.pow(pacman.getVerticalSpeed(), 2));
-        int anticipationEffective = anticipation + (int) (vitessePacman * 3);
+        double pacManSpeed = Math.sqrt(Math.pow(pacman.getHorizontalSpeed(), 2) + Math.pow(pacman.getVerticalSpeed(), 2));
+        int anticipationEffective = anticipation + (int) (pacManSpeed * 3);
 
-        int ligne = cellulePacman.getRow();
-        int colonne = cellulePacman.getColumn();
+        int line = pacManCell.getRow();
+        int column = pacManCell.getColumn();
         int dx = (int) Math.signum(pacman.getHorizontalSpeed());
         int dy = (int) Math.signum(pacman.getVerticalSpeed());
 
         GameMap carte = game.getGameMap();
-        Cell celluleFantome = game.getCellOf(ghost);
+        Cell ghostCell = game.getCellOf(ghost);
 
-        // Si PacMan est très proche, fonce directement vers lui
-        int distanceLignes = Math.abs(celluleFantome.getRow() - ligne);
-        int distanceColonnes = Math.abs(celluleFantome.getColumn() - colonne);
-        if (distanceLignes <= anticipationEffective && distanceColonnes <= anticipationEffective) {
-            return cellulePacman;
+        // if pacman is near go in front of him
+        int lineDistance = Math.abs(ghostCell.getRow() - line);
+        int columnDistance = Math.abs(ghostCell.getColumn() - column);
+        if (lineDistance <= anticipationEffective && columnDistance <= anticipationEffective) {
+            return pacManCell;
         }
 
-        // Sinon, projection classique en fonction de l'anticipation
+        // else classic anticipation
         for (int i = 0; i < anticipationEffective; i++) {
-            int nouvelleLigne = ligne + dy;
-            int nouvelleColonne = colonne + dx;
-            if (!carte.isOnMap(nouvelleLigne, nouvelleColonne)) break;
-            Cell prochaine = carte.getAt(nouvelleLigne, nouvelleColonne);
-            if (!prochaine.isEmpty()) break;
-            ligne = nouvelleLigne;
-            colonne = nouvelleColonne;
+            int newLine = line + dy;
+            int newColumn = column + dx;
+            if (!carte.isOnMap(newLine, newColumn)) break;
+            Cell next = carte.getAt(newLine, newColumn);
+            if (!next.isEmpty()) break;
+            line = newLine;
+            column = newColumn;
         }
-        return carte.getAt(ligne, colonne);
+        return carte.getAt(line, column);
     }
 
-    private List<Cell> reconstruireCheminBFS(GameMap carte, Cell depart, Cell arrivee) {
-        if (depart.equals(arrivee)) return new ArrayList<>();
+    private List<Cell> rebuildPathBFS(GameMap map, Cell begin, Cell end) {
+        if (begin.equals(end)) return new ArrayList<>();
 
-        int hauteur = carte.getHeight();
-        int largeur = carte.getWidth();
-        boolean[][] visite = new boolean[hauteur][largeur];
-        Map<Cell, Cell> precedent = new HashMap<>();
-        Queue<Cell> queue = new LinkedList<>();
+        int height = map.getHeight();
+        int width = map.getWidth();
+        boolean[][] visite = new boolean[height][width];
+        Map<Cell, Cell> previous = new HashMap<>();
+        Queue<Cell> tail = new LinkedList<>();
 
-        queue.add(depart);
-        visite[depart.getRow()][depart.getColumn()] = true;
+        tail.add(begin);
+        visite[begin.getRow()][begin.getColumn()] = true;
 
-        while (!queue.isEmpty()) {
-            Cell actuelle = queue.poll();
-            if (actuelle.equals(arrivee)) break;
+        while (!tail.isEmpty()) {
+            Cell current = tail.poll();
+            if (current.equals(end)) break;
 
-            for (Cell voisin : obtenirVoisins(carte, actuelle)) {
-                if (voisin.isEmpty() && !visite[voisin.getRow()][voisin.getColumn()]) {
-                    visite[voisin.getRow()][voisin.getColumn()] = true;
-                    precedent.put(voisin, actuelle);
-                    queue.add(voisin);
+            for (Cell neighbor : getNeighbor(map, current)) {
+                if (neighbor.isEmpty() && !visite[neighbor.getRow()][neighbor.getColumn()]) {
+                    visite[neighbor.getRow()][neighbor.getColumn()] = true;
+                    previous.put(neighbor, current);
+                    tail.add(neighbor);
                 }
             }
         }
 
-        List<Cell> chemin = new ArrayList<>();
-        Cell current = arrivee;
-        while (current != null && !current.equals(depart)) {
-            chemin.add(0, current);
-            current = precedent.get(current);
+        List<Cell> path = new ArrayList<>();
+        Cell current = end;
+        while (current != null && !current.equals(begin)) {
+            path.add(0, current);
+            current = previous.get(current);
         }
-        return chemin;
+        return path;
     }
 
-    private List<Cell> obtenirVoisins(GameMap carte, Cell cellule) {
+    private List<Cell> getNeighbor(GameMap map, Cell cell) {
         List<Cell> voisins = new ArrayList<>();
-        int ligne = cellule.getRow(), colonne = cellule.getColumn();
-        if (carte.isOnMap(ligne - 1, colonne)) voisins.add(carte.getAt(ligne - 1, colonne));
-        if (carte.isOnMap(ligne + 1, colonne)) voisins.add(carte.getAt(ligne + 1, colonne));
-        if (carte.isOnMap(ligne, colonne - 1)) voisins.add(carte.getAt(ligne, colonne - 1));
-        if (carte.isOnMap(ligne, colonne + 1)) voisins.add(carte.getAt(ligne, colonne + 1));
+        int line = cell.getRow();
+        int column = cell.getColumn();
+        if (map.isOnMap(line - 1, column)) voisins.add(map.getAt(line - 1, column));
+        if (map.isOnMap(line + 1, column)) voisins.add(map.getAt(line + 1, column));
+        if (map.isOnMap(line, column - 1)) voisins.add(map.getAt(line, column - 1));
+        if (map.isOnMap(line, column + 1)) voisins.add(map.getAt(line, column + 1));
         return voisins;
     }
 
-    public List<Cell> getCheminVersPacman() {
-        return cheminVersPacman;
+    public List<Cell> getPathToPacMan() {
+        return pathToPacMan;
     }
 
     public void reset() {
-        indexProchaineCellule = 0;
-        cheminVersPacman.clear();
+        indexNextCell = 0;
+        pathToPacMan.clear();
     }
 }
