@@ -28,7 +28,7 @@ public class ChooseRandomMap {
     }
 
 
-    public IMap choisirMap() {
+    public IMap chooseMap() {
         int index = random.nextInt(maps.size());
         IMap choose = maps.get(index);
         System.out.println("Carte choose : " + choose.getClass().getSimpleName());
@@ -37,6 +37,6 @@ public class ChooseRandomMap {
 
     public static void main(String[] args) {
         ChooseRandomMap choice = new ChooseRandomMap();
-        IMap map = choice.choisirMap();
+        IMap map = choice.chooseMap();
     }
 }

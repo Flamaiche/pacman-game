@@ -461,7 +461,7 @@ public final class PacmanGame {
         System.out.println("Choix de une carte aleatoire");
 
         ChooseRandomMap choix = new ChooseRandomMap();
-        IMap nouvelleCarte = choix.choisirMap();
+        IMap nouvelleCarte = choix.chooseMap();
         this.setIcarte(nouvelleCarte);
 
 
