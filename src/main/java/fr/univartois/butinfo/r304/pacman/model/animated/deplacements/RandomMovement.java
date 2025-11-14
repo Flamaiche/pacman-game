@@ -21,7 +21,7 @@ public class RandomMovement implements IMovementStrategy {
         }
 
         @Override
-        public void mouvement() {
+        public void movement() {
             compteurDeplacement++;
             if(compteurDeplacement >= DELAI){
                 choixDirection();

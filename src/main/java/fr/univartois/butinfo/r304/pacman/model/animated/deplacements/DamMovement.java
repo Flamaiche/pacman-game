@@ -42,7 +42,7 @@ public class DamMovement implements IMovementStrategy {
     }
 
     @Override
-    public void mouvement() {
+    public void movement() {
         GameMap carte = game.getGameMap();
         Cell celluleFantome = game.getCellOf(ghost);
         if (celluleFantome == null) return;
