@@ -13,9 +13,9 @@ import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 import java.util.Timer;
 
-@StateDesignPattern(state = IEtat.class, participant = StateParticipant.IMPLEMENTATION)
+@StateDesignPattern(state = IState.class, participant = StateParticipant.IMPLEMENTATION)
 @StrategyDesignPattern(strategy = IMovementStrategy.class, participant = StrategyParticipant.CONTEXT)
-public class Ghost extends AbstractAnimated implements IEtat {
+public class Ghost extends AbstractAnimated implements IState {
 
     private GhostColor ghostColor;
     private IMovementStrategy currentMovement;

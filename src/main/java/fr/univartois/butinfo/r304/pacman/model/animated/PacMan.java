@@ -9,8 +9,8 @@ import javafx.beans.property.IntegerProperty;
 
 import java.util.Timer;
 
-@StateDesignPattern(state = IEtat.class, participant = StateParticipant.IMPLEMENTATION)
-public class PacMan extends AbstractAnimated implements IEtat {
+@StateDesignPattern(state = IState.class, participant = StateParticipant.IMPLEMENTATION)
+public class PacMan extends AbstractAnimated implements IState {
 
     private final IntegerProperty pointsDeVie;
     private final IntegerProperty score;
