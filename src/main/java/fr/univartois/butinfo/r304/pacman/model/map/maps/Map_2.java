@@ -27,32 +27,32 @@ public class Map_2 extends Map {
         Sprite path = spriteStore.getSprite("path");
 
         int offset = 2;
-        int couche = 0;
+        int layout = 0;
 
         while (offset < Math.min(largeur, hauteur) / 2 - 2) {
 
             for (int x = offset; x < largeur - offset; x++) {
-                if (x != offset + 1 || couche % 2 == 0)
+                if (x != offset + 1 || layout % 2 == 0)
                     map.setAt(offset, x, new Cell(wall));
             }
 
             for (int y = offset; y < hauteur - offset; y++) {
-                if (y != offset + 1 || couche % 2 == 1) // ouverture alternée
+                if (y != offset + 1 || layout % 2 == 1) // ouverture alternée
                     map.setAt(y, largeur - offset - 1, new Cell(wall));
             }
 
             for (int x = largeur - offset - 1; x >= offset; x--) {
-                if (x != largeur - offset - 2 || couche % 2 == 0)
+                if (x != largeur - offset - 2 || layout % 2 == 0)
                     map.setAt(hauteur - offset - 1, x, new Cell(wall));
             }
 
             for (int y = hauteur - offset - 1; y >= offset; y--) {
-                if (y != hauteur - offset - 2 || couche % 2 == 1)
+                if (y != hauteur - offset - 2 || layout % 2 == 1)
                     map.setAt(y, offset, new Cell(wall));
             }
 
             offset += 3;
-            couche++;
+            layout++;
         }
 
         int centreX = largeur / 2;
