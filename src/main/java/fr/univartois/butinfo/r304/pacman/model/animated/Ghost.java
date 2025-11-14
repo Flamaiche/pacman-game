@@ -2,9 +2,9 @@ package fr.univartois.butinfo.r304.pacman.model.animated;
 
 import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
-import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.DeplacementAleatoire;
+import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.RandomMovement;
 import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.DeplacementFuyard;
-import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.IStrategieDeplacement;
+import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.IMovementStrategy;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.dpprocessor.designpatterns.state.StateDesignPattern;
 import fr.univartois.dpprocessor.designpatterns.state.StateParticipant;
@@ -14,15 +14,15 @@ import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 import java.util.Timer;
 
 @StateDesignPattern(state = IEtat.class, participant = StateParticipant.IMPLEMENTATION)
-@StrategyDesignPattern(strategy = IStrategieDeplacement.class, participant = StrategyParticipant.CONTEXT)
-public class Fantome extends AbstractAnimated implements IEtat {
+@StrategyDesignPattern(strategy = IMovementStrategy.class, participant = StrategyParticipant.CONTEXT)
+public class Ghost extends AbstractAnimated implements IEtat {
 
-    private CouleurFantome couleurFantome;
-    private IStrategieDeplacement deplacementCurrent;
+    private GhostColor ghostColor;
+    private IMovementStrategy deplacementCurrent;
     private int spawnX = 0;
     private int spawnY = 0;
 
-    private Etat etat;
+    private State state;
     private long animationTimer;
     private int animationFrame;
     private Timer etatTimer;
@@ -35,24 +35,24 @@ public class Fantome extends AbstractAnimated implements IEtat {
             "2"
     };
 
-    private final IStrategieDeplacement deplacementDefault;
-    private final IStrategieDeplacement deplacementFuyard = new DeplacementFuyard(this);
-    private final IStrategieDeplacement deplacementAleatoire = new DeplacementAleatoire(this);
+    private final IMovementStrategy deplacementDefault;
+    private final IMovementStrategy deplacementFuyard = new DeplacementFuyard(this);
+    private final IMovementStrategy deplacementAleatoire = new RandomMovement(this);
 
-    public Fantome(PacmanGame game, double xPosition, double yPosition, Sprite sprite, CouleurFantome couleurFantome) {
+    public Ghost(PacmanGame game, double xPosition, double yPosition, Sprite sprite, GhostColor ghostColor) {
         super(game, xPosition, yPosition, sprite);
-        this.couleurFantome = couleurFantome;
-        this.deplacementCurrent = couleurFantome.getStrategie(this);
-        this.etat = Etat.INVULNERABLE;
+        this.ghostColor = ghostColor;
+        this.deplacementCurrent = ghostColor.getStrategie(this);
+        this.state = State.INVULNERABLE;
         deplacementDefault = deplacementCurrent;
     }
 
-    private CouleurFantome getCouleurFantome() {
-        return couleurFantome;
+    private GhostColor getCouleurFantome() {
+        return ghostColor;
     }
 
-    private void setCouleurFantome(CouleurFantome couleurFantome) {
-        this.couleurFantome = couleurFantome;
+    private void setCouleurFantome(GhostColor ghostColor) {
+        this.ghostColor = ghostColor;
     }
 
     @Override
@@ -68,22 +68,22 @@ public class Fantome extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public void onCollisionWith(Fantome fantome) {
+    public void onCollisionWith(Ghost ghost) {
         // ne fait rien
     }
 
     @Override
-    public void onCollisionWith(PacGomme pacGomme) {
+    public void onCollisionWith(PacGum pacGum) {
         // ne fait rien
     }
 
-    private void setDeplacementCurrent(IStrategieDeplacement deplacementCurrent) {
+    private void setDeplacementCurrent(IMovementStrategy deplacementCurrent) {
         this.deplacementCurrent = deplacementCurrent;
     }
 
     private void updateStrategieDeplacement() {
-        IStrategieDeplacement deplacement = deplacementCurrent;
-        switch (etat) {
+        IMovementStrategy deplacement = deplacementCurrent;
+        switch (state) {
             case MORT -> setDeplacementCurrent(deplacementAleatoire);
             case VULNERABLE -> setDeplacementCurrent(deplacementFuyard);
             default -> setDeplacementCurrent(deplacementDefault);
@@ -132,21 +132,21 @@ public class Fantome extends AbstractAnimated implements IEtat {
 
     @Override
     public String getCustomPath() {
-        if (etat == Etat.VULNERABLE) {
+        if (state == State.VULNERABLE) {
             return "default/afraid/";
-        } else if (etat == Etat.MORT) {
+        } else if (state == State.MORT) {
             return "default/hurt/";
         }
-        return getDirection() + couleurFantome.getFolderName() + "/";
+        return getDirection() + ghostColor.getFolderName() + "/";
     }
 
-    public IStrategieDeplacement getDeplacementCurrent() {
+    public IMovementStrategy getDeplacementCurrent() {
         return deplacementCurrent;
     }
 
     @Override
-    public Etat getEtat() {
-        return etat;
+    public State getEtat() {
+        return state;
     }
 
     @Override
@@ -180,22 +180,22 @@ public class Fantome extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public void setEtat(Etat etat) {
-        if (this.etat == Etat.MORT && etat != Etat.INVULNERABLE) return;
+    public void setEtat(State state) {
+        if (this.state == State.MORT && state != State.INVULNERABLE) return;
 
-        switch (etat) {
-            case VULNERABLE -> setEtatLater(Etat.PRESQUE_INVULNERABLE);
-            case PRESQUE_INVULNERABLE -> setEtatLater(Etat.INVULNERABLE, Etat.getDureePreventive());
-            case MORT ->  setEtatLater(Etat.INVULNERABLE, Etat.getDureeMort());
+        switch (state) {
+            case VULNERABLE -> setEtatLater(State.PRESQUE_INVULNERABLE);
+            case PRESQUE_INVULNERABLE -> setEtatLater(State.INVULNERABLE, State.getDureePreventive());
+            case MORT ->  setEtatLater(State.INVULNERABLE, State.getDureeMort());
         }
 
-        this.etat = etat;
+        this.state = state;
         updateStrategieDeplacement();
     }
 
     @Override
     public String[] getCurrentSprites() {
-        if (etat == Etat.PRESQUE_INVULNERABLE) return SPRITES_PRESQUE_INVULNERABLE;
+        if (state == State.PRESQUE_INVULNERABLE) return SPRITES_PRESQUE_INVULNERABLE;
         else return SPRITES;
     }
 }

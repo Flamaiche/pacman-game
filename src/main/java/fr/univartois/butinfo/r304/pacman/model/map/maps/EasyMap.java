@@ -1,4 +1,4 @@
-package fr.univartois.butinfo.r304.pacman.model.map.carte;
+package fr.univartois.butinfo.r304.pacman.model.map.maps;
 
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
@@ -6,14 +6,13 @@ import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
 import fr.univartois.butinfo.r304.pacman.model.map.Wall;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
-import fr.univartois.dpprocessor.designpatterns.decorator.DecoratorDesignPattern;
 import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
 import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 @StrategyDesignPattern(strategy = ICarte.class, participant = StrategyParticipant.IMPLEMENTATION)
-public class CarteFacile extends Carte {
+public class EasyMap extends Map {
 
-    public CarteFacile() {}
+    public EasyMap() {}
 
     @Override
     public GameMap createMap(int largeur, int hauteur) {

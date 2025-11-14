@@ -1,4 +1,4 @@
-package fr.univartois.butinfo.r304.pacman.model.map.carte;
+package fr.univartois.butinfo.r304.pacman.model.map.maps;
 
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
@@ -6,7 +6,6 @@ import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
 import fr.univartois.butinfo.r304.pacman.model.map.Wall;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
-import fr.univartois.dpprocessor.designpatterns.decorator.DecoratorDesignPattern;
 import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
 import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
@@ -15,9 +14,9 @@ le labyrinth sera genera à partir Carte
 Carte est un générateur de Cell pour GameMap
  */
 @StrategyDesignPattern(strategy = ICarte.class, participant = StrategyParticipant.IMPLEMENTATION)
-public class Carte implements ICarte {
+public class Map implements ICarte {
 
-    public Carte() {}
+    public Map() {}
 
     public GameMap createMap(int largeur, int hauteur) {
         /*

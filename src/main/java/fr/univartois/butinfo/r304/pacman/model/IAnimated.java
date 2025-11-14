@@ -16,8 +16,8 @@
 
 package fr.univartois.butinfo.r304.pacman.model;
 
-import fr.univartois.butinfo.r304.pacman.model.animated.Fantome;
-import fr.univartois.butinfo.r304.pacman.model.animated.PacGomme;
+import fr.univartois.butinfo.r304.pacman.model.animated.Ghost;
+import fr.univartois.butinfo.r304.pacman.model.animated.PacGum;
 import fr.univartois.butinfo.r304.pacman.model.animated.PacMan;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import javafx.beans.property.BooleanProperty;
@@ -249,9 +249,9 @@ public interface IAnimated {
 
     void onCollisionWith(PacMan pacMan);
 
-    void onCollisionWith(Fantome fantome);
+    void onCollisionWith(Ghost ghost);
 
-    void onCollisionWith(PacGomme pacGomme);
+    void onCollisionWith(PacGum pacGum);
 
     boolean isAlignedWithGrid(int alignTolerance);
 

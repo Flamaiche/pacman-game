@@ -22,8 +22,8 @@ public interface IEtat {
         return "";
     }
 
-    Etat getEtat();
-    void setEtat(Etat etat);
+    State getEtat();
+    void setEtat(State state);
 
     long getAnimationTimer();
     void setAnimationTimer(long animationTimer);
@@ -63,7 +63,7 @@ public interface IEtat {
         }
     }
 
-    default void setEtatLater(Etat etat, int delay) {
+    default void setEtatLater(State state, int delay) {
         cancelEtatTimer();
 
         Timer timer = new Timer();
@@ -72,12 +72,12 @@ public interface IEtat {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                setEtat(etat);
+                setEtat(state);
             }
         }, delay);
     }
-    default void setEtatLater(Etat etat) {
-        setEtatLater(etat, Etat.getDureeEtat());
+    default void setEtatLater(State state) {
+        setEtatLater(state, State.getDureeEtat());
     }
     default IEtat nextState() {
         return this;

@@ -4,7 +4,7 @@ import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 
-public class PacGomme extends AbstractAnimated {
+public class PacGum extends AbstractAnimated {
 
     /**
      * Crée une nouvelle instance de AbstractAnimated.
@@ -14,7 +14,7 @@ public class PacGomme extends AbstractAnimated {
      * @param yPosition La position en y initiale de l'objet animé.
      * @param sprite    L'instance de {@link Sprite} représentant l'objet animé.
      */
-    public PacGomme(PacmanGame game, double xPosition, double yPosition, Sprite sprite) {
+    public PacGum(PacmanGame game, double xPosition, double yPosition, Sprite sprite) {
         super(game, xPosition, yPosition, sprite);
     }
 
@@ -34,12 +34,12 @@ public class PacGomme extends AbstractAnimated {
     }
 
     @Override
-    public void onCollisionWith(Fantome fantome) {
+    public void onCollisionWith(Ghost ghost) {
         // ne fait rien
     }
 
     @Override
-    public void onCollisionWith(PacGomme pacGomme) {
+    public void onCollisionWith(PacGum pacGum) {
         // ne fait rien
     }
 }

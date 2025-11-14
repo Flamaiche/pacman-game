@@ -1,24 +1,24 @@
 package fr.univartois.butinfo.r304.pacman.model.map;
 
-import fr.univartois.butinfo.r304.pacman.model.map.carte.*;
+import fr.univartois.butinfo.r304.pacman.model.map.maps.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ChoisirMapAleatoirement {
+public class ChooseRandomMap {
 
     private final List<ICarte> cartes;
     private final Random random;
 
-    public ChoisirMapAleatoirement() {
+    public ChooseRandomMap() {
         this.random = new Random();
         this.cartes = new ArrayList<>();
 
-        this.cartes.add(new Carte());
-        this.cartes.add(new Carte_2());
-        this.cartes.add(new Carte_4());
-        this.cartes.add(new Carte_5());
+        this.cartes.add(new Map());
+        this.cartes.add(new Map_2());
+        this.cartes.add(new Map_4());
+        this.cartes.add(new Map_5());
 
 
         System.out.println("Cartes disponibles :");
@@ -36,7 +36,7 @@ public class ChoisirMapAleatoirement {
     }
 
     public static void main(String[] args) {
-        ChoisirMapAleatoirement choix = new ChoisirMapAleatoirement();
+        ChooseRandomMap choix = new ChooseRandomMap();
         ICarte carte = choix.choisirMap();
     }
 }

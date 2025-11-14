@@ -3,7 +3,7 @@ package fr.univartois.butinfo.r304.pacman.model.animated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 
-public class MegaPacGomme extends PacGomme {
+public class MegaGum extends PacGum {
 
     /**
      * Crée une nouvelle instance de AbstractAnimated.
@@ -13,7 +13,7 @@ public class MegaPacGomme extends PacGomme {
      * @param yPosition La position en y initiale de l'objet animé.
      * @param sprite    L'instance de {@link Sprite} représentant l'objet animé.
      */
-    public MegaPacGomme(PacmanGame game, double xPosition, double yPosition, Sprite sprite) {
+    public MegaGum(PacmanGame game, double xPosition, double yPosition, Sprite sprite) {
         super(game, xPosition, yPosition, sprite);
     }
 

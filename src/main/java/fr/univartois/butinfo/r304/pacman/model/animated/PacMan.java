@@ -16,7 +16,7 @@ public class PacMan extends AbstractAnimated implements IEtat {
     private final IntegerProperty score;
     private int spawnX = 0;
     private int spawnY = 0;
-    private Etat etat;
+    private State state;
     private Timer etatTimer;
 
     private long animationTimer = 0;
@@ -37,7 +37,7 @@ public class PacMan extends AbstractAnimated implements IEtat {
         super(game, xPosition, yPosition, sprite);
         this.pointsDeVie = pointsDeVie;
         this.score = score;
-        this.etat = Etat.VULNERABLE;
+        this.state = State.VULNERABLE;
     }
 
     public PacmanGame getGame() {
@@ -85,11 +85,11 @@ public class PacMan extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public void onCollisionWith(Fantome fantome) {
-        if (fantome.getEtat().estMort()) return;
-        if (fantome.getEtat().estVulnerable()) {
-            fantome.setEtat(Etat.MORT);
-        } else if (this.etat != Etat.INVULNERABLE) {
+    public void onCollisionWith(Ghost ghost) {
+        if (ghost.getEtat().estMort()) return;
+        if (ghost.getEtat().estVulnerable()) {
+            ghost.setEtat(State.MORT);
+        } else if (this.state != State.INVULNERABLE) {
             game.respawnFantome();
             setPointsDeVie(getPointsDeVie() - 1 );
             if (pointsDeVie.get() <= 0) {
@@ -108,13 +108,13 @@ public class PacMan extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public void onCollisionWith(PacGomme pacGomme) {
+    public void onCollisionWith(PacGum pacGum) {
         setScore(getScore() + 1);
     }
 
     @Override
-    public Etat getEtat() {
-        return etat;
+    public State getEtat() {
+        return state;
     }
 
     @Override
@@ -148,20 +148,20 @@ public class PacMan extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public void setEtat(Etat etat) {
-        if (etat == Etat.PRESQUE_INVULNERABLE || etat == Etat.MORT) {
-            throw new IllegalArgumentException("Etat interdit pour le pacman: " + etat);
+    public void setEtat(State state) {
+        if (state == State.PRESQUE_INVULNERABLE || state == State.MORT) {
+            throw new IllegalArgumentException("Etat interdit pour le pacman: " + state);
         }
 
-        if (etat == Etat.INVULNERABLE) setEtatLater(Etat.VULNERABLE);
+        if (state == State.INVULNERABLE) setEtatLater(State.VULNERABLE);
 
-        this.etat = etat;
+        this.state = state;
         applySpeed();
     }
 
     @Override
     public String[] getCurrentSprites() {
-        if (etat == Etat.INVULNERABLE) return SPRITES_BOOST;
+        if (state == State.INVULNERABLE) return SPRITES_BOOST;
         return SPRITES;
     }
 }
