@@ -1,4 +1,4 @@
-package fr.univartois.butinfo.r304.pacman.model.map.carte;
+package fr.univartois.butinfo.r304.pacman.model.map.maps;
 
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
@@ -10,9 +10,9 @@ import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
 import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 @StrategyDesignPattern(strategy = ICarte.class, participant = StrategyParticipant.IMPLEMENTATION)
-public class Carte_2 extends Carte {
+public class Map_2 extends Map {
 
-    public Carte_2() {}
+    public Map_2() {}
 
     @Override
     public GameMap createMap(int largeur, int hauteur) {

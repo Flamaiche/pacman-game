@@ -2,7 +2,7 @@ package fr.univartois.butinfo.r304.pacman.model.animated.deplacements;
 
 import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
-import fr.univartois.butinfo.r304.pacman.model.animated.Fantome;
+import fr.univartois.butinfo.r304.pacman.model.animated.Ghost;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
@@ -10,40 +10,40 @@ import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 import java.util.*;
 
-@StrategyDesignPattern(strategy = IStrategieDeplacement.class, participant = StrategyParticipant.IMPLEMENTATION)
-public class DeplacementBarrage implements IStrategieDeplacement {
+@StrategyDesignPattern(strategy = IMovementStrategy.class, participant = StrategyParticipant.IMPLEMENTATION)
+public class DamMovement implements IMovementStrategy {
 
-    private final Fantome fantome;
+    private final Ghost ghost;
     private final PacmanGame game;
     private final IAnimated pacman;
     private final double vitesse = PacmanGame.DEFAULT_SPEED*0.85;
 
-    private List<Fantome> autresFantomes;
+    private List<Ghost> autresGhosts;
     private List<Cell> cheminBarrage = new ArrayList<>();
     private int indexProchaineCellule = 0;
 
     private double lastDxPacman = 0;
     private double lastDyPacman = 0;
 
-    public DeplacementBarrage(Fantome fantome) {
-        this.fantome = fantome;
-        this.game = fantome.getGame();
+    public DamMovement(Ghost ghost) {
+        this.ghost = ghost;
+        this.game = ghost.getGame();
         this.pacman = game.getPlayer();
-        this.autresFantomes = rechercherAutresFantomes();
+        this.autresGhosts = rechercherAutresFantomes();
     }
 
-    private List<Fantome> rechercherAutresFantomes() {
-        List<Fantome> fantomes = new ArrayList<>();
+    private List<Ghost> rechercherAutresFantomes() {
+        List<Ghost> ghosts = new ArrayList<>();
         for (IAnimated obj : game.getMovingObjects()) {
-            if (obj instanceof Fantome f && f != this.fantome) fantomes.add(f);
+            if (obj instanceof Ghost f && f != this.ghost) ghosts.add(f);
         }
-        return fantomes;
+        return ghosts;
     }
 
     @Override
     public void mouvement() {
         GameMap carte = game.getGameMap();
-        Cell celluleFantome = game.getCellOf(fantome);
+        Cell celluleFantome = game.getCellOf(ghost);
         if (celluleFantome == null) return;
 
         if (directionPacmanChangee()) {
@@ -66,8 +66,8 @@ public class DeplacementBarrage implements IStrategieDeplacement {
             if (celluleFantome.equals(prochaine)) {
                 indexProchaineCellule++;
                 if (indexProchaineCellule >= cheminBarrage.size()) {
-                    fantome.setHorizontalSpeed(0);
-                    fantome.setVerticalSpeed(0);
+                    ghost.setHorizontalSpeed(0);
+                    ghost.setVerticalSpeed(0);
                     return;
                 }
                 prochaine = cheminBarrage.get(indexProchaineCellule);
@@ -76,11 +76,11 @@ public class DeplacementBarrage implements IStrategieDeplacement {
             int dx = prochaine.getColumn() - celluleFantome.getColumn();
             int dy = prochaine.getRow() - celluleFantome.getRow();
             if (Math.abs(dx) > 0) {
-                fantome.setHorizontalSpeed(dx > 0 ? vitesse : -vitesse);
-                fantome.setVerticalSpeed(0);
+                ghost.setHorizontalSpeed(dx > 0 ? vitesse : -vitesse);
+                ghost.setVerticalSpeed(0);
             } else if (Math.abs(dy) > 0) {
-                fantome.setVerticalSpeed(dy > 0 ? vitesse : -vitesse);
-                fantome.setHorizontalSpeed(0);
+                ghost.setVerticalSpeed(dy > 0 ? vitesse : -vitesse);
+                ghost.setHorizontalSpeed(0);
             }
         }
     }
@@ -107,7 +107,7 @@ public class DeplacementBarrage implements IStrategieDeplacement {
         int dxPac = (int) Math.signum(pacman.getHorizontalSpeed());
         int dyPac = (int) Math.signum(pacman.getVerticalSpeed());
 
-        Fantome chasseur = trouverChasseur();
+        Ghost chasseur = trouverChasseur();
         List<Cell> cheminChasseur = chasseur != null ? getCheminChasseur(chasseur) : new ArrayList<>();
 
         Cell embuscadeGauche = projectionEmbuscade(carte, cellulePacman, dxPac, dyPac, anticipation, true);
@@ -138,10 +138,10 @@ public class DeplacementBarrage implements IStrategieDeplacement {
         return pacman;
     }
 
-    private Fantome trouverChasseur() {
-        Fantome chasseur = null;
+    private Ghost trouverChasseur() {
+        Ghost chasseur = null;
         double best = Double.MAX_VALUE;
-        for (Fantome f : autresFantomes) {
+        for (Ghost f : autresGhosts) {
             Cell c = game.getCellOf(f);
             Cell p = game.getCellOf(pacman);
             if (c == null || p == null) continue;
@@ -154,18 +154,18 @@ public class DeplacementBarrage implements IStrategieDeplacement {
         return chasseur;
     }
 
-    private List<Cell> getCheminChasseur(Fantome chasseur) {
+    private List<Cell> getCheminChasseur(Ghost chasseur) {
         try {
-            if (chasseur.getDeplacementCurrent() instanceof DeplacementChasseur strat) {
+            if (chasseur.getDeplacementCurrent() instanceof HuntMovement strat) {
                 return strat.getCheminVersPacman();
-            } else if (chasseur.getDeplacementCurrent() instanceof DeplacementBarrage strat) {
+            } else if (chasseur.getDeplacementCurrent() instanceof DamMovement strat) {
                 return strat.getCheminBarrage();
             }
         } catch (Exception ignored) {}
         return new ArrayList<>();
     }
 
-    private Cell choisirEmbuscade(GameMap carte, Cell celluleFantome, Fantome chasseur,
+    private Cell choisirEmbuscade(GameMap carte, Cell celluleFantome, Ghost chasseur,
                                   List<Cell> cheminChasseur, Cell gauche, Cell droite) {
 
         Cell cChasseur = (chasseur != null) ? game.getCellOf(chasseur) : null;

@@ -67,7 +67,7 @@ public final class PacmanApplication extends Application {
 
 
         // Choisir une carte aléatoirement
-        ChoisirMapAleatoirement choix = new ChoisirMapAleatoirement();
+        ChooseRandomMap choix = new ChooseRandomMap();
         ICarte carte = choix.choisirMap();
 
 

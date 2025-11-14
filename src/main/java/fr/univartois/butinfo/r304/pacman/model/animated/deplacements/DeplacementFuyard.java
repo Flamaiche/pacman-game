@@ -2,7 +2,7 @@ package fr.univartois.butinfo.r304.pacman.model.animated.deplacements;
 
 import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
-import fr.univartois.butinfo.r304.pacman.model.animated.Fantome;
+import fr.univartois.butinfo.r304.pacman.model.animated.Ghost;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
@@ -11,26 +11,26 @@ import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 import java.util.ArrayList;
 import java.util.List;
 
-@StrategyDesignPattern(strategy = IStrategieDeplacement.class, participant = StrategyParticipant.IMPLEMENTATION)
-public class DeplacementFuyard implements IStrategieDeplacement {
+@StrategyDesignPattern(strategy = IMovementStrategy.class, participant = StrategyParticipant.IMPLEMENTATION)
+public class DeplacementFuyard implements IMovementStrategy {
 
-    private final Fantome fantome;
+    private final Ghost ghost;
     private final PacmanGame game;
     private final IAnimated pacman;
-    private final DeplacementAleatoire aleatoire;
+    private final RandomMovement aleatoire;
     private static final double DISTANCE_FUITE = 5.0;
 
-    public DeplacementFuyard(Fantome fantome) {
-        this.fantome = fantome;
-        this.game = fantome.getGame();
+    public DeplacementFuyard(Ghost ghost) {
+        this.ghost = ghost;
+        this.game = ghost.getGame();
         this.pacman = game.getPlayer();
-        this.aleatoire = new DeplacementAleatoire(fantome);
+        this.aleatoire = new RandomMovement(ghost);
     }
 
     @Override
     public void mouvement() {
         GameMap carte = game.getGameMap();
-        Cell celluleFantome = game.getCellOf(fantome);
+        Cell celluleFantome = game.getCellOf(ghost);
         Cell cellulePacman = game.getCellOf(pacman);
 
         if (celluleFantome == null || cellulePacman == null) return;
@@ -62,8 +62,8 @@ public class DeplacementFuyard implements IStrategieDeplacement {
             }
 
             if (directionsLibres.isEmpty()) {
-                fantome.setHorizontalSpeed(0);
-                fantome.setVerticalSpeed(0);
+                ghost.setHorizontalSpeed(0);
+                ghost.setVerticalSpeed(0);
                 return;
             }
 
@@ -86,8 +86,8 @@ public class DeplacementFuyard implements IStrategieDeplacement {
                     meilleur = dir;
                 }
             }
-            fantome.setHorizontalSpeed(meilleur[0] * vitesse * 1.1);
-            fantome.setVerticalSpeed(meilleur[1] * vitesse * 1.1);
+            ghost.setHorizontalSpeed(meilleur[0] * vitesse * 1.1);
+            ghost.setVerticalSpeed(meilleur[1] * vitesse * 1.1);
 
         } else {
             aleatoire.mouvement();
@@ -97,7 +97,7 @@ public class DeplacementFuyard implements IStrategieDeplacement {
     @Override
     public void reset() {
         aleatoire.reset();
-        fantome.setHorizontalSpeed(0);
-        fantome.setVerticalSpeed(0);
+        ghost.setHorizontalSpeed(0);
+        ghost.setVerticalSpeed(0);
     }
 }

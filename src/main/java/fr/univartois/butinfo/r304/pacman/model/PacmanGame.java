@@ -23,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import fr.univartois.butinfo.r304.pacman.model.animated.*;
 
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
-import fr.univartois.butinfo.r304.pacman.model.map.ChoisirMapAleatoirement;
+import fr.univartois.butinfo.r304.pacman.model.map.ChooseRandomMap;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
 import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
@@ -225,9 +225,9 @@ public final class PacmanGame {
 
         // On crée ensuite les fantômes sur la carte.
         for (int i = 0; i < nbGhosts; i++) {
-            CouleurFantome couleur =CouleurFantome.values()[ (i % CouleurFantome.values().length) ];
+            GhostColor couleur = GhostColor.values()[ (i % GhostColor.values().length) ];
             String spritePath = "ghosts/right/" + couleur.getFolderName() + "/1";
-            Fantome ghost = new Fantome(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
+            Ghost ghost = new Ghost(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
 
             do {
@@ -244,13 +244,13 @@ public final class PacmanGame {
 
         int y, x;
         for (Cell emptyCell : gameMap.getEmptyCells()) {
-            PacGomme pg;
+            PacGum pg;
             y = emptyCell.getColumn();
             x = emptyCell.getRow();
             if (RANDOM.nextInt(100) == 0) { // 1% de chance
-                pg = new MegaPacGomme(this, x, y, megaGomme);
+                pg = new MegaGum(this, x, y, megaGomme);
             }
-            else pg = new PacGomme(this, x, y, gomme);
+            else pg = new PacGum(this, x, y, gomme);
             spawnAnimated(pg, x, y);
             addAnimated(pg);
         }
@@ -411,8 +411,8 @@ public final class PacmanGame {
 
     public void respawnFantome() {
         for (IAnimated animated : movingObjects) {
-            if (animated instanceof Fantome fantome) {
-                fantome.respawn();
+            if (animated instanceof Ghost ghost) {
+                ghost.respawn();
             }
         }
     }
@@ -433,10 +433,10 @@ public final class PacmanGame {
     }
 
     public void megaPacGumEaten(IAnimated megaGum) {
-        player.setEtat(Etat.INVULNERABLE);
+        player.setEtat(State.INVULNERABLE);
         for (IAnimated moving : movingObjects) {
-            if (moving instanceof Fantome fantome) {
-                fantome.setEtat(Etat.VULNERABLE);
+            if (moving instanceof Ghost ghost) {
+                ghost.setEtat(State.VULNERABLE);
             }
         }
     }
@@ -460,7 +460,7 @@ public final class PacmanGame {
         System.out.println("Fin de la partie" + message);
         System.out.println("Choix de une carte aleatoire");
 
-        ChoisirMapAleatoirement choix = new ChoisirMapAleatoirement();
+        ChooseRandomMap choix = new ChooseRandomMap();
         ICarte nouvelleCarte = choix.choisirMap();
         this.setIcarte(nouvelleCarte);
 

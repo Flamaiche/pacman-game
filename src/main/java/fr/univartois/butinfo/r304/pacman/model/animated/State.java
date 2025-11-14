@@ -1,6 +1,6 @@
 package fr.univartois.butinfo.r304.pacman.model.animated;
 
-public enum Etat {
+public enum State {
     VULNERABLE(true, false),
     INVULNERABLE(false, false),
     PRESQUE_INVULNERABLE(true, false),
@@ -15,7 +15,7 @@ public enum Etat {
 
     private final static int DUREE_MORT = 12_000; // en ms
 
-    Etat(boolean estVulnerable,  boolean estMort) {
+    State(boolean estVulnerable, boolean estMort) {
         this.estVulnerable = estVulnerable;
         this.estMort = estMort;
     }

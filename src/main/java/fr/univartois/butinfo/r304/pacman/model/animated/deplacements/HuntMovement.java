@@ -2,7 +2,7 @@ package fr.univartois.butinfo.r304.pacman.model.animated.deplacements;
 
 import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
-import fr.univartois.butinfo.r304.pacman.model.animated.Fantome;
+import fr.univartois.butinfo.r304.pacman.model.animated.Ghost;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
@@ -10,10 +10,10 @@ import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 import java.util.*;
 
-@StrategyDesignPattern(strategy = IStrategieDeplacement.class, participant = StrategyParticipant.IMPLEMENTATION)
-public class DeplacementChasseur implements IStrategieDeplacement {
+@StrategyDesignPattern(strategy = IMovementStrategy.class, participant = StrategyParticipant.IMPLEMENTATION)
+public class HuntMovement implements IMovementStrategy {
 
-    private final Fantome fantome;
+    private final Ghost ghost;
     private final PacmanGame game;
     private final IAnimated pacman;
     private final double vitesse = PacmanGame.DEFAULT_SPEED*0.85;
@@ -21,9 +21,9 @@ public class DeplacementChasseur implements IStrategieDeplacement {
     private List<Cell> cheminVersPacman = new ArrayList<>();
     private int indexProchaineCellule = 0;
 
-    public DeplacementChasseur(Fantome fantome) {
-        this.fantome = fantome;
-        this.game = fantome.getGame();
+    public HuntMovement(Ghost ghost) {
+        this.ghost = ghost;
+        this.game = ghost.getGame();
         this.pacman = game.getPlayer();
     }
 
@@ -34,7 +34,7 @@ public class DeplacementChasseur implements IStrategieDeplacement {
     @Override
     public void mouvement() {
         GameMap carte = game.getGameMap();
-        Cell celluleFantome = game.getCellOf(fantome);
+        Cell celluleFantome = game.getCellOf(ghost);
         if (celluleFantome == null) return;
 
         // Recalcul du chemin si nécessaire
@@ -53,8 +53,8 @@ public class DeplacementChasseur implements IStrategieDeplacement {
             if (celluleFantome.equals(prochaine)) {
                 indexProchaineCellule++;
                 if (indexProchaineCellule >= cheminVersPacman.size()) {
-                    fantome.setHorizontalSpeed(0);
-                    fantome.setVerticalSpeed(0);
+                    ghost.setHorizontalSpeed(0);
+                    ghost.setVerticalSpeed(0);
                     return;
                 }
                 prochaine = cheminVersPacman.get(indexProchaineCellule);
@@ -64,11 +64,11 @@ public class DeplacementChasseur implements IStrategieDeplacement {
             int dy = prochaine.getRow() - celluleFantome.getRow();
 
             if (Math.abs(dx) > 0) {
-                fantome.setHorizontalSpeed(dx > 0 ? vitesse : -vitesse);
-                fantome.setVerticalSpeed(0);
+                ghost.setHorizontalSpeed(dx > 0 ? vitesse : -vitesse);
+                ghost.setVerticalSpeed(0);
             } else if (Math.abs(dy) > 0) {
-                fantome.setVerticalSpeed(dy > 0 ? vitesse : -vitesse);
-                fantome.setHorizontalSpeed(0);
+                ghost.setVerticalSpeed(dy > 0 ? vitesse : -vitesse);
+                ghost.setHorizontalSpeed(0);
             }
         }
     }
@@ -86,7 +86,7 @@ public class DeplacementChasseur implements IStrategieDeplacement {
         int dy = (int) Math.signum(pacman.getVerticalSpeed());
 
         GameMap carte = game.getGameMap();
-        Cell celluleFantome = game.getCellOf(fantome);
+        Cell celluleFantome = game.getCellOf(ghost);
 
         // Si PacMan est très proche, fonce directement vers lui
         int distanceLignes = Math.abs(celluleFantome.getRow() - ligne);
