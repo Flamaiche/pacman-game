@@ -195,8 +195,8 @@ public final class Cell {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof Cell)) return false;
-        Cell autre = (Cell) obj;
-        return this.row == autre.row && this.column == autre.column;
+        Cell other = (Cell) obj;
+        return this.row == other.row && this.column == other.column;
     }
 
 }

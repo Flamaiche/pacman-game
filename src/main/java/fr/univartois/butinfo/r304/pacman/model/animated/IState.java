@@ -11,8 +11,8 @@ import java.util.TimerTask;
 /**
  * Interface pour les objets ayant un Etat et étant animé.
  */
-@StateDesignPattern(state = IEtat.class, participant = StateParticipant.INTERFACE)
-public interface IEtat {
+@StateDesignPattern(state = IState.class, participant = StateParticipant.INTERFACE)
+public interface IState {
 
     PacmanGame getGame();
 
@@ -22,8 +22,8 @@ public interface IEtat {
         return "";
     }
 
-    State getEtat();
-    void setEtat(State state);
+    State getState();
+    void setState(State state);
 
     long getAnimationTimer();
     void setAnimationTimer(long animationTimer);
@@ -31,8 +31,8 @@ public interface IEtat {
     int getAnimationFrame();
     void setAnimationFrame(int animationFrame);
 
-    Timer getEtatTimer();
-    void setEtatTimer(Timer timer);
+    Timer getStateTimer();
+    void setStateTimer(Timer timer);
 
     String[] getCurrentSprites();
 
@@ -56,30 +56,30 @@ public interface IEtat {
         }
     }
 
-    default void cancelEtatTimer() {
-        if (getEtatTimer() != null) {
-            getEtatTimer().cancel();
-            setEtatTimer(null);
+    default void cancelStateTimer() {
+        if (getStateTimer() != null) {
+            getStateTimer().cancel();
+            setStateTimer(null);
         }
     }
 
-    default void setEtatLater(State state, int delay) {
-        cancelEtatTimer();
+    default void setStateLater(State state, int delay) {
+        cancelStateTimer();
 
         Timer timer = new Timer();
-        setEtatTimer(timer);
+        setStateTimer(timer);
 
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                setEtat(state);
+                setState(state);
             }
         }, delay);
     }
-    default void setEtatLater(State state) {
-        setEtatLater(state, State.getDureeEtat());
+    default void setStateLater(State state) {
+        setStateLater(state, State.getStateDuration());
     }
-    default IEtat nextState() {
+    default IState nextState() {
         return this;
     }
 }

@@ -9,15 +9,15 @@ import javafx.beans.property.IntegerProperty;
 
 import java.util.Timer;
 
-@StateDesignPattern(state = IEtat.class, participant = StateParticipant.IMPLEMENTATION)
-public class PacMan extends AbstractAnimated implements IEtat {
+@StateDesignPattern(state = IState.class, participant = StateParticipant.IMPLEMENTATION)
+public class PacMan extends AbstractAnimated implements IState {
 
-    private final IntegerProperty pointsDeVie;
+    private final IntegerProperty lifePoint;
     private final IntegerProperty score;
     private int spawnX = 0;
     private int spawnY = 0;
     private State state;
-    private Timer etatTimer;
+    private Timer stateTimer;
 
     private long animationTimer = 0;
     private int animationFrame = 0;
@@ -33,9 +33,9 @@ public class PacMan extends AbstractAnimated implements IEtat {
             "half-open",
     };
 
-    public PacMan(PacmanGame game, int xPosition, int yPosition, Sprite sprite, IntegerProperty pointsDeVie, IntegerProperty score) {
+    public PacMan(PacmanGame game, int xPosition, int yPosition, Sprite sprite, IntegerProperty lifePoint, IntegerProperty score) {
         super(game, xPosition, yPosition, sprite);
-        this.pointsDeVie = pointsDeVie;
+        this.lifePoint = lifePoint;
         this.score = score;
         this.state = State.VULNERABLE;
     }
@@ -44,16 +44,16 @@ public class PacMan extends AbstractAnimated implements IEtat {
         return game;
     }
 
-    public IntegerProperty pointsDeVieProperty() {
-        return pointsDeVie;
+    public IntegerProperty lifePointProperty() {
+        return lifePoint;
     }
 
-    public int getPointsDeVie() {
-        return pointsDeVie.get();
+    public int getLifePoint() {
+        return lifePoint.get();
     }
 
-    public void setPointsDeVie(int pointsDeVie) {
-        this.pointsDeVie.set(pointsDeVie);
+    public void setLifePoint(int lifePoint) {
+        this.lifePoint.set(lifePoint);
     }
 
     public IntegerProperty scoreProperty() {
@@ -86,13 +86,13 @@ public class PacMan extends AbstractAnimated implements IEtat {
 
     @Override
     public void onCollisionWith(Ghost ghost) {
-        if (ghost.getEtat().estMort()) return;
-        if (ghost.getEtat().estVulnerable()) {
-            ghost.setEtat(State.MORT);
+        if (ghost.getState().isDie()) return;
+        if (ghost.getState().estVulnerable()) {
+            ghost.setState(State.DIE);
         } else if (this.state != State.INVULNERABLE) {
             game.respawnFantome();
-            setPointsDeVie(getPointsDeVie() - 1 );
-            if (pointsDeVie.get() <= 0) {
+            setLifePoint(getLifePoint() - 1 );
+            if (lifePoint.get() <= 0) {
                 game.playerIsDead();
             } else {
                 setX(spawnX);
@@ -113,7 +113,7 @@ public class PacMan extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public State getEtat() {
+    public State getState() {
         return state;
     }
 
@@ -138,22 +138,22 @@ public class PacMan extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public Timer getEtatTimer() {
-        return etatTimer;
+    public Timer getStateTimer() {
+        return stateTimer;
     }
 
     @Override
-    public void setEtatTimer(Timer etatTimer) {
-        this.etatTimer = etatTimer;
+    public void setStateTimer(Timer etatTimer) {
+        this.stateTimer = etatTimer;
     }
 
     @Override
-    public void setEtat(State state) {
-        if (state == State.PRESQUE_INVULNERABLE || state == State.MORT) {
-            throw new IllegalArgumentException("Etat interdit pour le pacman: " + state);
+    public void setState(State state) {
+        if (state == State.ALMOST_INVULNERABLE || state == State.DIE) {
+            throw new IllegalArgumentException("Prohibited State for PacMan: " + state);
         }
 
-        if (state == State.INVULNERABLE) setEtatLater(State.VULNERABLE);
+        if (state == State.INVULNERABLE) setStateLater(State.VULNERABLE);
 
         this.state = state;
         applySpeed();

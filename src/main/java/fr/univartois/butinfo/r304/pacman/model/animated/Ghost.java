@@ -3,7 +3,7 @@ package fr.univartois.butinfo.r304.pacman.model.animated;
 import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.RandomMovement;
-import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.DeplacementFuyard;
+import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.FuyartMovement;
 import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.IMovementStrategy;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.dpprocessor.designpatterns.state.StateDesignPattern;
@@ -13,12 +13,12 @@ import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 import java.util.Timer;
 
-@StateDesignPattern(state = IEtat.class, participant = StateParticipant.IMPLEMENTATION)
+@StateDesignPattern(state = IState.class, participant = StateParticipant.IMPLEMENTATION)
 @StrategyDesignPattern(strategy = IMovementStrategy.class, participant = StrategyParticipant.CONTEXT)
-public class Ghost extends AbstractAnimated implements IEtat {
+public class Ghost extends AbstractAnimated implements IState {
 
     private GhostColor ghostColor;
-    private IMovementStrategy deplacementCurrent;
+    private IMovementStrategy currentMovement;
     private int spawnX = 0;
     private int spawnY = 0;
 
@@ -26,7 +26,7 @@ public class Ghost extends AbstractAnimated implements IEtat {
     private long animationTimer;
     private int animationFrame;
     private Timer etatTimer;
-    private final static String[] SPRITES = {
+    private static final String[] SPRITES = {
             "1",
             "2"
     };
@@ -35,23 +35,23 @@ public class Ghost extends AbstractAnimated implements IEtat {
             "2"
     };
 
-    private final IMovementStrategy deplacementDefault;
-    private final IMovementStrategy deplacementFuyard = new DeplacementFuyard(this);
-    private final IMovementStrategy deplacementAleatoire = new RandomMovement(this);
+    private final IMovementStrategy defaultMovement;
+    private final IMovementStrategy fuyartMovement = new FuyartMovement(this);
+    private final IMovementStrategy randomMovement = new RandomMovement(this);
 
     public Ghost(PacmanGame game, double xPosition, double yPosition, Sprite sprite, GhostColor ghostColor) {
         super(game, xPosition, yPosition, sprite);
         this.ghostColor = ghostColor;
-        this.deplacementCurrent = ghostColor.getStrategie(this);
+        this.currentMovement = ghostColor.getStrategy(this);
         this.state = State.INVULNERABLE;
-        deplacementDefault = deplacementCurrent;
+        defaultMovement = currentMovement;
     }
 
-    private GhostColor getCouleurFantome() {
+    private GhostColor getGhostColor() {
         return ghostColor;
     }
 
-    private void setCouleurFantome(GhostColor ghostColor) {
+    private void setGhostColor(GhostColor ghostColor) {
         this.ghostColor = ghostColor;
     }
 
@@ -77,23 +77,24 @@ public class Ghost extends AbstractAnimated implements IEtat {
         // ne fait rien
     }
 
-    private void setDeplacementCurrent(IMovementStrategy deplacementCurrent) {
-        this.deplacementCurrent = deplacementCurrent;
+    private void setCurrentMovement(IMovementStrategy currentMovement) {
+        this.currentMovement = currentMovement;
     }
 
     private void updateStrategieDeplacement() {
-        IMovementStrategy deplacement = deplacementCurrent;
+        IMovementStrategy movement = currentMovement;
         switch (state) {
-            case MORT -> setDeplacementCurrent(deplacementAleatoire);
-            case VULNERABLE -> setDeplacementCurrent(deplacementFuyard);
-            default -> setDeplacementCurrent(deplacementDefault);
+            case DIE -> setCurrentMovement(randomMovement);
+            case VULNERABLE -> setCurrentMovement(fuyartMovement);
+            default -> setCurrentMovement(defaultMovement);
         }
-        if (deplacementCurrent != null && deplacement != deplacementCurrent) deplacementCurrent.reset();
+        if (currentMovement != null && movement != currentMovement) currentMovement.reset();
     }
 
+    @Override
     public boolean onStep(long delta){
-        if(deplacementCurrent !=null){
-            deplacementCurrent.mouvement();
+        if(currentMovement !=null){
+            currentMovement.movement();
         }
         return super.onStep(delta);
     }
@@ -101,7 +102,7 @@ public class Ghost extends AbstractAnimated implements IEtat {
     public void respawn() {
         setX(spawnX);
         setY(spawnY);
-        deplacementCurrent.reset();
+        currentMovement.reset();
     }
 
     public void setSpawnPoint(int x, int y) {
@@ -134,18 +135,18 @@ public class Ghost extends AbstractAnimated implements IEtat {
     public String getCustomPath() {
         if (state == State.VULNERABLE) {
             return "default/afraid/";
-        } else if (state == State.MORT) {
+        } else if (state == State.DIE) {
             return "default/hurt/";
         }
         return getDirection() + ghostColor.getFolderName() + "/";
     }
 
-    public IMovementStrategy getDeplacementCurrent() {
-        return deplacementCurrent;
+    public IMovementStrategy getCurrentMovement() {
+        return currentMovement;
     }
 
     @Override
-    public State getEtat() {
+    public State getState() {
         return state;
     }
 
@@ -170,23 +171,23 @@ public class Ghost extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public Timer getEtatTimer() {
+    public Timer getStateTimer() {
         return etatTimer;
     }
 
     @Override
-    public void setEtatTimer(Timer etatTimer) {
+    public void setStateTimer(Timer etatTimer) {
         this.etatTimer = etatTimer;
     }
 
     @Override
-    public void setEtat(State state) {
-        if (this.state == State.MORT && state != State.INVULNERABLE) return;
+    public void setState(State state) {
+        if (this.state == State.DIE && state != State.INVULNERABLE) return;
 
         switch (state) {
-            case VULNERABLE -> setEtatLater(State.PRESQUE_INVULNERABLE);
-            case PRESQUE_INVULNERABLE -> setEtatLater(State.INVULNERABLE, State.getDureePreventive());
-            case MORT ->  setEtatLater(State.INVULNERABLE, State.getDureeMort());
+            case VULNERABLE -> setStateLater(State.ALMOST_INVULNERABLE);
+            case ALMOST_INVULNERABLE -> setStateLater(State.INVULNERABLE, State.getPreventiveDuration());
+            case DIE ->  setStateLater(State.INVULNERABLE, State.getDieDuration());
         }
 
         this.state = state;
@@ -195,7 +196,7 @@ public class Ghost extends AbstractAnimated implements IEtat {
 
     @Override
     public String[] getCurrentSprites() {
-        if (state == State.PRESQUE_INVULNERABLE) return SPRITES_PRESQUE_INVULNERABLE;
+        if (state == State.ALMOST_INVULNERABLE) return SPRITES_PRESQUE_INVULNERABLE;
         else return SPRITES;
     }
 }

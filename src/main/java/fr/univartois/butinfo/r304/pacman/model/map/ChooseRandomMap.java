@@ -8,35 +8,35 @@ import java.util.Random;
 
 public class ChooseRandomMap {
 
-    private final List<ICarte> cartes;
+    private final List<IMap> maps;
     private final Random random;
 
     public ChooseRandomMap() {
         this.random = new Random();
-        this.cartes = new ArrayList<>();
+        this.maps = new ArrayList<>();
 
-        this.cartes.add(new Map());
-        this.cartes.add(new Map_2());
-        this.cartes.add(new Map_4());
-        this.cartes.add(new Map_5());
+        this.maps.add(new Map());
+        this.maps.add(new Map_2());
+        this.maps.add(new Map_4());
+        this.maps.add(new Map_5());
 
 
         System.out.println("Cartes disponibles :");
-        for (ICarte c : cartes) {
-            System.out.println("- " + c.getClass().getSimpleName());
+        for (IMap map : maps) {
+            System.out.println("- " + map.getClass().getSimpleName());
         }
     }
 
 
-    public ICarte choisirMap() {
-        int index = random.nextInt(cartes.size());
-        ICarte choisie = cartes.get(index);
-        System.out.println("Carte choisie : " + choisie.getClass().getSimpleName());
-        return choisie;
+    public IMap chooseMap() {
+        int index = random.nextInt(maps.size());
+        IMap choose = maps.get(index);
+        System.out.println("Carte choose : " + choose.getClass().getSimpleName());
+        return choose;
     }
 
     public static void main(String[] args) {
-        ChooseRandomMap choix = new ChooseRandomMap();
-        ICarte carte = choix.choisirMap();
+        ChooseRandomMap choice = new ChooseRandomMap();
+        IMap map = choice.chooseMap();
     }
 }

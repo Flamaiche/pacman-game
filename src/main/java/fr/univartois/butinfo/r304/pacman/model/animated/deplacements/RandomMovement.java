@@ -9,11 +9,13 @@ import java.util.Random;
 
 @StrategyDesignPattern(strategy = IMovementStrategy.class, participant = StrategyParticipant.IMPLEMENTATION)
 public class RandomMovement implements IMovementStrategy {
+
+    private static final double SPEED = PacmanGame.DEFAULT_SPEED*0.85;
+
     private final Ghost ghost;
     private final Random random = new Random();
-    private int compteurDeplacement =0;
-    private static final int DELAI = 30;
-    private final double vitesse = PacmanGame.DEFAULT_SPEED*0.85;
+    private int movementCounter =0;
+    private static final int DELAY = 30;
 
 
     public RandomMovement(Ghost ghost) {
@@ -21,28 +23,28 @@ public class RandomMovement implements IMovementStrategy {
         }
 
         @Override
-        public void mouvement() {
-            compteurDeplacement++;
-            if(compteurDeplacement >= DELAI){
-                choixDirection();
-                compteurDeplacement = 0;
+        public void movement() {
+            movementCounter++;
+            if(movementCounter >= DELAY){
+                chooseDirection();
+                movementCounter = 0;
             }
 
         }
 
-    private void choixDirection() {
+    private void chooseDirection() {
 
         if(random.nextBoolean()){
-            ghost.setHorizontalSpeed(vitesse * (random.nextBoolean() ? 1 : -1));
+            ghost.setHorizontalSpeed(SPEED * (random.nextBoolean() ? 1 : -1));
             ghost.setVerticalSpeed(0);
         } else {
-            ghost.setVerticalSpeed(vitesse * (random.nextBoolean() ? 1 : -1));
+            ghost.setVerticalSpeed(SPEED * (random.nextBoolean() ? 1 : -1));
             ghost.setHorizontalSpeed(0);
     }
 }
 
     public void reset() {
-                compteurDeplacement = 0;
+                movementCounter = 0;
     }
 
 }

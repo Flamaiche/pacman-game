@@ -5,6 +5,6 @@ import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 @StrategyDesignPattern(strategy = IMovementStrategy.class, participant = StrategyParticipant.INTERFACE)
 public interface IMovementStrategy {
-        void mouvement();
+        void movement();
         void reset();
 }
