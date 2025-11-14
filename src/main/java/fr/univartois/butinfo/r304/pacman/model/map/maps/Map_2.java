@@ -17,11 +17,11 @@ public class Map_2 extends Map {
     @Override
     public GameMap createMap(int width, int height) {
         GameMap map = super.createMap(width, height);
-        ajoutMursInterieurs(map, width, height);
+        addInternWall(map, width, height);
         return map;
     }
 
-    private void ajoutMursInterieurs(GameMap map, int largeur, int hauteur) {
+    private void addInternWall(GameMap map, int largeur, int hauteur) {
         SpriteStore spriteStore = new SpriteStore();
         Wall wall = new Wall(spriteStore.getSprite("wall"));
         Sprite path = spriteStore.getSprite("path");
