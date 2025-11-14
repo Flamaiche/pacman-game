@@ -6,10 +6,6 @@ import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.RandomMovem
 import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.FuyartMovement;
 import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.IMovementStrategy;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
-import fr.univartois.dpprocessor.designpatterns.state.StateDesignPattern;
-import fr.univartois.dpprocessor.designpatterns.state.StateParticipant;
-import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
-import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 import java.util.Timer;
 
