@@ -248,8 +248,7 @@ public final class PacmanGame {
             y = emptyCell.getColumn();
             x = emptyCell.getRow();
             if (RANDOM.nextInt(100) == 0) { // 1% de chance
-                pg = new PacGomme(this, x, y, megaGomme);
-                pg.setMegaGum(true);
+                pg = new MegaPacGomme(this, x, y, megaGomme);
             }
             else pg = new PacGomme(this, x, y, gomme);
             spawnAnimated(pg, x, y);
@@ -424,7 +423,7 @@ public final class PacmanGame {
      * @param gum La pac-gomme qui a été mangée.
      */
     public void pacGumEaten(IAnimated gum) {
-        if (gum instanceof PacGomme && ((PacGomme) gum).isMegaGum()) megaPacGumEaten(gum);
+//        if (gum instanceof PacGomme && ((PacGomme) gum).isMegaGum()) megaPacGumEaten(gum);
         nbGums--;
         removeAnimated(gum);
 
