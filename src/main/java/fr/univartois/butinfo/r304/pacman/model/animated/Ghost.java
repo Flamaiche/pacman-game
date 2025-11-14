@@ -146,7 +146,7 @@ public class Ghost extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public State getEtat() {
+    public State getState() {
         return state;
     }
 
@@ -171,17 +171,17 @@ public class Ghost extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public Timer getEtatTimer() {
+    public Timer getStateTimer() {
         return etatTimer;
     }
 
     @Override
-    public void setEtatTimer(Timer etatTimer) {
+    public void setStateTimer(Timer etatTimer) {
         this.etatTimer = etatTimer;
     }
 
     @Override
-    public void setEtat(State state) {
+    public void setState(State state) {
         if (this.state == State.MORT && state != State.INVULNERABLE) return;
 
         switch (state) {

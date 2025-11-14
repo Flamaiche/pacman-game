@@ -273,7 +273,7 @@ public abstract class AbstractAnimated implements IAnimated {
         if (speed == 0) return 0;
 
         double speedBoost;
-        if (this instanceof PacMan pacMan && !pacMan.getEtat().estVulnerable()) {
+        if (this instanceof PacMan pacMan && !pacMan.getState().estVulnerable()) {
             if (speed < 0) speedBoost = -BOOST_SPEED;
             else speedBoost = BOOST_SPEED;
         } else speedBoost = speed;

@@ -86,9 +86,9 @@ public class PacMan extends AbstractAnimated implements IEtat {
 
     @Override
     public void onCollisionWith(Ghost ghost) {
-        if (ghost.getEtat().estMort()) return;
-        if (ghost.getEtat().estVulnerable()) {
-            ghost.setEtat(State.MORT);
+        if (ghost.getState().estMort()) return;
+        if (ghost.getState().estVulnerable()) {
+            ghost.setState(State.MORT);
         } else if (this.state != State.INVULNERABLE) {
             game.respawnFantome();
             setPointsDeVie(getPointsDeVie() - 1 );
@@ -113,7 +113,7 @@ public class PacMan extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public State getEtat() {
+    public State getState() {
         return state;
     }
 
@@ -138,17 +138,17 @@ public class PacMan extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public Timer getEtatTimer() {
+    public Timer getStateTimer() {
         return etatTimer;
     }
 
     @Override
-    public void setEtatTimer(Timer etatTimer) {
+    public void setStateTimer(Timer etatTimer) {
         this.etatTimer = etatTimer;
     }
 
     @Override
-    public void setEtat(State state) {
+    public void setState(State state) {
         if (state == State.PRESQUE_INVULNERABLE || state == State.MORT) {
             throw new IllegalArgumentException("Etat interdit pour le pacman: " + state);
         }
