@@ -111,7 +111,7 @@ public final class PacmanGame {
     private IPacmanController controller;
 
 
-    private IMap carte;
+    private IMap map;
 
     /**
      * Crée une nouvelle instance de PacmanGame.
@@ -122,12 +122,12 @@ public final class PacmanGame {
      *        {@link Sprite} du jeu.
      * @param nbGhosts Le nombre de fantômes dans le jeu.
      */
-    public PacmanGame(int gameWidth, int gameHeight, ISpriteStore spriteStore, int nbGhosts, IMap carte) {
+    public PacmanGame(int gameWidth, int gameHeight, ISpriteStore spriteStore, int nbGhosts, IMap map) {
         this.width = gameWidth;
         this.height = gameHeight;
         this.spriteStore = spriteStore;
         this.nbGhosts = nbGhosts;
-        this.carte = carte;
+        this.map = map;
     }
 
     /**
@@ -182,16 +182,16 @@ public final class PacmanGame {
      * @return La carte du jeu ayant été créée.
      */
     private GameMap createMap() {
-        int nbCellLargeur = width / ISpriteStore.DEFAULT_SPRITE_SIZE;
-        int nbCellHauteur = height / ISpriteStore.DEFAULT_SPRITE_SIZE;
-        return carte.createMap(nbCellLargeur, nbCellHauteur);
+        int nbCellWidth = width / ISpriteStore.DEFAULT_SPRITE_SIZE;
+        int nbCellHeight = height / ISpriteStore.DEFAULT_SPRITE_SIZE;
+        return map.createMap(nbCellWidth, nbCellHeight);
 
 
 
     }
 
-    public void setIcarte(IMap carte){
-        this.carte=carte;
+    public void setMap(IMap map){
+        this.map = map;
 
     }
 
@@ -462,7 +462,7 @@ public final class PacmanGame {
 
         ChooseRandomMap choix = new ChooseRandomMap();
         IMap nouvelleCarte = choix.chooseMap();
-        this.setIcarte(nouvelleCarte);
+        this.setMap(nouvelleCarte);
 
 
         System.out.println("Nouvelle partie lancee avec la nouvelle carte" + nouvelleCarte.getClass().getSimpleName());
