@@ -25,7 +25,7 @@ import fr.univartois.butinfo.r304.pacman.model.animated.*;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.ChooseRandomMap;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
-import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
+import fr.univartois.butinfo.r304.pacman.model.map.IMap;
 import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
@@ -41,7 +41,7 @@ import javafx.beans.property.SimpleIntegerProperty;
  *
  * @version 0.1.0
  */
-@StrategyDesignPattern(strategy = ICarte.class, participant = StrategyParticipant.CONTEXT)
+@StrategyDesignPattern(strategy = IMap.class, participant = StrategyParticipant.CONTEXT)
 public final class PacmanGame {
 
     /**
@@ -111,7 +111,7 @@ public final class PacmanGame {
     private IPacmanController controller;
 
 
-    private ICarte carte;
+    private IMap carte;
 
     /**
      * Crée une nouvelle instance de PacmanGame.
@@ -122,7 +122,7 @@ public final class PacmanGame {
      *        {@link Sprite} du jeu.
      * @param nbGhosts Le nombre de fantômes dans le jeu.
      */
-    public PacmanGame(int gameWidth, int gameHeight, ISpriteStore spriteStore, int nbGhosts, ICarte carte) {
+    public PacmanGame(int gameWidth, int gameHeight, ISpriteStore spriteStore, int nbGhosts, IMap carte) {
         this.width = gameWidth;
         this.height = gameHeight;
         this.spriteStore = spriteStore;
@@ -190,7 +190,7 @@ public final class PacmanGame {
 
     }
 
-    public void setIcarte(ICarte carte){
+    public void setIcarte(IMap carte){
         this.carte=carte;
 
     }
@@ -461,7 +461,7 @@ public final class PacmanGame {
         System.out.println("Choix de une carte aleatoire");
 
         ChooseRandomMap choix = new ChooseRandomMap();
-        ICarte nouvelleCarte = choix.choisirMap();
+        IMap nouvelleCarte = choix.choisirMap();
         this.setIcarte(nouvelleCarte);
 
 

@@ -3,8 +3,8 @@ package fr.univartois.butinfo.r304.pacman.model.map;
 import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
 import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
-@StrategyDesignPattern(strategy = ICarte.class, participant = StrategyParticipant.INTERFACE)
-public interface ICarte {
+@StrategyDesignPattern(strategy = IMap.class, participant = StrategyParticipant.INTERFACE)
+public interface IMap {
     GameMap createMap(int width, int height);
-    default ICarte getInstance() {return this;}
+    default IMap getInstance() {return this;}
 }
