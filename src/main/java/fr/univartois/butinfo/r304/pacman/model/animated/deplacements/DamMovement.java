@@ -19,7 +19,7 @@ public class DamMovement implements IMovementStrategy {
     private final PacmanGame game;
     private final IAnimated pacman;
 
-    private List<Ghost> otherGhosts;
+    private final List<Ghost> otherGhosts;
     private List<Cell> damPath = new ArrayList<>();
     private int indexNextCell = 0;
 
@@ -62,20 +62,20 @@ public class DamMovement implements IMovementStrategy {
             indexNextCell = 0;
         }
 
-        if (!damPath.isEmpty() && indexNextCell < damPath.size()) {
-            Cell prochaine = damPath.get(indexNextCell);
-            if (celluleFantome.equals(prochaine)) {
+        if (!damPath.isEmpty()) {
+            Cell next = damPath.get(indexNextCell);
+            if (celluleFantome.equals(next)) {
                 indexNextCell++;
                 if (indexNextCell >= damPath.size()) {
                     ghost.setHorizontalSpeed(0);
                     ghost.setVerticalSpeed(0);
                     return;
                 }
-                prochaine = damPath.get(indexNextCell);
+                next = damPath.get(indexNextCell);
             }
 
-            int dx = prochaine.getColumn() - celluleFantome.getColumn();
-            int dy = prochaine.getRow() - celluleFantome.getRow();
+            int dx = next.getColumn() - celluleFantome.getColumn();
+            int dy = next.getRow() - celluleFantome.getRow();
             if (Math.abs(dx) > 0) {
                 ghost.setHorizontalSpeed(dx > 0 ? SPEED : -SPEED);
                 ghost.setVerticalSpeed(0);
@@ -98,25 +98,25 @@ public class DamMovement implements IMovementStrategy {
     }
 
     private Cell getDamCell(GameMap carte, Cell celluleFantome) {
-        Cell cellulePacman = game.getCellOf(pacman);
-        if (cellulePacman == null) return null;
+        Cell pacManCell = game.getCellOf(pacman);
+        if (pacManCell == null) return null;
 
-        double dist = distance(celluleFantome, cellulePacman);
+        double dist = distance(celluleFantome, pacManCell);
         // Plus il est loin, plus il anticipe
-        int anticipation = Math.min(15, Math.max(4, (int) (dist / 2)));
+        int anticipation = Math.clamp((int) (dist / 2), 4, 15);
 
         int dxPac = (int) Math.signum(pacman.getHorizontalSpeed());
         int dyPac = (int) Math.signum(pacman.getVerticalSpeed());
 
         Ghost chasseur = findHunter();
-        List<Cell> cheminChasseur = chasseur != null ? getHunterPath(chasseur) : new ArrayList<>();
+        List<Cell> pathHunt = chasseur != null ? getHunterPath(chasseur) : new ArrayList<>();
 
-        Cell embuscadeGauche = futureDam(carte, cellulePacman, dxPac, dyPac, anticipation, true);
-        Cell embuscadeDroite = futureDam(carte, cellulePacman, dxPac, dyPac, anticipation, false);
+        Cell leftAmbush = futureDam(carte, pacManCell, dxPac, dyPac, anticipation, true);
+        Cell rightAmbush = futureDam(carte, pacManCell, dxPac, dyPac, anticipation, false);
 
-        Cell cible = chooseAmbush(carte, celluleFantome, chasseur, cheminChasseur, embuscadeGauche, embuscadeDroite);
+        Cell target = chooseAmbush(carte, celluleFantome, chasseur, pathHunt, leftAmbush, rightAmbush);
 
-        return (cible != null) ? cible : cellulePacman;
+        return (target != null) ? target : pacManCell;
     }
 
     private Cell futureDam(GameMap carte, Cell pacman, int dx, int dy, int anticipation, boolean gauche) {
@@ -162,7 +162,7 @@ public class DamMovement implements IMovementStrategy {
             } else if (chasseur.getCurrentMovement() instanceof DamMovement strat) {
                 return strat.getDamPath();
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) { /* Ignored exception */ }
         return new ArrayList<>();
     }
 
@@ -177,24 +177,24 @@ public class DamMovement implements IMovementStrategy {
         Cell secondaire = (distG > distD) ? droite : gauche;
 
         List<Cell> chemin1 = rebuildPathBFS(carte, celluleFantome, prioritaire);
-        if (!chemin1.isEmpty() && !pathHorseHunter(chemin1, cheminChasseur)) return prioritaire;
+        if (!chemin1.isEmpty() && pathNotHorseHunter(chemin1, cheminChasseur)) return prioritaire;
 
         List<Cell> chemin2 = rebuildPathBFS(carte, celluleFantome, secondaire);
-        if (!chemin2.isEmpty() && !pathHorseHunter(chemin2, cheminChasseur)) return secondaire;
+        if (!chemin2.isEmpty() && pathNotHorseHunter(chemin2, cheminChasseur)) return secondaire;
 
         return null;
     }
 
-    private boolean pathHorseHunter(List<Cell> chemin, List<Cell> cheminChasseur) {
+    private boolean pathNotHorseHunter(List<Cell> chemin, List<Cell> cheminChasseur) {
         for (Cell c : chemin) {
             for (Cell cc : cheminChasseur) {
                 if (cc == null) continue;
                 int dr = Math.abs(c.getRow() - cc.getRow());
                 int dc = Math.abs(c.getColumn() - cc.getColumn());
-                if (dr <= 1 && dc <= 1) return true;
+                if (dr <= 1 && dc <= 1) return false;
             }
         }
-        return false;
+        return true;
     }
 
     private List<Cell> rebuildPathBFS(GameMap carte, Cell begin, Cell end) {
@@ -226,26 +226,27 @@ public class DamMovement implements IMovementStrategy {
         if (!find) return chemin;
         Cell current = end;
         while (current != null && !current.equals(begin)) {
-            chemin.add(0, current);
+            chemin.addFirst(current);
             current = previous.get(current);
         }
         return chemin;
     }
 
     private List<Cell> getNeighbor(GameMap carte, Cell cellule) {
-        List<Cell> voisins = new ArrayList<>();
-        int l = cellule.getRow(), c = cellule.getColumn();
-        if (carte.isOnMap(l - 1, c)) voisins.add(carte.getAt(l - 1, c));
-        if (carte.isOnMap(l + 1, c)) voisins.add(carte.getAt(l + 1, c));
-        if (carte.isOnMap(l, c - 1)) voisins.add(carte.getAt(l, c - 1));
-        if (carte.isOnMap(l, c + 1)) voisins.add(carte.getAt(l, c + 1));
-        return voisins;
+        List<Cell> neighbor = new ArrayList<>();
+        int l = cellule.getRow();
+        int c = cellule.getColumn();
+        if (carte.isOnMap(l - 1, c)) neighbor.add(carte.getAt(l - 1, c));
+        if (carte.isOnMap(l + 1, c)) neighbor.add(carte.getAt(l + 1, c));
+        if (carte.isOnMap(l, c - 1)) neighbor.add(carte.getAt(l, c - 1));
+        if (carte.isOnMap(l, c + 1)) neighbor.add(carte.getAt(l, c + 1));
+        return neighbor;
     }
 
     private double distance(Cell a, Cell b) {
         int dx = a.getColumn() - b.getColumn();
         int dy = a.getRow() - b.getRow();
-        return Math.sqrt(dx * dx + dy * dy);
+        return Math.sqrt( (double) dx * (double) dx + (double) dy * (double) dy);
     }
 
     public List<Cell> getDamPath() {

@@ -11,7 +11,6 @@ import java.util.TimerTask;
 /**
  * Interface pour les objets ayant un Etat et étant animé.
  */
-@StateDesignPattern(state = IState.class, participant = StateParticipant.INTERFACE)
 public interface IState {
 
     PacmanGame getGame();
@@ -78,8 +77,5 @@ public interface IState {
     }
     default void setStateLater(State state) {
         setStateLater(state, State.getStateDuration());
-    }
-    default IState nextState() {
-        return this;
     }
 }

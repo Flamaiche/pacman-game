@@ -6,18 +6,12 @@ import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.RandomMovem
 import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.FuyartMovement;
 import fr.univartois.butinfo.r304.pacman.model.animated.deplacements.IMovementStrategy;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
-import fr.univartois.dpprocessor.designpatterns.state.StateDesignPattern;
-import fr.univartois.dpprocessor.designpatterns.state.StateParticipant;
-import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
-import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 import java.util.Timer;
 
-@StateDesignPattern(state = IState.class, participant = StateParticipant.IMPLEMENTATION)
-@StrategyDesignPattern(strategy = IMovementStrategy.class, participant = StrategyParticipant.CONTEXT)
 public class Ghost extends AbstractAnimated implements IState {
 
-    private GhostColor ghostColor;
+    private final GhostColor ghostColor;
     private IMovementStrategy currentMovement;
     private int spawnX = 0;
     private int spawnY = 0;
@@ -30,7 +24,7 @@ public class Ghost extends AbstractAnimated implements IState {
             "1",
             "2"
     };
-    private final static String[] SPRITES_PRESQUE_INVULNERABLE = {
+    private static final String[] SPRITES_ALMOST_INVULNERABLE = {
             "../../default/afraid/1",
             "2"
     };
@@ -49,14 +43,6 @@ public class Ghost extends AbstractAnimated implements IState {
 
     public Ghost(PacmanGame game, double xPosition, double yPosition, GhostColor ghostColor) {
         this(game, xPosition, yPosition, game.getSpriteStore().getSprite("ghosts/right/" + ghostColor.getFolderName() + "/1"), ghostColor);
-    }
-
-    private GhostColor getGhostColor() {
-        return ghostColor;
-    }
-
-    private void setGhostColor(GhostColor ghostColor) {
-        this.ghostColor = ghostColor;
     }
 
     @Override
@@ -192,6 +178,7 @@ public class Ghost extends AbstractAnimated implements IState {
             case VULNERABLE -> setStateLater(State.ALMOST_INVULNERABLE);
             case ALMOST_INVULNERABLE -> setStateLater(State.INVULNERABLE, State.getPreventiveDuration());
             case DIE ->  setStateLater(State.INVULNERABLE, State.getDieDuration());
+            default -> { /* Else have a warning sonarQube */ }
         }
 
         this.state = state;
@@ -200,7 +187,17 @@ public class Ghost extends AbstractAnimated implements IState {
 
     @Override
     public String[] getCurrentSprites() {
-        if (state == State.ALMOST_INVULNERABLE) return SPRITES_PRESQUE_INVULNERABLE;
+        if (state == State.ALMOST_INVULNERABLE) return SPRITES_ALMOST_INVULNERABLE;
         else return SPRITES;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

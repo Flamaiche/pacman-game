@@ -113,19 +113,10 @@ final class GameAnimation extends AnimationTimer {
      * collision.
      */
     private void checkCollisions() {
-//        for (IAnimated moving : movingObjects) {
-//            for (IAnimated animated : animatedObjects) {
-//                if ((moving != animated) && moving.isCollidingWith(animated)) {
-//                    moving.onCollisionWith(animated);
-//                    animated.onCollisionWith(moving);
-//                }
-//            }
-//        }
-
         PacMan pacMan = null;
         for (IAnimated moving : movingObjects) {
-            if (moving instanceof PacMan) {
-                pacMan = (PacMan) moving;
+            if (moving instanceof PacMan movingPacMan) {
+                pacMan = movingPacMan;
                 break;
             }
         }

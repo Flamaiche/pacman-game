@@ -199,4 +199,9 @@ public final class Cell {
         return this.row == other.row && this.column == other.column;
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 }

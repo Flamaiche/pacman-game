@@ -30,7 +30,7 @@ public final class Wall {
     /**
      * Le sprite représentant ce mur sur la carte.
      */
-    private Sprite sprite;
+    private final Sprite sprite;
 
     /**
      * Crée une nouvelle instance de Wall.

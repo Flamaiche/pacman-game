@@ -77,13 +77,12 @@ public final class PacmanGame {
     /**
      * Le personnage du joueur.
      */
-    // TODO Adaptez le type de cet attribut pour correspondre à votre implémentation.
     private PacMan player;
 
     /**
      * Le nombre de fantômes initialement dans le jeu.
      */
-    private int nbGhosts;
+    private final int nbGhosts;
 
     /**
      * Le nombre de pac-gommes initialement dans le jeu.
@@ -237,9 +236,8 @@ public final class PacmanGame {
             addMoving(ghost);
         }
 
-        SpriteStore spriteStore = new SpriteStore();
-
-        int y, x;
+        int y;
+        int x;
         for (Cell emptyCell : gameMap.getEmptyCells()) {
             PacGum pg;
             y = emptyCell.getColumn();
@@ -276,15 +274,15 @@ public final class PacmanGame {
         List<Cell> spawnableCells = gameMap.getEmptyCells();
         if (!spawnableCells.isEmpty()) {
             Cell cell = spawnableCells.get(RANDOM.nextInt(spawnableCells.size()));
-            animated.setX(cell.getColumn() * spriteStore.getSpriteSize());
-            animated.setY(cell.getRow() * spriteStore.getSpriteSize());
+            animated.setX(cell.getColumn() * (double)spriteStore.getSpriteSize());
+            animated.setY(cell.getRow() * (double)spriteStore.getSpriteSize());
         }
     }
 
     private void spawnAnimated(IAnimated animated, int x, int y) {
         Cell cell = gameMap.getAt(x, y);
-        animated.setX(cell.getColumn() * spriteStore.getSpriteSize());
-        animated.setY(cell.getRow() * spriteStore.getSpriteSize());
+        animated.setX(cell.getColumn() * (double)spriteStore.getSpriteSize());
+        animated.setY(cell.getRow() * (double)spriteStore.getSpriteSize());
     }
 
     /**
