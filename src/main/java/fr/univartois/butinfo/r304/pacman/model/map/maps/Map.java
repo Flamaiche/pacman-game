@@ -4,6 +4,7 @@ import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 import fr.univartois.butinfo.r304.pacman.model.map.IMap;
 import fr.univartois.butinfo.r304.pacman.model.map.Wall;
+import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
@@ -24,7 +25,7 @@ public class Map implements IMap {
          */
         GameMap map = new GameMap(height, width);
 
-        SpriteStore spriteStore = new SpriteStore();
+        ISpriteStore spriteStore = SpriteStore.getInstance();
         Wall wall = new Wall(spriteStore.getSprite("wall"));
         Sprite path = spriteStore.getSprite("path");
 

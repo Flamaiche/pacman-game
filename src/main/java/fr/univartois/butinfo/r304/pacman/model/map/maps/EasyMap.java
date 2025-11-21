@@ -4,6 +4,7 @@ import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 import fr.univartois.butinfo.r304.pacman.model.map.IMap;
 import fr.univartois.butinfo.r304.pacman.model.map.Wall;
+import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
 import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
@@ -23,7 +24,7 @@ public class EasyMap extends Map {
     }
 
     private void addInternWall(GameMap map, int width, int height) {
-        SpriteStore spriteStore = new SpriteStore();
+        ISpriteStore spriteStore = SpriteStore.getInstance();
         Wall wall = new Wall(spriteStore.getSprite("wall"));
 
         double centreX = (width-1) / 2.0;
