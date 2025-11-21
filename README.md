@@ -361,7 +361,7 @@ PacmanController o-- "1" PacmanGame
 | ---------------------------------------------------- |------------------------|------------|-----------|
 | Définition d'un seul `SpriteStore`                   | Singleton              | oui        | Membre 4  |
 | Définition d'une seule instance quand c'est possible | Singleton              | oui        | Membre 4  |
-| Ajout des bonus de vitesse sur Pac-Man               |                        |            |           |
+| Ajout des bonus de vitesse sur Pac-Man               | Decorator              | oui        | Membre 1  |
 | Ajout des bonus de vitesse sur les fantômes          |                        |            |           |
 | Ajout des bonus de score                             |                        |            |           |
 | Ajout des bonus multiples                            |                        |            |           |
@@ -370,9 +370,9 @@ PacmanController o-- "1" PacmanGame
 
 ### Jalon n°5 - TP n°7
 
-| Fonctionnalité                             | Patron de Conception ? | Terminée ? | Auteur(s)                                     |
-| ------------------------------------------ | ---------------------- | ---------- | --------------------------------------------- |
-| Correction des avertissements              |                        |            |                                               |
-| Correction des défauts sur *SonarQube*     |                        |            |                                               |
-| Rangement des classes en paquetages        |                        |            |                                               |
-| Modularisation du projet                   |                        |            |                                               |
+| Fonctionnalité                             | Patron de Conception ? | Terminée ? | Auteur(s) |
+| ------------------------------------------ |------------------------|------------|-----------|
+| Correction des avertissements              | Aucun                  | oui        | Membre 1  |
+| Correction des défauts sur *SonarQube*     | Aucun                  | oui        | Membre 1  |
+| Rangement des classes en paquetages        |                        |            |           |
+| Modularisation du projet                   |                        |            |           |
