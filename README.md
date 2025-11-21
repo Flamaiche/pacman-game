@@ -357,22 +357,22 @@ PacmanController o-- "1" PacmanGame
 
 ### Jalon n°4 - TP n°6
 
-| Fonctionnalité                                       | Patron de Conception ? | Terminée ? | Auteur(s)                                     |
-| ---------------------------------------------------- | ---------------------- | ---------- | --------------------------------------------- |
-| Définition d'un seul `SpriteStore`                   |                        |            |                                               |
-| Définition d'une seule instance quand c'est possible |                        |            |                                               |
-| Ajout des bonus de vitesse sur Pac-Man               |                        |            |                                               |
-| Ajout des bonus de vitesse sur les fantômes          |                        |            |                                               |
-| Ajout des bonus de score                             |                        |            |                                               |
-| Ajout des bonus multiples                            |                        |            |                                               |
-| Gestion des différents niveaux                       |                        |            |                                               |
+| Fonctionnalité                                       | Patron de Conception ? | Terminée ? | Auteur(s) |
+| ---------------------------------------------------- | ---------------------- |------------|-----------|
+| Définition d'un seul `SpriteStore`                   |                        |            |           |
+| Définition d'une seule instance quand c'est possible |                        |            |           |
+| Ajout des bonus de vitesse sur Pac-Man               |                        | oui        | Membre 1  |
+| Ajout des bonus de vitesse sur les fantômes          |                        |            |           |
+| Ajout des bonus de score                             |                        |            |           |
+| Ajout des bonus multiples                            |                        |            |           |
+| Gestion des différents niveaux                       |                        |            |           |
 
 
 ### Jalon n°5 - TP n°7
 
-| Fonctionnalité                             | Patron de Conception ? | Terminée ? | Auteur(s)                                     |
-| ------------------------------------------ | ---------------------- | ---------- | --------------------------------------------- |
-| Correction des avertissements              |                        |            |                                               |
-| Correction des défauts sur *SonarQube*     |                        |            |                                               |
-| Rangement des classes en paquetages        |                        |            |                                               |
-| Modularisation du projet                   |                        |            |                                               |
+| Fonctionnalité                             | Patron de Conception ? | Terminée ? | Auteur(s) |
+| ------------------------------------------ |------------------------|------------|-----------|
+| Correction des avertissements              | Aucun                  | oui        | Membre 1  |
+| Correction des défauts sur *SonarQube*     | Aucun                  | oui        | Membre 1  |
+| Rangement des classes en paquetages        |                        |            |           |
+| Modularisation du projet                   |                        |            |           |
