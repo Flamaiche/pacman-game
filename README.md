@@ -358,7 +358,7 @@ PacmanController o-- "1" PacmanGame
 ### Jalon n°4 - TP n°6
 
 | Fonctionnalité                                       | Patron de Conception ? | Terminée ? | Auteur(s) |
-| ---------------------------------------------------- |------------------------|------------|-----------|
+|------------------------------------------------------|------------------------|------------|-----------|
 | Définition d'un seul `SpriteStore`                   | Singleton              | oui        | Membre 4  |
 | Définition d'une seule instance quand c'est possible | Singleton              | oui        | Membre 4  |
 | Ajout des bonus de vitesse sur Pac-Man               | Decorator              | oui        | Membre 1  |
