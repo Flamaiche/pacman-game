@@ -360,7 +360,7 @@ PacmanController o-- "1" PacmanGame
 | Fonctionnalité                                       | Patron de Conception ? | Terminée ? | Auteur(s) |
 | ---------------------------------------------------- |------------------------|------------|-----------|
 | Définition d'un seul `SpriteStore`                   | Singleton              | oui        | Membre 4  |
-| Définition d'une seule instance quand c'est possible |                        |            |           |
+| Définition d'une seule instance quand c'est possible | Singleton              | oui        | Membre 4  |
 | Ajout des bonus de vitesse sur Pac-Man               |                        |            |           |
 | Ajout des bonus de vitesse sur les fantômes          |                        |            |           |
 | Ajout des bonus de score                             |                        |            |           |
