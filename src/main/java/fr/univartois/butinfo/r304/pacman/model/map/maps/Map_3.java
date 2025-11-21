@@ -4,6 +4,7 @@ import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
 import fr.univartois.butinfo.r304.pacman.model.map.IMap;
 import fr.univartois.butinfo.r304.pacman.model.map.Wall;
+import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
@@ -25,7 +26,7 @@ public class Map_3 extends Map {
      * Génère le labyrinthe sur toute la map.
      */
     private void generateCompleteLabyrinth(GameMap map, int width, int height) {
-        SpriteStore store = new SpriteStore();
+        ISpriteStore store = SpriteStore.getInstance();
         Wall wall = new Wall(store.getSprite("wall"));
         Sprite path = store.getSprite("path");
 
