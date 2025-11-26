@@ -38,15 +38,6 @@ public class Bonus extends AbstractAnimated implements IBonus {
 
     }
 
-    @Override
-    public void onCollisionWith(Fantome fantome) {
-        // pas d'effet sur les fantômes
-    }
-
-    @Override
-    public void onCollisionWith(PacGomme pacGomme) {
-        // pas d'effet sur les pacgommes
-    }
 
     @Override
     public void onCollisionWith(IAnimated other) {
@@ -61,7 +52,7 @@ public class Bonus extends AbstractAnimated implements IBonus {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                pacMan.setEtat(Etat.VULNERABLE);
+                pacMan.setState(State.VULNERABLE);
             }
         }, duration);
     }
