@@ -11,6 +11,7 @@ public class SpeedBoostEffect implements BonusEffectStrategy {
 
     @Override
     public void apply(PacMan pacMan) {
-        pacMan.setSpeed(pacMan.getSpeed() * multiplier);
+        pacMan.setHorizontalSpeed(pacMan.getHorizontalSpeed() * multiplier);
+        pacMan.setVerticalSpeed(pacMan.getVerticalSpeed() * multiplier);
     }
 }
