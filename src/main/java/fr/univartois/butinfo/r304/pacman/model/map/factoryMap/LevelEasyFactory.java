@@ -1,5 +1,7 @@
-package fr.univartois.butinfo.r304.pacman.model.map;
+package fr.univartois.butinfo.r304.pacman.model.map.factoryMap;
 
+import fr.univartois.butinfo.r304.pacman.model.map.ILevelFactory;
+import fr.univartois.butinfo.r304.pacman.model.map.IMap;
 import fr.univartois.butinfo.r304.pacman.model.map.maps.EasyMap;
 import fr.univartois.butinfo.r304.pacman.model.map.maps.Map;
 
@@ -7,7 +9,7 @@ import java.util.Random;
 
 public class LevelEasyFactory implements ILevelFactory {
 
-    private IMap [] map;
+    private IMap[] map;
     private Random random = new Random();
 
     public LevelEasyFactory() {

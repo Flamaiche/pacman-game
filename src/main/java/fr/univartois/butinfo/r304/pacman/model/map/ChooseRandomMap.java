@@ -1,12 +1,13 @@
 package fr.univartois.butinfo.r304.pacman.model.map;
 
-import fr.univartois.butinfo.r304.pacman.model.map.maps.*;
+import fr.univartois.butinfo.r304.pacman.model.map.factoryMap.LevelEasyFactory;
+import fr.univartois.butinfo.r304.pacman.model.map.factoryMap.LevelHardFactory;
+import fr.univartois.butinfo.r304.pacman.model.map.factoryMap.LevelMediumFactory;
 import fr.univartois.dpprocessor.designpatterns.singleton.Instance;
 import fr.univartois.dpprocessor.designpatterns.singleton.SingletonDesignPattern;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @SingletonDesignPattern()
 public final class ChooseRandomMap {
