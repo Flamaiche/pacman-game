@@ -3,9 +3,12 @@ package fr.univartois.butinfo.r304.pacman.model.map.factoryMap;
 import fr.univartois.butinfo.r304.pacman.model.map.ILevelFactory;
 import fr.univartois.butinfo.r304.pacman.model.map.IMap;
 import fr.univartois.butinfo.r304.pacman.model.map.maps.*;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyDesignPattern;
+import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 
 import java.util.Random;
 
+@StrategyDesignPattern(strategy = ILevelFactory.class, participant = StrategyParticipant.IMPLEMENTATION)
 public class LevelMediumFactory implements ILevelFactory {
 
     private IMap[] map;
