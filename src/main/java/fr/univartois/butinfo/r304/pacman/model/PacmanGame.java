@@ -422,6 +422,7 @@ public final class PacmanGame {
         removeAnimated(gum);
 
         if (nbGums <= 0) {
+            ChooseRandomMap.getInstance().incrementScore();
             gameOver("YOU WIN!");
         }
     }
@@ -439,6 +440,7 @@ public final class PacmanGame {
      * Termine la partie lorsque le joueur est tué.
      */
     public void playerIsDead() {
+        ChooseRandomMap.getInstance().decrementScore();
         gameOver("YOU HAVE BEEN KILLED!");
     }
 
@@ -451,15 +453,12 @@ public final class PacmanGame {
         animation.stop();
         controller.gameOver(message);
 
-        System.out.println("Fin de la partie" + message);
-        System.out.println("Choix de une carte aleatoire");
+        System.out.println("Fin de la partie " + message);
 
-        ChooseRandomMap choix = new ChooseRandomMap();
-        IMap nouvelleCarte = choix.chooseMap();
+        System.out.println();
+
+        IMap nouvelleCarte = ChooseRandomMap.getInstance().chooseMap();
         this.setMap(nouvelleCarte);
-
-
-        System.out.println("Nouvelle partie lancee avec la nouvelle carte" + nouvelleCarte.getClass().getSimpleName());
     }
 
     public GameMap getGameMap() {

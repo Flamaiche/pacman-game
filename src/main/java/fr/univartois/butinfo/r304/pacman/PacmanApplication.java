@@ -67,8 +67,7 @@ public final class PacmanApplication extends Application {
 
 
         // Choisir une carte aléatoirement
-        ChooseRandomMap choix = new ChooseRandomMap();
-        IMap carte = choix.chooseMap();
+        IMap carte = ChooseRandomMap.getInstance().chooseMap();
 
 
         // On crée ensuite le jeu, que l'on lie au contrôleur.

@@ -12,7 +12,7 @@ import fr.univartois.dpprocessor.designpatterns.strategy.StrategyParticipant;
 @StrategyDesignPattern(strategy = IMap.class, participant = StrategyParticipant.IMPLEMENTATION)
 public class EasyMap extends Map {
 
-    private EasyMap() {}
+    public EasyMap() {}
 
     @Override
     public GameMap createMap(int width, int height) {
