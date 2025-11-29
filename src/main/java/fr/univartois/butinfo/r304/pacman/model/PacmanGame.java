@@ -22,6 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.univartois.butinfo.r304.pacman.model.animated.*;
 
+import fr.univartois.butinfo.r304.pacman.model.bonus.*;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
 import fr.univartois.butinfo.r304.pacman.model.map.ChooseRandomMap;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
@@ -111,6 +112,26 @@ public final class PacmanGame {
 
 
     private IMap map;
+
+    private int scoreMultiplier = 1;
+
+    /**
+     * Donne le multiplicateur de score courant.
+     *
+     * @return Le multiplicateur de score.
+     */
+    public int getScoreMultiplier() {
+        return scoreMultiplier;
+    }
+
+    /**
+     * Modifie le multiplicateur de score courant.
+     *
+     * @param scoreMultiplier Le nouveau multiplicateur.
+     */
+    public void setScoreMultiplier(int scoreMultiplier) {
+        this.scoreMultiplier = scoreMultiplier;
+    }
 
     /**
      * Crée une nouvelle instance de PacmanGame.
@@ -242,7 +263,7 @@ public final class PacmanGame {
             PacGum pg;
             y = emptyCell.getColumn();
             x = emptyCell.getRow();
-            if (RANDOM.nextInt(100) == 0) { // 1% de chance
+            if (RANDOM.nextInt(100) == 0) {
                 pg = new MegaGum(this, x, y);
             }
             else pg = new PacGum(this, x, y);
@@ -250,6 +271,8 @@ public final class PacmanGame {
             addAnimated(pg);
         }
         nbGums = gameMap.getEmptyCells().size();
+
+
     }
 
     private boolean isInZone(IAnimated inCenterZone, IAnimated animated, int zoneSafe) {
@@ -472,4 +495,31 @@ public final class PacmanGame {
     public List<IAnimated> getMovingObjects() {
         return movingObjects;
     }
+
+    public void slowDownGhosts(double factor) {
+        for (IAnimated animated : movingObjects) {
+            if (animated instanceof Ghost ghost) {
+                ghost.setHorizontalSpeed(ghost.getHorizontalSpeed() * factor);
+                ghost.setVerticalSpeed(ghost.getVerticalSpeed() * factor);
+            }
+        }
+    }
+
+    public void openDoor(int row, int column) {
+        if (gameMap == null) {
+            return;
+        }
+
+        Cell cell = gameMap.getAt(row, column);
+        if (cell == null) {
+            return;
+        }
+
+        if (cell.getWall() != null) {
+            Sprite pathSprite = spriteStore.getSprite("path");
+            Cell pathCell = new Cell(pathSprite);
+            cell.replaceBy(pathCell);
+        }
+    }
+
 }

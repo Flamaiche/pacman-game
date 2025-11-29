@@ -179,6 +179,11 @@ public abstract class AbstractAnimated implements IAnimated {
         return xPosition;
     }
 
+    public PacmanGame getGame() {
+        return game;
+    }
+
+
     /*
      * (non-Javadoc)
      *
