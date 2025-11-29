@@ -235,18 +235,17 @@ public final class PacmanGame {
         clearAnimated();
         movingObjects.clear();
 
-        player = new PacMan(this, 0, 0,
-                new SimpleIntegerProperty(3),
-                new SimpleIntegerProperty(0));
+        player =  new PacMan(this, 0, 0, new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
         spawnAnimated(player);
         player.setSpawnPoint(player.getX(), player.getY());
         addMoving(player);
 
         int zoneSafe = 6 * ISpriteStore.DEFAULT_SPRITE_SIZE;
 
+
         // On crée ensuite les fantômes sur la carte.
         for (int i = 0; i < nbGhosts; i++) {
-            GhostColor color = GhostColor.values()[(i % GhostColor.values().length)];
+            GhostColor color = GhostColor.values()[ (i % GhostColor.values().length) ];
             Ghost ghost = new Ghost(this, 0, 0, color);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
 
@@ -258,104 +257,23 @@ public final class PacmanGame {
             addMoving(ghost);
         }
 
-        // On récupère une seule fois les cases vides
-        List<Cell> emptyCells = gameMap.getEmptyCells();
-
         int y;
         int x;
-        for (Cell emptyCell : emptyCells) {
+        for (Cell emptyCell : gameMap.getEmptyCells()) {
             PacGum pg;
             y = emptyCell.getColumn();
             x = emptyCell.getRow();
             if (RANDOM.nextInt(100) == 0) {
                 pg = new MegaGum(this, x, y);
             }
-            else {
-                pg = new PacGum(this, x, y);
-            }
+            else pg = new PacGum(this, x, y);
             spawnAnimated(pg, x, y);
             addAnimated(pg);
         }
-        nbGums = emptyCells.size();
+        nbGums = gameMap.getEmptyCells().size();
 
-        for (Cell emptyCell : emptyCells) {
-            int bx = emptyCell.getRow();
-            int by = emptyCell.getColumn();
 
-            if (RANDOM.nextInt(200) == 0) {
-                Bonus speedBonus = new Bonus(
-                        this,
-                        bx,
-                        by,
-                        spriteStore.getSprite("megagum"),
-                        new SpeedBoostEffect(),
-                        0
-                );
-                spawnAnimated(speedBonus, bx, by);
-                addAnimated(speedBonus);
-            }
-
-            // 2) Bonus fantômes plus lents
-            if (RANDOM.nextInt(250) == 0) {
-                Bonus slowBonus = new Bonus(
-                        this,
-                        bx,
-                        by,
-                        spriteStore.getSprite("megagum"),
-                        new GhostSlowEffect(0.5),
-                        0
-                );
-                spawnAnimated(slowBonus, bx, by);
-                addAnimated(slowBonus);
-            }
-
-            // 3) Bonus multiplicateur de score
-            if (RANDOM.nextInt(250) == 0) {
-                Bonus scoreBonus = new Bonus(
-                        this,
-                        bx,
-                        by,
-                        spriteStore.getSprite("megagum"),
-                        new ScoreMultiplierEffect(2),
-                        0
-                );
-                spawnAnimated(scoreBonus, bx, by);
-                addAnimated(scoreBonus);
-            }
-
-            // 4) Bonus porte
-            if (RANDOM.nextInt(300) == 0) {
-                Bonus doorBonus = new Bonus(
-                        this,
-                        bx,
-                        by,
-                        spriteStore.getSprite("megagum"),
-                        new OpenDoorEffect(5, 10),
-                        0
-                );
-                spawnAnimated(doorBonus, bx, by);
-                addAnimated(doorBonus);
-            }
-
-            // 5) Super bonus
-            if (RANDOM.nextInt(400) == 0) {
-                Bonus superBonus = new Bonus(
-                        this,
-                        bx,
-                        by,
-                        spriteStore.getSprite("megagum"),
-                        new SuperBonus(
-                                new GhostSlowEffect(0.5),
-                                new ScoreMultiplierEffect(2)
-                        ),
-                        0
-                );
-                spawnAnimated(superBonus, bx, by);
-                addAnimated(superBonus);
-            }
-        }
     }
-
 
     private boolean isInZone(IAnimated inCenterZone, IAnimated animated, int zoneSafe) {
         return inCenterZone.getX() - zoneSafe < animated.getX() && inCenterZone.getX() + zoneSafe > animated.getX()
@@ -539,7 +457,6 @@ public final class PacmanGame {
             }
         }
     }
-
 
     /**
      * Termine la partie lorsque le joueur est tué.
