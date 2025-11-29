@@ -5,8 +5,6 @@ import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.model.animated.*;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Bonus extends AbstractAnimated implements IBonus {
 
@@ -14,30 +12,29 @@ public class Bonus extends AbstractAnimated implements IBonus {
     private final long duration;
     private final PacmanGame game;
 
-    public Bonus(PacmanGame game, int x, int y, Sprite sprite, BonusEffectStrategy effect, long duration) {
+    public Bonus(PacmanGame game, int x, int y, Sprite sprite,
+                 BonusEffectStrategy effect, long duration) {
         super(game, x, y, sprite);
-        this.game = game;  // On stocke le jeu localement
+        this.game = game;
         this.effect = effect;
         this.duration = duration;
     }
 
-    // Puis remplacer getGame() par game
+    @Override
     public void onCollisionWith(PacMan pacMan) {
         applyTo(pacMan);
-        game.removeAnimated(this); // plus besoin de getGame()
+        game.removeAnimated(this);
     }
-
 
     @Override
     public void onCollisionWith(Ghost ghost) {
-
+        // Rien à faire : un fantôme qui marche sur le bonus ne le déclenche pas
     }
 
     @Override
     public void onCollisionWith(PacGum pacGum) {
-
+        // Rien
     }
-
 
     @Override
     public void onCollisionWith(IAnimated other) {
@@ -47,18 +44,8 @@ public class Bonus extends AbstractAnimated implements IBonus {
     @Override
     public void applyTo(PacMan pacMan) {
         effect.apply(pacMan);
-
-        // retour à l'état normal après la durée
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                pacMan.setState(State.VULNERABLE);
-            }
-        }, duration);
     }
 
-    @Override
-    public long getDuration() {
-        return duration;
-    }
+
+
 }
