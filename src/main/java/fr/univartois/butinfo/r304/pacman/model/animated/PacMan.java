@@ -3,57 +3,65 @@ package fr.univartois.butinfo.r304.pacman.model.animated;
 import fr.univartois.butinfo.r304.pacman.model.IAnimated;
 import fr.univartois.butinfo.r304.pacman.model.PacmanGame;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
+import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
 import fr.univartois.dpprocessor.designpatterns.state.StateDesignPattern;
 import fr.univartois.dpprocessor.designpatterns.state.StateParticipant;
 import javafx.beans.property.IntegerProperty;
 
 import java.util.Timer;
 
-@StateDesignPattern(state = IEtat.class, participant = StateParticipant.IMPLEMENTATION)
-public class PacMan extends AbstractAnimated implements IEtat {
+public class PacMan extends AbstractAnimated implements IState {
 
-    private final IntegerProperty pointsDeVie;
+    private static final String SPRITE_1 = "closed";
+    private static final String SPRITE_2 = "half-open";
+    private static final String SPRITE_3 = "open";
+
+    private final IntegerProperty lifePoint;
     private final IntegerProperty score;
     private int spawnX = 0;
     private int spawnY = 0;
-    private Etat etat;
-    private Timer etatTimer;
+    private State state;
+    private Timer stateTimer;
 
     private long animationTimer = 0;
     private int animationFrame = 0;
     private static final String[] SPRITES = {
-            "closed",
-            "half-open",
-            "open",
-            "open",
-            "half-open"
+            SPRITE_1,
+            SPRITE_2,
+            SPRITE_3,
+            SPRITE_3,
+            SPRITE_2
     };
     private static final String[] SPRITES_BOOST = {
-            "open",
-            "half-open",
+            SPRITE_3,
+            SPRITE_2,
     };
 
-    public PacMan(PacmanGame game, int xPosition, int yPosition, Sprite sprite, IntegerProperty pointsDeVie, IntegerProperty score) {
+    public PacMan(PacmanGame game, int xPosition, int yPosition, Sprite sprite, IntegerProperty lifePoint, IntegerProperty score) {
         super(game, xPosition, yPosition, sprite);
-        this.pointsDeVie = pointsDeVie;
+        this.lifePoint = lifePoint;
         this.score = score;
-        this.etat = Etat.VULNERABLE;
+        this.state = State.VULNERABLE;
+    }
+
+    public PacMan(PacmanGame game, int xPosition, int yPosition, IntegerProperty lifePoint, IntegerProperty score) {
+        this(game, xPosition, yPosition, game.getSpriteStore().getSprite("pacman/closed"), lifePoint, score);
     }
 
     public PacmanGame getGame() {
         return game;
     }
 
-    public IntegerProperty pointsDeVieProperty() {
-        return pointsDeVie;
+    public IntegerProperty lifePointProperty() {
+        return lifePoint;
     }
 
-    public int getPointsDeVie() {
-        return pointsDeVie.get();
+    public int getLifePoint() {
+        return lifePoint.get();
     }
 
-    public void setPointsDeVie(int pointsDeVie) {
-        this.pointsDeVie.set(pointsDeVie);
+    public void setLifePoint(int lifePoint) {
+        this.lifePoint.set(lifePoint);
     }
 
     public IntegerProperty scoreProperty() {
@@ -85,14 +93,14 @@ public class PacMan extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public void onCollisionWith(Fantome fantome) {
-        if (fantome.getEtat().estMort()) return;
-        if (fantome.getEtat().estVulnerable()) {
-            fantome.setEtat(Etat.MORT);
-        } else if (this.etat != Etat.INVULNERABLE) {
+    public void onCollisionWith(Ghost ghost) {
+        if (ghost.getState().isDie()) return;
+        if (ghost.getState().estVulnerable()) {
+            ghost.setState(State.DIE);
+        } else if (this.state != State.INVULNERABLE) {
             game.respawnFantome();
-            setPointsDeVie(getPointsDeVie() - 1 );
-            if (pointsDeVie.get() <= 0) {
+            setLifePoint(getLifePoint() - 1 );
+            if (lifePoint.get() <= 0) {
                 game.playerIsDead();
             } else {
                 setX(spawnX);
@@ -108,13 +116,13 @@ public class PacMan extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public void onCollisionWith(PacGomme pacGomme) {
+    public void onCollisionWith(PacGum pacGum) {
         setScore(getScore() + 1);
     }
 
     @Override
-    public Etat getEtat() {
-        return etat;
+    public State getState() {
+        return state;
     }
 
     @Override
@@ -138,30 +146,40 @@ public class PacMan extends AbstractAnimated implements IEtat {
     }
 
     @Override
-    public Timer getEtatTimer() {
-        return etatTimer;
+    public Timer getStateTimer() {
+        return stateTimer;
     }
 
     @Override
-    public void setEtatTimer(Timer etatTimer) {
-        this.etatTimer = etatTimer;
+    public void setStateTimer(Timer etatTimer) {
+        this.stateTimer = etatTimer;
     }
 
     @Override
-    public void setEtat(Etat etat) {
-        if (etat == Etat.PRESQUE_INVULNERABLE || etat == Etat.MORT) {
-            throw new IllegalArgumentException("Etat interdit pour le pacman: " + etat);
+    public void setState(State state) {
+        if (state == State.ALMOST_INVULNERABLE || state == State.DIE) {
+            throw new IllegalArgumentException("Prohibited State for PacMan: " + state);
         }
 
-        if (etat == Etat.INVULNERABLE) setEtatLater(Etat.VULNERABLE);
+        if (state == State.INVULNERABLE) setStateLater(State.VULNERABLE);
 
-        this.etat = etat;
+        this.state = state;
         applySpeed();
     }
 
     @Override
     public String[] getCurrentSprites() {
-        if (etat == Etat.INVULNERABLE) return SPRITES_BOOST;
+        if (state == State.INVULNERABLE) return SPRITES_BOOST;
         return SPRITES;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

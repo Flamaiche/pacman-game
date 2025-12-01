@@ -22,10 +22,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.univartois.butinfo.r304.pacman.model.animated.*;
 
+import fr.univartois.butinfo.r304.pacman.model.bonus.*;
 import fr.univartois.butinfo.r304.pacman.model.map.Cell;
-import fr.univartois.butinfo.r304.pacman.model.map.ChoisirMapAleatoirement;
+import fr.univartois.butinfo.r304.pacman.model.map.ChooseRandomMap;
 import fr.univartois.butinfo.r304.pacman.model.map.GameMap;
-import fr.univartois.butinfo.r304.pacman.model.map.ICarte;
+import fr.univartois.butinfo.r304.pacman.model.map.IMap;
 import fr.univartois.butinfo.r304.pacman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.pacman.view.Sprite;
 import fr.univartois.butinfo.r304.pacman.view.SpriteStore;
@@ -41,7 +42,7 @@ import javafx.beans.property.SimpleIntegerProperty;
  *
  * @version 0.1.0
  */
-@StrategyDesignPattern(strategy = ICarte.class, participant = StrategyParticipant.CONTEXT)
+@StrategyDesignPattern(strategy = IMap.class, participant = StrategyParticipant.CONTEXT)
 public final class PacmanGame {
 
     /**
@@ -77,13 +78,12 @@ public final class PacmanGame {
     /**
      * Le personnage du joueur.
      */
-    // TODO Adaptez le type de cet attribut pour correspondre à votre implémentation.
     private PacMan player;
 
     /**
      * Le nombre de fantômes initialement dans le jeu.
      */
-    private int nbGhosts;
+    private final int nbGhosts;
 
     /**
      * Le nombre de pac-gommes initialement dans le jeu.
@@ -111,7 +111,27 @@ public final class PacmanGame {
     private IPacmanController controller;
 
 
-    private ICarte carte;
+    private IMap map;
+
+    private int scoreMultiplier = 1;
+
+    /**
+     * Donne le multiplicateur de score courant.
+     *
+     * @return Le multiplicateur de score.
+     */
+    public int getScoreMultiplier() {
+        return scoreMultiplier;
+    }
+
+    /**
+     * Modifie le multiplicateur de score courant.
+     *
+     * @param scoreMultiplier Le nouveau multiplicateur.
+     */
+    public void setScoreMultiplier(int scoreMultiplier) {
+        this.scoreMultiplier = scoreMultiplier;
+    }
 
     /**
      * Crée une nouvelle instance de PacmanGame.
@@ -122,12 +142,12 @@ public final class PacmanGame {
      *        {@link Sprite} du jeu.
      * @param nbGhosts Le nombre de fantômes dans le jeu.
      */
-    public PacmanGame(int gameWidth, int gameHeight, ISpriteStore spriteStore, int nbGhosts, ICarte carte) {
+    public PacmanGame(int gameWidth, int gameHeight, ISpriteStore spriteStore, int nbGhosts, IMap map) {
         this.width = gameWidth;
         this.height = gameHeight;
         this.spriteStore = spriteStore;
         this.nbGhosts = nbGhosts;
-        this.carte = carte;
+        this.map = map;
     }
 
     /**
@@ -182,16 +202,16 @@ public final class PacmanGame {
      * @return La carte du jeu ayant été créée.
      */
     private GameMap createMap() {
-        int nbCellLargeur = width / ISpriteStore.DEFAULT_SPRITE_SIZE;
-        int nbCellHauteur = height / ISpriteStore.DEFAULT_SPRITE_SIZE;
-        return carte.createMap(nbCellLargeur, nbCellHauteur);
+        int nbCellWidth = width / ISpriteStore.DEFAULT_SPRITE_SIZE;
+        int nbCellHeight = height / ISpriteStore.DEFAULT_SPRITE_SIZE;
+        return map.createMap(nbCellWidth, nbCellHeight);
 
 
 
     }
 
-    public void setIcarte(ICarte carte){
-        this.carte=carte;
+    public void setMap(IMap map){
+        this.map = map;
 
     }
 
@@ -215,7 +235,7 @@ public final class PacmanGame {
         clearAnimated();
         movingObjects.clear();
 
-        player =  new PacMan(this, 0, 0, getSpriteStore().getSprite("pacman/right/closed"), new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
+        player =  new PacMan(this, 0, 0, new SimpleIntegerProperty(3),new SimpleIntegerProperty(0));
         spawnAnimated(player);
         player.setSpawnPoint(player.getX(), player.getY());
         addMoving(player);
@@ -225,9 +245,8 @@ public final class PacmanGame {
 
         // On crée ensuite les fantômes sur la carte.
         for (int i = 0; i < nbGhosts; i++) {
-            CouleurFantome couleur =CouleurFantome.values()[ (i % CouleurFantome.values().length) ];
-            String spritePath = "ghosts/right/" + couleur.getFolderName() + "/1";
-            Fantome ghost = new Fantome(this, 0, 0, spriteStore.getSprite(spritePath), couleur);
+            GhostColor color = GhostColor.values()[ (i % GhostColor.values().length) ];
+            Ghost ghost = new Ghost(this, 0, 0, color);
             ghost.setHorizontalSpeed(DEFAULT_SPEED * 0.8);
 
             do {
@@ -238,24 +257,22 @@ public final class PacmanGame {
             addMoving(ghost);
         }
 
-        SpriteStore spriteStore = new SpriteStore();
-        Sprite gomme = spriteStore.getSprite("pacgum");
-        Sprite megaGomme = spriteStore.getSprite("megagum");
-
-        int y, x;
+        int y;
+        int x;
         for (Cell emptyCell : gameMap.getEmptyCells()) {
-            PacGomme pg;
+            PacGum pg;
             y = emptyCell.getColumn();
             x = emptyCell.getRow();
-            if (RANDOM.nextInt(100) == 0) { // 1% de chance
-                pg = new PacGomme(this, x, y, megaGomme);
-                pg.setMegaGum(true);
+            if (RANDOM.nextInt(100) == 0) {
+                pg = new MegaGum(this, x, y);
             }
-            else pg = new PacGomme(this, x, y, gomme);
+            else pg = new PacGum(this, x, y);
             spawnAnimated(pg, x, y);
             addAnimated(pg);
         }
         nbGums = gameMap.getEmptyCells().size();
+
+
     }
 
     private boolean isInZone(IAnimated inCenterZone, IAnimated animated, int zoneSafe) {
@@ -267,7 +284,7 @@ public final class PacmanGame {
      * Initialise les statistiques de cette partie.
      */
     private void initStatistics() {
-        controller.bindLife(player.pointsDeVieProperty());
+        controller.bindLife(player.lifePointProperty());
         controller.bindScore(player.scoreProperty());
     }
 
@@ -280,15 +297,15 @@ public final class PacmanGame {
         List<Cell> spawnableCells = gameMap.getEmptyCells();
         if (!spawnableCells.isEmpty()) {
             Cell cell = spawnableCells.get(RANDOM.nextInt(spawnableCells.size()));
-            animated.setX(cell.getColumn() * spriteStore.getSpriteSize());
-            animated.setY(cell.getRow() * spriteStore.getSpriteSize());
+            animated.setX(cell.getColumn() * (double)spriteStore.getSpriteSize());
+            animated.setY(cell.getRow() * (double)spriteStore.getSpriteSize());
         }
     }
 
     private void spawnAnimated(IAnimated animated, int x, int y) {
         Cell cell = gameMap.getAt(x, y);
-        animated.setX(cell.getColumn() * spriteStore.getSpriteSize());
-        animated.setY(cell.getRow() * spriteStore.getSpriteSize());
+        animated.setX(cell.getColumn() * (double)spriteStore.getSpriteSize());
+        animated.setY(cell.getRow() * (double)spriteStore.getSpriteSize());
     }
 
     /**
@@ -412,8 +429,8 @@ public final class PacmanGame {
 
     public void respawnFantome() {
         for (IAnimated animated : movingObjects) {
-            if (animated instanceof Fantome fantome) {
-                fantome.respawn();
+            if (animated instanceof Ghost ghost) {
+                ghost.respawn();
             }
         }
     }
@@ -424,20 +441,20 @@ public final class PacmanGame {
      * @param gum La pac-gomme qui a été mangée.
      */
     public void pacGumEaten(IAnimated gum) {
-        if (gum instanceof PacGomme && ((PacGomme) gum).isMegaGum()) megaPacGumEaten(gum);
         nbGums--;
         removeAnimated(gum);
 
         if (nbGums <= 0) {
+            ChooseRandomMap.getInstance().incrementScore();
             gameOver("YOU WIN!");
         }
     }
 
-    public void megaPacGumEaten(IAnimated megaGum) {
-        player.setEtat(Etat.INVULNERABLE);
+    public void megaPacGumEaten() {
+        player.setState(State.INVULNERABLE);
         for (IAnimated moving : movingObjects) {
-            if (moving instanceof Fantome fantome) {
-                fantome.setEtat(Etat.VULNERABLE);
+            if (moving instanceof Ghost ghost) {
+                ghost.setState(State.VULNERABLE);
             }
         }
     }
@@ -446,6 +463,7 @@ public final class PacmanGame {
      * Termine la partie lorsque le joueur est tué.
      */
     public void playerIsDead() {
+        ChooseRandomMap.getInstance().decrementScore();
         gameOver("YOU HAVE BEEN KILLED!");
     }
 
@@ -458,15 +476,12 @@ public final class PacmanGame {
         animation.stop();
         controller.gameOver(message);
 
-        System.out.println("Fin de la partie" + message);
-        System.out.println("Choix de une carte aleatoire");
+        System.out.println("Fin de la partie " + message);
 
-        ChoisirMapAleatoirement choix = new ChoisirMapAleatoirement();
-        ICarte nouvelleCarte = choix.choisirMap();
-        this.setIcarte(nouvelleCarte);
+        System.out.println();
 
-
-        System.out.println("Nouvelle partie lancee avec la nouvelle carte" + nouvelleCarte.getClass().getSimpleName());
+        IMap nouvelleCarte = ChooseRandomMap.getInstance().chooseMap();
+        this.setMap(nouvelleCarte);
     }
 
     public GameMap getGameMap() {
@@ -480,4 +495,31 @@ public final class PacmanGame {
     public List<IAnimated> getMovingObjects() {
         return movingObjects;
     }
+
+    public void slowDownGhosts(double factor) {
+        for (IAnimated animated : movingObjects) {
+            if (animated instanceof Ghost ghost) {
+                ghost.setHorizontalSpeed(ghost.getHorizontalSpeed() * factor);
+                ghost.setVerticalSpeed(ghost.getVerticalSpeed() * factor);
+            }
+        }
+    }
+
+    public void openDoor(int row, int column) {
+        if (gameMap == null) {
+            return;
+        }
+
+        Cell cell = gameMap.getAt(row, column);
+        if (cell == null) {
+            return;
+        }
+
+        if (cell.getWall() != null) {
+            Sprite pathSprite = spriteStore.getSprite("path");
+            Cell pathCell = new Cell(pathSprite);
+            cell.replaceBy(pathCell);
+        }
+    }
+
 }

@@ -18,7 +18,7 @@ package fr.univartois.butinfo.r304.pacman.model;
 
 import java.util.List;
 
-import fr.univartois.butinfo.r304.pacman.model.animated.Fantome;
+import fr.univartois.butinfo.r304.pacman.model.animated.Ghost;
 import fr.univartois.butinfo.r304.pacman.model.animated.PacMan;
 import javafx.animation.AnimationTimer;
 
@@ -102,8 +102,8 @@ final class GameAnimation extends AnimationTimer {
 
             if (movable instanceof PacMan pacMan) {
                 pacMan.animate(delta);
-            } else if (movable instanceof Fantome fantome) {
-                fantome.animate(delta);
+            } else if (movable instanceof Ghost ghost) {
+                ghost.animate(delta);
             }
         }
     }
@@ -113,19 +113,10 @@ final class GameAnimation extends AnimationTimer {
      * collision.
      */
     private void checkCollisions() {
-//        for (IAnimated moving : movingObjects) {
-//            for (IAnimated animated : animatedObjects) {
-//                if ((moving != animated) && moving.isCollidingWith(animated)) {
-//                    moving.onCollisionWith(animated);
-//                    animated.onCollisionWith(moving);
-//                }
-//            }
-//        }
-
         PacMan pacMan = null;
         for (IAnimated moving : movingObjects) {
-            if (moving instanceof PacMan) {
-                pacMan = (PacMan) moving;
+            if (moving instanceof PacMan movingPacMan) {
+                pacMan = movingPacMan;
                 break;
             }
         }

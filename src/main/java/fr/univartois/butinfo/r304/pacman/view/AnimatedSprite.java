@@ -70,7 +70,7 @@ final class AnimatedSprite extends Sprite {
         ObjectBinding<Image> imageProperty = Bindings.valueAt(images, imageIndex);
 
         // On crée la timeline qui va gérer l'animation.
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000 / frameRate),
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000d / frameRate),
                 e -> imageIndex.set((imageIndex.get() + 1) % images.size())));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();

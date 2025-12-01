@@ -179,6 +179,11 @@ public abstract class AbstractAnimated implements IAnimated {
         return xPosition;
     }
 
+    public PacmanGame getGame() {
+        return game;
+    }
+
+
     /*
      * (non-Javadoc)
      *
@@ -273,7 +278,7 @@ public abstract class AbstractAnimated implements IAnimated {
         if (speed == 0) return 0;
 
         double speedBoost;
-        if (this instanceof PacMan pacMan && !pacMan.getEtat().estVulnerable()) {
+        if (this instanceof PacMan pacMan && !pacMan.getState().estVulnerable()) {
             if (speed < 0) speedBoost = -BOOST_SPEED;
             else speedBoost = BOOST_SPEED;
         } else speedBoost = speed;
@@ -395,13 +400,14 @@ public abstract class AbstractAnimated implements IAnimated {
     public boolean onStep(long delta) {
 
         // Si l'objet est aligné avec la grille, on applique la direction demandée.
-        if (isAlignedWithGrid(ALIGN_TOLERANCE)) {
-            if ((requestedHorizontalSpeed != horizontalSpeed) || (requestedVerticalSpeed != verticalSpeed)) {
+        if (isAlignedWithGrid(ALIGN_TOLERANCE)
+                && ((requestedHorizontalSpeed != horizontalSpeed)
+                || (requestedVerticalSpeed != verticalSpeed))) {
                 horizontalSpeed = requestedHorizontalSpeed;
                 verticalSpeed = requestedVerticalSpeed;
                 alignToGrid();
-            }
         }
+
 
         // On calcule la nouvelle position sur l'axe X.
         int limitMaxX = game.getWidth() - getWidth();
@@ -473,12 +479,8 @@ public abstract class AbstractAnimated implements IAnimated {
             return true;
         }
 
-        if (game.getCellAt(x + getWidth() - MARGIN, y + getHeight() - MARGIN).getWall() != null) {
-            // Le coin inférieur droit de l'objet a atteint un mur.
-            return true;
-        }
-
-        return false;
+        // Le coin inférieur droit de l'objet a atteint un mur.
+        return game.getCellAt(x + getWidth() - MARGIN, y + getHeight() - MARGIN).getWall() != null;
     }
 
     /*
@@ -491,12 +493,12 @@ public abstract class AbstractAnimated implements IAnimated {
     @Override
     public boolean isCollidingWith(IAnimated other) {
         if (isDestroyed() || other.isDestroyed()) return false;
-
+        double margin = MARGIN_COLLISION;
         Rectangle pacmanRect = new Rectangle(
-                getX() + MARGIN_COLLISION,
-                getY() + MARGIN_COLLISION,
-                getWidth() - 2 * MARGIN_COLLISION,
-                getHeight() - 2 * MARGIN_COLLISION
+                getX() + margin,
+                getY() + margin,
+                getWidth() - 2 * margin,
+                getHeight() - 2 * margin
         );
 
         Rectangle otherRect = new Rectangle(other.getX(), other.getY(), other.getWidth(), other.getHeight());
